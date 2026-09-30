@@ -124,7 +124,11 @@ throw new ConflictException({
 
 - Pure logic (mappers, token helpers, recurrence) → plain unit tests.
 - Services with real rules (auth rotation, invitations) → unit tests with a typed fake of the Prisma
-  calls they use, or integration tests against the dev database for the critical paths.
+  calls they use.
+- Endpoints → e2e tests in `test/*.e2e-spec.ts` against real Postgres (`petwatch_test`), Mailpit and S3:
+  `createTestApp()` (real `AppModule` + `configureApp`), `api(app)` (supertest), `resetDb()` in
+  `beforeEach`, `waitForMessageTo()` / `extractLink()` for email flows. Cover the access rules
+  (404 invisible / 403 wrong role) and the error `code`s. Run with `pnpm test:e2e`.
 - The error filter has tests (`api-exception.filter.spec.ts`); keep new error mappings covered.
 
 ## New endpoint checklist
@@ -133,5 +137,5 @@ throw new ConflictException({
 2. DTO wrapper in `dto.ts`.
 3. Service method: access check → logic → mapper. Domain errors with codes.
 4. Thin controller method with `@CurrentUser()` and validated params.
-5. Test for the rule that matters (access, edge case).
-6. `pnpm typecheck && pnpm lint && pnpm test`.
+5. Unit test for the rule that matters; e2e test for the endpoint (happy path, access, error codes).
+6. `pnpm typecheck && pnpm lint && pnpm test && pnpm test:e2e`.

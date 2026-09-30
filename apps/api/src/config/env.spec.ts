@@ -20,6 +20,8 @@ describe('validateEnv', () => {
     expect(env.SMTP_PORT).toBe(1025);
     expect(env.PORT).toBe(3000);
     expect(env.JWT_ACCESS_TTL_SECONDS).toBe(900);
+    expect(env.THROTTLE_LIMIT).toBe(10);
+    expect(env.THROTTLE_STRICT_LIMIT).toBe(5);
   });
 
   it('fails fast with a readable message on bad config', () => {

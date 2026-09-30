@@ -1,0 +1,4 @@
+# Maestro workspace config. Run from the repo root: `pnpm e2e:mobile` (= maestro test apps/mobile/e2e).
+# Only flows/ are test cases; subflows/ are reused via runFlow and scripts/ via runScript.
+flows:
+  - 'flows/*'

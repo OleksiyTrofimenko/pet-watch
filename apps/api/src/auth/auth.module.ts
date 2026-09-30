@@ -25,7 +25,17 @@ import { AuthService } from './auth.service';
       }),
     }),
     // In-memory counters per IP (D41); applied by ThrottlerGuard on AuthController only.
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 10 }]),
+    // Two named throttlers: `default` for every auth route, `strict` opted into per route.
+    ThrottlerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService<Env, true>) => {
+        const ttl = config.get('THROTTLE_TTL_MS', { infer: true });
+        return [
+          { name: 'default', ttl, limit: config.get('THROTTLE_LIMIT', { infer: true }) },
+          { name: 'strict', ttl, limit: config.get('THROTTLE_STRICT_LIMIT', { infer: true }) },
+        ];
+      },
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],

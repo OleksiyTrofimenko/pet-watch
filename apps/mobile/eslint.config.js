@@ -74,5 +74,21 @@ module.exports = defineConfig([
     ignores: ['**/*.test.tsx'],
     rules: { 'no-restricted-imports': ['error', { patterns: [NO_DOMAIN_IN_DESIGN_SYSTEM] }] },
   },
+  {
+    // Maestro runScript files run in Maestro's GraalJS, not in the app: these globals are injected
+    // (http/json/output by Maestro, the upper-case ones are the flow's env inputs).
+    files: ['e2e/scripts/**/*.js'],
+    languageOptions: {
+      globals: {
+        http: 'readonly',
+        json: 'readonly',
+        output: 'writable',
+        EMAIL: 'readonly',
+        PASSWORD: 'readonly',
+        API_URL: 'readonly',
+        MAILPIT_URL: 'readonly',
+      },
+    },
+  },
   prettier,
 ]);

@@ -95,3 +95,23 @@ export function useUpdatePet(id: string) {
 
 - Testing Library v14: `render` and `fireEvent` are **async** — always `await` them.
 - Test design-system components and pure feature utils (see `form-input.test.tsx`).
+
+## E2E (Maestro) and testIDs
+
+```
+e2e/config.yaml     runs flows/* only
+e2e/flows/          one user journey per file (a test case)
+e2e/subflows/       reusable steps via runFlow, inputs as env (register.yaml: EMAIL, PASSWORD)
+e2e/scripts/        runScript JS on the host: api.js (create data via HTTP), mailpit.js (latest link)
+```
+
+- **testID = `<screen>.<element>`**, kebab-case: `login.email`, `login.submit`, `pets.add`,
+  `pet-form.name`, `schedule.tab-week`, `invite.email`, `invite.result`. Flows select by `id:`,
+  never by visible text (copy changes must not break tests).
+- Every interactive element in a journey gets a testID; icon-only buttons also get `accessibilityLabel`.
+  Design-system components forward `testID` to the touchable/input, not to a wrapper.
+- Flows create their own data (unique email per run, e.g. `e2e+${Date.now()}@petwatch.test` in a script)
+  through `scripts/api.js`, so they never need a DB reset and run in any order. Only the journey under
+  test goes through the UI.
+- Run: API + Metro + dev build on a booted simulator, then `pnpm e2e:mobile` (one flow:
+  `maestro test apps/mobile/e2e/flows/<name>.yaml`).

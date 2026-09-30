@@ -35,6 +35,26 @@ adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<toke
 
 Invite and reset emails are captured by Mailpit at http://localhost:8025.
 
+## Running tests
+
+```bash
+pnpm typecheck && pnpm lint && pnpm test   # static checks + unit tests (no services needed)
+
+# API e2e: real Postgres, Mailpit and S3 (docker compose), separate petwatch_test database
+cp apps/api/.env.test.example apps/api/.env.test   # once
+pnpm db:up
+pnpm test:e2e            # creates petwatch_test if missing, migrate deploy, then test/*.e2e-spec.ts
+
+# Mobile e2e: Maestro (curl -fsSL "https://get.maestro.mobile.dev" | bash)
+pnpm dev:api                                  # terminal 1
+pnpm --filter @petwatch/mobile ios            # terminal 2: dev build + Metro on a booted simulator
+pnpm e2e:mobile                               # runs apps/mobile/e2e/flows/*
+```
+
+API e2e tests truncate all tables before each test and clear the Mailpit inbox they read from, so
+don't keep anything you care about in the local Mailpit while they run. Maestro flows create their own
+users through the API (unique emails), so they need no reset.
+
 ## Repository layout
 
 ```
@@ -75,7 +95,7 @@ See the "Ambiguities → assumptions" section of [`docs/REQUIREMENTS.md`](docs/R
 
 _To be completed at the end of implementation._ Candidates: push reminders for due tasks, task completion log
 ("fed at 08:05 by Ana"), watcher can leave a pet, pet `birthDate` instead of age, universal links,
-presigned POST with size limits, e2e tests (Maestro), CI pipeline.
+presigned POST with size limits, CI pipeline (running both e2e suites).
 
 - **Reset-password links use the custom scheme** (`petwatch://reset-password?token=…`). Many mail clients
   don't make custom-scheme links clickable. Production would send an https link handled by Universal

@@ -27,6 +27,11 @@ const envSchema = z.object({
   MAIL_FROM: z.string().min(1),
 
   APP_SCHEME: z.string().min(1).default('petwatch'),
+
+  // Per-IP rate limits on the auth endpoints (D41). Configurable so e2e tests can raise them.
+  THROTTLE_TTL_MS: z.coerce.number().int().positive().default(60_000),
+  THROTTLE_LIMIT: z.coerce.number().int().positive().default(10),
+  THROTTLE_STRICT_LIMIT: z.coerce.number().int().positive().default(5),
 });
 
 export type Env = z.infer<typeof envSchema>;

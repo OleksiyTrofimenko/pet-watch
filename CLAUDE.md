@@ -27,7 +27,9 @@ pnpm build:shared            # rebuild the contract after editing packages/share
 pnpm --filter @petwatch/api prisma:migrate   # create/apply migrations (dev)
 pnpm dev:api                 # http://localhost:3000/health
 pnpm --filter @petwatch/mobile ios|android   # dev build (custom scheme needs it; not Expo Go)
-pnpm typecheck && pnpm lint && pnpm test     # the definition of done
+pnpm typecheck && pnpm lint && pnpm test     # static checks + unit tests
+pnpm test:e2e                # API e2e (real services, petwatch_test DB); needs db:up + apps/api/.env.test
+pnpm e2e:mobile              # Maestro flows; needs API + Metro + dev build on a booted simulator
 pnpm format                  # prettier
 ```
 
@@ -50,8 +52,9 @@ pnpm format                  # prettier
 - Prefer extending an existing pattern over inventing a new one. If something repeats twice, extract it.
 - Don't add a dependency without saying why the platform/existing deps aren't enough.
 - Record real choices in `docs/DECISIONS.md` (one row). Update the requirement status.
-- Finish with: what changed, how it was verified, open questions. Never claim "done" without
-  `pnpm typecheck && pnpm lint && pnpm test` passing.
+- Finish with: what changed, how it was verified, open questions. **Definition of done:**
+  `pnpm typecheck && pnpm lint && pnpm test && pnpm test:e2e` pass, plus `pnpm e2e:mobile` when a
+  simulator is booted. Each slice adds API e2e tests and a Maestro flow for its journey.
 
 ## Local dev gotchas
 

@@ -6,7 +6,9 @@ import { Screen } from '@/src/design-system';
 export default function Home() {
   return (
     <Screen>
-      <Heading size="2xl">PetWatch</Heading>
+      <Heading size="2xl" testID="home.title">
+        PetWatch
+      </Heading>
       <Text className="text-typography-500">Scaffold is running.</Text>
     </Screen>
   );

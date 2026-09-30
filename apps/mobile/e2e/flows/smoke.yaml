@@ -1,0 +1,8 @@
+# Smoke: the dev build starts and renders the home screen.
+appId: com.petwatch.app
+name: Smoke – app launches
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: 'home.title'

@@ -1,15 +1,19 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, UseGuards } from '@nestjs/common';
-import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { SkipThrottle, ThrottlerGuard } from '@nestjs/throttler';
 import type { AuthResponse } from '@petwatch/shared';
 import { AuthService } from './auth.service';
 import { ForgotPasswordDto, LoginDto, RefreshDto, RegisterDto, ResetPasswordDto } from './dto';
 import { Public } from './public.decorator';
 
-/** Stricter limit for the endpoints worth brute-forcing (passwords, mailbox flooding). */
-const STRICT_LIMIT = { default: { limit: 5, ttl: 60_000 } };
+/**
+ * The `strict` throttler (limits from config) is off by default and switched on for the
+ * endpoints worth brute-forcing (passwords, mailbox flooding).
+ */
+const STRICT_ON = { strict: false };
 
 @Public()
 @UseGuards(ThrottlerGuard)
+@SkipThrottle({ strict: true })
 @Controller('auth')
 export class AuthController {
   constructor(private readonly auth: AuthService) {}
@@ -21,7 +25,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  @Throttle(STRICT_LIMIT)
+  @SkipThrottle(STRICT_ON)
   login(@Body() dto: LoginDto): Promise<AuthResponse> {
     return this.auth.login(dto);
   }
@@ -40,7 +44,7 @@ export class AuthController {
 
   @Post('forgot-password')
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Throttle(STRICT_LIMIT)
+  @SkipThrottle(STRICT_ON)
   forgotPassword(@Body() dto: ForgotPasswordDto): Promise<void> {
     return this.auth.forgotPassword(dto.email);
   }
