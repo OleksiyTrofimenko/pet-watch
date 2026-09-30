@@ -22,7 +22,7 @@ docs/            REQUIREMENTS (what) · DECISIONS (why) · LEARNING (reading lis
 
 ```bash
 pnpm install                 # also runs `prisma generate` for the API
-pnpm db:up                   # postgres, minio (+bucket), mailpit
+pnpm db:up                   # postgres, seaweedfs s3 (+bucket), mailpit
 pnpm build:shared            # rebuild the contract after editing packages/shared
 pnpm --filter @petwatch/api prisma:migrate   # create/apply migrations (dev)
 pnpm dev:api                 # http://localhost:3000/health
@@ -58,4 +58,4 @@ pnpm format                  # prettier
 - Android emulator reaches the host at `10.0.2.2`; set `EXPO_PUBLIC_API_URL` and `S3_PUBLIC_ENDPOINT`.
 - Deep links: `xcrun simctl openurl booted "petwatch://invites/<token>"` /
   `adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<token>"`.
-- Emails land in Mailpit: http://localhost:8025. MinIO console: http://localhost:9001.
+- Emails land in Mailpit: http://localhost:8025. S3 (SeaweedFS): http://localhost:9000 (no web console).

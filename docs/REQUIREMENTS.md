@@ -52,8 +52,8 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 | T-4  | JWT auth; client token storage + auto-attach, reusable                       | See AUTH-4                                              | ⬜                         |
 | T-5  | DTO validation on **every** endpoint, sensible errors                        | Global `ZodValidationPipe` + `ApiExceptionFilter`       | ✅ infra                   |
 | T-6  | Server-side access rules: only pets you own or watch                         | `PetAccessService` + guard/decorator; 404 for invisible | ⬜                         |
-| T-7  | Docker Compose for DB + README run instructions                              | Postgres, MinIO, Mailpit                                | ✅                         |
-| T-8  | Email + S3 may be stubbed; README says what + how to wire real               | Mailpit + MinIO (real protocols)                        | 🟨 README                  |
+| T-7  | Docker Compose for DB + README run instructions                              | Postgres, SeaweedFS (S3), Mailpit                       | ✅                         |
+| T-8  | Email + S3 may be stubbed; README says what + how to wire real               | Mailpit + SeaweedFS (real protocols)                    | 🟨 README                  |
 | T-9  | Deep link opens accept-invite screen; no store fallback                      | Expo Router file route                                  | 🟨 route stub              |
 | T-10 | Jotai/Context for UI state; TanStack Query for **all** server state          | Rule in CLAUDE.md                                       | 🟨 QueryClient wired       |
 | T-11 | React Hook Form + Zod on **all** forms                                       | login, register, forgot, reset, pet, care task, invite  | ⬜                         |

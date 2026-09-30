@@ -14,7 +14,7 @@ Prerequisites: Node 22+, pnpm 10 (`corepack enable`), Docker, Xcode (iOS) and/or
 pnpm install                       # installs everything, generates the Prisma client
 cp .env.example apps/api/.env      # API config (defaults match docker-compose)
 cp apps/mobile/.env.example apps/mobile/.env
-pnpm db:up                         # Postgres :5432, MinIO :9000 (console :9001), Mailpit :8025
+pnpm db:up                         # Postgres :5432, SeaweedFS S3 :9000, Mailpit :8025
 pnpm build:shared                  # compile the shared contract package
 pnpm --filter @petwatch/api prisma:deploy   # apply committed migrations
 pnpm dev:api                       # http://localhost:3000/health → {"status":"ok","db":"up"}
@@ -64,7 +64,7 @@ Full reasoning with rejected alternatives: [`docs/DECISIONS.md`](docs/DECISIONS.
 | Concern        | Local                          | Production                                                                                                                        |
 | -------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
 | Email          | Mailpit (real SMTP, web inbox) | Point `SMTP_*` at SES/Postmark/SendGrid SMTP, or swap the mail transport for the provider SDK                                     |
-| Object storage | MinIO (S3 API)                 | Real S3: remove `S3_ENDPOINT`/`S3_PUBLIC_ENDPOINT`, use IAM role credentials, private bucket (+ CloudFront signed URLs if needed) |
+| Object storage | SeaweedFS (S3 API)             | Real S3: remove `S3_ENDPOINT`/`S3_PUBLIC_ENDPOINT`, use IAM role credentials, private bucket (+ CloudFront signed URLs if needed) |
 | Deep links     | Custom scheme `petwatch://`    | Universal Links (iOS) / App Links (Android) on an https domain with a web fallback                                                |
 
 ## Assumptions

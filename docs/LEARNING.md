@@ -50,7 +50,7 @@ Grouped by what you'll be asked. For each topic: what to read, then what you sho
 
 - Presigned URL uploads — https://docs.aws.amazon.com/AmazonS3/latest/userguide/PresignedUrlUploadObject.html
 - Presigned URLs with AWS SDK v3 — https://aws.amazon.com/blogs/developer/generate-presigned-url-modular-aws-sdk-javascript/
-- MinIO (S3-compatible server) — https://github.com/minio/minio
+- SeaweedFS (S3-compatible server) — https://github.com/seaweedfs/seaweedfs
 
 **Be able to say:** why the file never touches the API; what a presigned PUT can't enforce (size → presigned POST with `content-length-range`); why we store the key, not the URL; the Android emulator host problem.
 

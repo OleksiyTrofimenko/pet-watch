@@ -14,32 +14,38 @@ services:
       interval: 5s
       retries: 10
 
-  # S3-compatible storage. Same AWS SDK code works against real S3.
-  minio:
-    image: minio/minio:latest
-    command: server /data --console-address ":9001"
+  # S3-compatible object storage (Apache-2.0). Same AWS SDK code works against real S3.
+  # MinIO was the original choice but its images were removed from Docker Hub in Sept 2026.
+  s3:
+    image: chrislusf/seaweedfs:4.48
+    command: server -dir=/data -s3 -s3.port=9000 -master.volumeSizeLimitMB=64
     environment:
-      MINIO_ROOT_USER: petwatch
-      MINIO_ROOT_PASSWORD: petwatch-secret
-    ports: ['9000:9000', '9001:9001']
-    volumes: [miniodata:/data]
+      # SeaweedFS uses the standard AWS variables as its admin identity when no s3.json is given.
+      AWS_ACCESS_KEY_ID: petwatch
+      AWS_SECRET_ACCESS_KEY: petwatch-secret
+    ports: ['9000:9000']
+    volumes: [s3data:/data]
 
-  # Creates the private bucket once MinIO is up.
-  minio-init:
-    image: minio/mc:latest
-    depends_on: [minio]
-    entrypoint: >
-      /bin/sh -c "
-      until mc alias set local http://minio:9000 petwatch petwatch-secret; do sleep 1; done;
-      mc mb --ignore-existing local/petwatch;
-      mc anonymous set none local/petwatch;
-      "
+  # One-shot: creates the private bucket once the S3 endpoint answers, then exits.
+  s3-init:
+    image: amazon/aws-cli:latest
+    depends_on: [s3]
+    environment:
+      AWS_ACCESS_KEY_ID: petwatch
+      AWS_SECRET_ACCESS_KEY: petwatch-secret
+      AWS_REGION: us-east-1
+    entrypoint: ['/bin/sh', '-c']
+    command:
+      - >
+        until aws --endpoint-url http://s3:9000 s3api head-bucket --bucket petwatch 2>/dev/null
+        || aws --endpoint-url http://s3:9000 s3api create-bucket --bucket petwatch;
+        do echo 'waiting for s3...'; sleep 2; done; echo 'bucket ready'
 
-  # Catches all outgoing SMTP. Inspect invites/reset mails at http://localhost:8025
+  # Catches all outgoing SMTP. Inspect invite/reset mails at http://localhost:8025
   mailpit:
     image: axllent/mailpit:latest
     ports: ['1025:1025', '8025:8025']
 
 volumes:
   pgdata:
-  miniodata:
+  s3data:
