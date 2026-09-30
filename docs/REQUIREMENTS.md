@@ -9,9 +9,9 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 | ID     | Requirement                                     | Edge cases / acceptance                                                                                                                                                           | Status |
 | ------ | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| AUTH-1 | Register with email + password                  | Email trimmed + lower-cased; duplicate → 409 `EMAIL_TAKEN`; password ≥ 8 chars; returns tokens (auto-login)                                                                       | ⬜     |
-| AUTH-2 | Log in with email + password                    | Wrong email _or_ password → same 401 `INVALID_CREDENTIALS`; rate-limited                                                                                                          | ⬜     |
-| AUTH-3 | Request password reset link by email            | Always 200 (no account enumeration); token single-use, 30 min, stored hashed; link `petwatch://reset-password?token=…` opens reset screen; after reset all refresh tokens revoked | ⬜     |
+| AUTH-1 | Register with email + password                  | Email trimmed + lower-cased; duplicate → 409 `EMAIL_TAKEN`; password ≥ 8 chars; returns tokens (auto-login)                                                                       | 🟨     |
+| AUTH-2 | Log in with email + password                    | Wrong email _or_ password → same 401 `INVALID_CREDENTIALS`; rate-limited                                                                                                          | 🟨     |
+| AUTH-3 | Request password reset link by email            | Always 200 (no account enumeration); token single-use, 30 min, stored hashed; link `petwatch://reset-password?token=…` opens reset screen; after reset all refresh tokens revoked | 🟨     |
 | AUTH-4 | Tokens stored + attached automatically (client) | SecureStore; one `apiClient`; 401 → single-flight refresh → retry once; refresh fails → sign out                                                                                  | ⬜     |
 
 ### Pets
@@ -49,7 +49,7 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 | T-1  | Expo React Native, runs on iOS + Android simulators                          | Expo SDK 57 dev build                                   | 🟨 scaffold                |
 | T-2  | NestJS + TypeScript, organised in modules                                    | One module per feature                                  | 🟨 scaffold                |
 | T-3  | PostgreSQL via ORM, migrations committed                                     | Prisma 7, `apps/api/prisma/migrations`                  | ✅ schema + init migration |
-| T-4  | JWT auth; client token storage + auto-attach, reusable                       | See AUTH-4                                              | ⬜                         |
+| T-4  | JWT auth; client token storage + auto-attach, reusable                       | See AUTH-4                                              | 🟨 API guard               |
 | T-5  | DTO validation on **every** endpoint, sensible errors                        | Global `ZodValidationPipe` + `ApiExceptionFilter`       | ✅ infra                   |
 | T-6  | Server-side access rules: only pets you own or watch                         | `PetAccessService` + guard/decorator; 404 for invisible | ⬜                         |
 | T-7  | Docker Compose for DB + README run instructions                              | Postgres, SeaweedFS (S3), Mailpit                       | ✅                         |

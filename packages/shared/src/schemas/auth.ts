@@ -44,3 +44,8 @@ export interface PublicUser {
   id: string;
   email: string;
 }
+
+/** Returned by register, login and refresh: the client gets the user without an extra call. */
+export interface AuthResponse extends AuthTokens {
+  user: PublicUser;
+}

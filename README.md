@@ -77,6 +77,11 @@ _To be completed at the end of implementation._ Candidates: push reminders for d
 ("fed at 08:05 by Ana"), watcher can leave a pet, pet `birthDate` instead of age, universal links,
 presigned POST with size limits, e2e tests (Maestro), CI pipeline.
 
+- **Reset-password links use the custom scheme** (`petwatch://reset-password?token=…`). Many mail clients
+  don't make custom-scheme links clickable. Production would send an https link handled by Universal
+  Links (iOS) / App Links (Android), with a web fallback page.
+- **Rate limits are in memory** (D41): fine for one API instance; several instances need shared (Redis) storage.
+
 ## Working with AI
 
 Built with Claude Code. Project rules for the assistant live in [`CLAUDE.md`](CLAUDE.md); reusable prompts in
