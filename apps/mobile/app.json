@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "PetWatch",
+    "slug": "petwatch",
+    "scheme": "petwatch",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.petwatch.app"
+    },
+    "android": {
+      "package": "com.petwatch.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#E6F4FE",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "PetWatch needs access to your photos so you can add a picture of your pet.",
+          "cameraPermission": "PetWatch needs camera access so you can take a picture of your pet."
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

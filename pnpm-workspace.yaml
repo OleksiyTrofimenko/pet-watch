@@ -1,0 +1,13 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm 10 blocks install scripts by default (supply-chain safety).
+# Allow-list only the packages that genuinely need a native build/download.
+onlyBuiltDependencies:
+  - '@prisma/engines'
+  - prisma
+  - argon2
+  - '@parcel/watcher'
+  - unrs-resolver
+

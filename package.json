@@ -1,0 +1,16 @@
+{
+  "name": "petwatch",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "dev:api": "pnpm --filter @petwatch/api start:dev",
+    "dev:mobile": "pnpm --filter @petwatch/mobile start",
+    "build:shared": "pnpm --filter @petwatch/shared build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint"
+  }
+}

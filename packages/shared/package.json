@@ -1,0 +1,22 @@
+{
+  "name": "@petwatch/shared",
+  "version": "0.0.0",
+  "private": true,
+  "description": "API contract shared by api and mobile: Zod schemas + inferred types.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.3"
+  }
+}
