@@ -7,10 +7,10 @@ services:
       POSTGRES_USER: petwatch
       POSTGRES_PASSWORD: petwatch
       POSTGRES_DB: petwatch
-    ports: ["5432:5432"]
+    ports: ['5432:5432']
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U petwatch"]
+      test: ['CMD-SHELL', 'pg_isready -U petwatch']
       interval: 5s
       retries: 10
 
@@ -21,7 +21,7 @@ services:
     environment:
       MINIO_ROOT_USER: petwatch
       MINIO_ROOT_PASSWORD: petwatch-secret
-    ports: ["9000:9000", "9001:9001"]
+    ports: ['9000:9000', '9001:9001']
     volumes: [miniodata:/data]
 
   # Creates the private bucket once MinIO is up.
@@ -38,7 +38,7 @@ services:
   # Catches all outgoing SMTP. Inspect invites/reset mails at http://localhost:8025
   mailpit:
     image: axllent/mailpit:latest
-    ports: ["1025:1025", "8025:8025"]
+    ports: ['1025:1025', '8025:8025']
 
 volumes:
   pgdata:

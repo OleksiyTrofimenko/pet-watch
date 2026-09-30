@@ -1,7 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
-import { Box } from '@/components/ui/box';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
+import { Screen } from '@/src/design-system';
 
 /**
  * Deep link target: petwatch://invites/<token>
@@ -10,9 +10,9 @@ import { Text } from '@/components/ui/text';
 export default function AcceptInviteScreen() {
   const { token } = useLocalSearchParams<{ token: string }>();
   return (
-    <Box className="flex-1 items-center justify-center bg-background-0 p-6">
+    <Screen>
       <Heading>Invitation</Heading>
       <Text className="text-typography-500">token: {token}</Text>
-    </Box>
+    </Screen>
   );
 }

@@ -1,6 +1,13 @@
 import { z } from 'zod';
 
-export const CARE_TASK_TYPES = ['FEEDING', 'WALK', 'MEDICATION', 'PLAY', 'GROOMING', 'OTHER'] as const;
+export const CARE_TASK_TYPES = [
+  'FEEDING',
+  'WALK',
+  'MEDICATION',
+  'PLAY',
+  'GROOMING',
+  'OTHER',
+] as const;
 export const careTaskTypeSchema = z.enum(CARE_TASK_TYPES);
 export type CareTaskType = z.infer<typeof careTaskTypeSchema>;
 
@@ -21,7 +28,11 @@ export const careTaskSchema = z
     type: careTaskTypeSchema,
     title: z.string().trim().min(1, 'Title is required').max(80),
     notes: z.string().trim().max(500).optional(),
-    timeOfDay: z.number().int().min(0).max(24 * 60 - 1),
+    timeOfDay: z
+      .number()
+      .int()
+      .min(0)
+      .max(24 * 60 - 1),
     recurrence: recurrenceSchema,
     daysOfWeek: z.array(dayOfWeekSchema).max(7).default([]),
   })

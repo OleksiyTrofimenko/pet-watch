@@ -7,15 +7,18 @@ Paste everything below the line into Claude Design.
 Design the mobile UI for **PetWatch**, an iOS/Android app. Pet owners use it to set up care routines for their pets and invite people they trust to look after them. A user's role is set per pet: the same person can **own** one pet and **watch** another. Design every screen so it works in both views: an owner can manage the pet, and a watcher can only read.
 
 ## Constraints (the design will be built with these, so stay inside them)
+
 - Canvas: phone portrait, 390×844 (iPhone 14/15). Safe areas respected. It must also read well on Android at 360 width.
 - Components: only the **Gluestack UI v3** set: Box, VStack/HStack, Heading, Text, Button (solid/outline/link; primary/secondary/negative), Input, Textarea, FormControl (label, helper, error), Select, Checkbox, Radio, Switch, Badge, Avatar, Image, Card, Divider, Pressable, Fab, Actionsheet, AlertDialog, Modal, Toast, Skeleton, Spinner, Icon. Gluestack has no tabs component, so build segmented controls from a ButtonGroup or Pressables. The time picker is the native OS picker, so show only the field that opens it.
 - Styling is Tailwind/NativeWind with Gluestack's token scales. Express colors as these scales (each has steps 0, 50, 100 … 950): `primary`, `secondary`, `tertiary`, `error`, `success`, `warning`, `info`, `typography`, `outline`, `background`. Spacing is on a 4-pt grid. Use at most 3 radii.
 - Keep it simple enough to build in about 2 hours of UI work. Reuse patterns: one list-row pattern, one card pattern, one form layout, one empty state, one error state.
 
 ## Brand & tone
+
 Warm, calm and trustworthy. The feel is a reliable pet-sitter's notebook, not a toy. Use one friendly accent color and neutral surfaces. Copy is short, human, and second-person ("Rex's dinner is at 18:00"). Give light mode first. Dark mode tokens are a bonus.
 
 ## Accessibility
+
 - Text contrast of at least 4.5:1 and touch targets of at least 44pt.
 - Never use color alone to carry meaning. Each care-task type gets **an icon + label + color**: Feeding, Walk, Medication, Play, Grooming, Other.
 - Dynamic type must not break layouts (test at 1.3×).
@@ -23,12 +26,14 @@ Warm, calm and trustworthy. The feel is a reliable pet-sitter's notebook, not a 
 ## Screens and states
 
 ### Auth
+
 1. **Log in**: email, password (show/hide), "Forgot password?", link to Register. States: inline field errors, and a form-level error ("Email or password is incorrect").
 2. **Register**: email, password (hint: 8+ characters). Error: "An account with this email already exists."
 3. **Forgot password**: email field, then a confirmation screen: "If an account exists for this email, we've sent a reset link." The confirmation looks the same whether or not the account exists.
 4. **Reset password**, opened from the email link: new password + confirm. Error state: "This link has expired or was already used", with a "Request a new link" action.
 
 ### Main app: bottom navigation with 3 tabs (Schedule, Pets, Account)
+
 5. **Schedule: Today**
    - Segmented control at the top: **Today | This week**.
    - Below it, a horizontal **pet filter**: "All pets" plus avatar chips. The selected chip must be obvious.
@@ -86,6 +91,7 @@ Warm, calm and trustworthy. The feel is a reliable pet-sitter's notebook, not a 
 13. **Account**: email, "Log out".
 
 ### Global patterns (design once, as a component sheet)
+
 - **Skeletons** for the pet card, task row and pet detail.
 - **Empty states**:
   - no pets yet (CTA "Add your first pet")
@@ -98,6 +104,7 @@ Warm, calm and trustworthy. The feel is a reliable pet-sitter's notebook, not a 
 - **Confirm dialog**: destructive variant.
 
 ## Deliverables
+
 1. A **token sheet**: the color scales mapped to the Gluestack names above (hex for key steps 50/100/500/600/700/900), plus the type scale, spacing and radii.
 2. A **component sheet**: task row, pet card, pet filter chip, segmented control, role badge, watcher row, section header, form field (default/focus/error/disabled), empty state, error state, offline banner, toasts.
 3. **One frame per screen state listed above**, named like `08-pet-detail/owner`, `08-pet-detail/watcher`, `11-invite/already-watching`.

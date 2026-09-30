@@ -27,10 +27,12 @@ Android emulator: set `EXPO_PUBLIC_API_URL=http://10.0.2.2:3000` (mobile `.env`)
 `S3_PUBLIC_ENDPOINT=http://10.0.2.2:9000` (API `.env`).
 
 ### Try the deep links
+
 ```bash
 xcrun simctl openurl booted "petwatch://invites/<token>"
 adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<token>" com.petwatch.app
 ```
+
 Invite and reset emails are captured by Mailpit at http://localhost:8025.
 
 ## Repository layout
@@ -47,7 +49,7 @@ CLAUDE.md, .claude/   AI configuration used while building this
 
 Full reasoning with rejected alternatives: [`docs/DECISIONS.md`](docs/DECISIONS.md).
 
-- **One contract, two apps.** Zod schemas in `packages/shared` validate API requests (`nestjs-zod`) *and*
+- **One contract, two apps.** Zod schemas in `packages/shared` validate API requests (`nestjs-zod`) _and_
   mobile forms (`zodResolver`). Types are inferred, never duplicated.
 - **Relationships, not roles.** Ownership is `pets.owner_id`; watching is a row in `pet_watchers`.
   Access is resolved per pet on the server; invisible pets return 404.
@@ -59,11 +61,11 @@ Full reasoning with rejected alternatives: [`docs/DECISIONS.md`](docs/DECISIONS.
 
 ## What is stubbed and how to make it real
 
-| Concern | Local | Production |
-|---------|-------|------------|
-| Email | Mailpit (real SMTP, web inbox) | Point `SMTP_*` at SES/Postmark/SendGrid SMTP, or swap the mail transport for the provider SDK |
-| Object storage | MinIO (S3 API) | Real S3: remove `S3_ENDPOINT`/`S3_PUBLIC_ENDPOINT`, use IAM role credentials, private bucket (+ CloudFront signed URLs if needed) |
-| Deep links | Custom scheme `petwatch://` | Universal Links (iOS) / App Links (Android) on an https domain with a web fallback |
+| Concern        | Local                          | Production                                                                                                                        |
+| -------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
+| Email          | Mailpit (real SMTP, web inbox) | Point `SMTP_*` at SES/Postmark/SendGrid SMTP, or swap the mail transport for the provider SDK                                     |
+| Object storage | MinIO (S3 API)                 | Real S3: remove `S3_ENDPOINT`/`S3_PUBLIC_ENDPOINT`, use IAM role credentials, private bucket (+ CloudFront signed URLs if needed) |
+| Deep links     | Custom scheme `petwatch://`    | Universal Links (iOS) / App Links (Android) on an https domain with a web fallback                                                |
 
 ## Assumptions
 
@@ -78,5 +80,5 @@ presigned POST with size limits, e2e tests (Maestro), CI pipeline.
 ## Working with AI
 
 Built with Claude Code. Project rules for the assistant live in [`CLAUDE.md`](CLAUDE.md); reusable prompts in
-[`.claude/commands`](.claude/commands) (`/feature`, `/check`, `/explain`). Every generated change was reviewed,
+[`.claude/commands`](.claude/commands) (`/feature`, `/check`, `/review`, `/explain`). Every generated change was reviewed,
 typechecked and tested; decisions are recorded in `docs/DECISIONS.md`.
