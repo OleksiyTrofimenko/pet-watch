@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div aria-busy="true" style="font-family:Figtree,system-ui,sans-serif"><sc-if value="{{ isTask }}"><div style="display:flex;gap:12px;padding:14px 16px 14px 14px;border-radius:16px;background:#FFFFFF;border:1px solid #E9E3DA;min-height:72px;box-sizing:border-box"><div style="width:44px;height:16px;border-radius:8px;background:#EFEBE5"></div><div style="flex:1;display:flex;flex-direction:column;gap:10px"><div style="display:flex;justify-content:space-between"><div style="width:84px;height:22px;border-radius:999px;background:#EFEBE5"></div><div style="width:56px;height:22px;border-radius:999px;background:#EFEBE5"></div></div><div style="width:60%;height:16px;border-radius:8px;background:#EFEBE5"></div><div style="width:85%;height:12px;border-radius:8px;background:#F3EEE6"></div></div></div></sc-if><sc-if value="{{ isPet }}"><div style="display:flex;gap:16px;align-items:center;padding:12px;border-radius:16px;background:#FFFFFF;border:1px solid #E9E3DA;min-height:96px;box-sizing:border-box"><div style="width:72px;height:72px;border-radius:8px;background:#EFEBE5;flex:none"></div><div style="flex:1;display:flex;flex-direction:column;gap:10px"><div style="width:40%;height:18px;border-radius:8px;background:#EFEBE5"></div><div style="width:70%;height:12px;border-radius:8px;background:#F3EEE6"></div><div style="width:76px;height:20px;border-radius:999px;background:#EFEBE5"></div></div></div></sc-if><sc-if value="{{ isDetail }}"><div style="display:flex;flex-direction:column;gap:16px"><div style="height:220px;background:#EFEBE5"></div><div style="display:flex;flex-direction:column;gap:10px;padding:0 16px"><div style="width:30%;height:26px;border-radius:8px;background:#EFEBE5"></div><div style="width:60%;height:14px;border-radius:8px;background:#F3EEE6"></div><div style="width:80px;height:22px;border-radius:999px;background:#EFEBE5"></div></div><div style="display:flex;flex-direction:column;gap:8px;padding:8px 16px 0"><div style="width:40%;height:18px;border-radius:8px;background:#EFEBE5"></div><div style="height:72px;border-radius:16px;background:#FFFFFF;border:1px solid #E9E3DA"></div><div style="height:72px;border-radius:16px;background:#FFFFFF;border:1px solid #E9E3DA"></div></div></div></sc-if></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:358,&quot;height&quot;:120},&quot;kind&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;task&quot;,&quot;pet&quot;,&quot;detail&quot;],&quot;default&quot;:&quot;task&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const k = this.props.kind ?? 'task';
+    return { isTask: k === 'task', isPet: k === 'pet', isDetail: k === 'detail' };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12);font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<div style="position:relative;height:280px;flex:none"><dc-import name="PetPhoto" pet="rex" w="390px" h="280px" r="0" hint-size="390px,280px"></dc-import><dc-import name="StatusBar" style="position:absolute;top:0;left:0;right:0" hint-size="390px,47px"></dc-import></div>
+<div style="padding:20px 16px;display:flex;flex-direction:column;gap:6px"><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Rex</span><span style="font-size:16px;color:#4A433B">Dog · Labrador · 4 years</span></div>
+<div style="position:absolute;inset:0;background:rgba(42,37,32,.55);display:flex;flex-direction:column;justify-content:flex-end">
+<div role="dialog" style="background:#FFFFFF;border-radius:16px 16px 0 0;padding:8px 20px 0;display:flex;flex-direction:column;gap:16px">
+<div style="width:40px;height:5px;border-radius:999px;background:#DCD4C8;align-self:center;margin-top:4px"></div>
+<sc-if value="{{ isForm }}">
+<div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:Newsreader,Georgia,serif;font-size:24px;line-height:30px;font-weight:600">Invite a watcher for Rex</span><span style="font-size:15px;line-height:22px;color:#4A433B">They'll see Rex's routine and schedule. They can't change anything.</span></div>
+<dc-import name="Field" label="Their email" value="{{ email }}" placeholder="name@example.com" state="{{ fieldState }}" error="{{ error }}" hint-size="100%,74px"></dc-import>
+<sc-if value="{{ already }}"><div role="status" style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:8px;background:#EEF3FA;color:#2E4E7D;font-size:15px;line-height:22px;font-weight:600"><div style="padding-top:2px"><dc-import name="Icon" icon="info" size="18" color="#2E4E7D" hint-size="18px,18px"></dc-import></div><span>sam@example.com is already watching Rex.</span></div></sc-if>
+<div style="display:flex;flex-direction:column;gap:4px"><dc-import name="Btn" label="{{ sendLabel }}" icon="{{ sendIcon }}" size="lg" full="{{ true }}" loading="{{ sending }}" hint-size="100%,52px"></dc-import><dc-import name="Btn" label="Cancel" variant="link" action="secondary" full="{{ true }}" hint-size="100%,48px"></dc-import></div>
+</sc-if>
+<sc-if value="{{ isResult }}">
+<div style="display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding-top:4px"><div style="width:56px;height:56px;border-radius:999px;background:#D9EBDC;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" icon="{{ resultIcon }}" size="26" color="#2F653C" hint-size="26px,26px"></dc-import></div><span style="font-family:Newsreader,Georgia,serif;font-size:24px;line-height:30px;font-weight:600">{{ resultTitle }}</span><span style="font-size:16px;line-height:24px;color:#4A433B">{{ resultBody }}</span></div>
+<div style="display:flex;flex-direction:column;gap:4px"><dc-import name="Btn" label="Done" size="lg" full="{{ true }}" hint-size="100%,52px"></dc-import><dc-import name="Btn" label="Invite someone else" variant="link" full="{{ true }}" hint-size="100%,48px"></dc-import></div>
+</sc-if>
+<div style="height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box"><div style="width:134px;height:5px;border-radius:999px;background:#2A2520"></div></div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;result&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;form&quot;,&quot;sending&quot;,&quot;sent&quot;,&quot;resent&quot;,&quot;already&quot;,&quot;noaccount&quot;,&quot;self&quot;],&quot;default&quot;:&quot;form&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const r = this.props.result ?? 'form';
+    const isResult = r === 'sent' || r === 'resent';
+    const errors = { noaccount: "There's no PetWatch account for this email. Ask them to sign up first.", self: "You can't invite yourself." };
+    return {
+      isForm: !isResult, isResult, already: r === 'already', sending: r === 'sending',
+      email: r === 'form' ? '' : (r === 'noaccount' ? 'lee.m@example.com' : r === 'self' ? 'ana@example.com' : 'sam@example.com'),
+      fieldState: r === 'form' ? 'focus' : 'default', error: errors[r] || '',
+      sendLabel: r === 'sending' ? 'Sending…' : 'Send invite', sendIcon: 'send',
+      resultIcon: r === 'sent' ? 'checkCircle' : 'send',
+      resultTitle: r === 'sent' ? 'Invite sent' : 'Invite re-sent',
+      resultBody: r === 'sent' ? "Invite sent to sam@example.com. They'll appear as a watcher once they accept." : 'Invite re-sent to sam@example.com. The earlier link no longer works.',
+    };
+  }
+}
+</script>
+</body>
+</html>

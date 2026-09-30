@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="height:47px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0 38px;box-sizing:border-box;font-family:-apple-system,'SF Pro Text',system-ui,sans-serif;font-weight:600;font-size:16px;color:{{ c }}"><span>{{ t }}</span><div style="display:flex;align-items:center;gap:6px"><div style="display:flex;align-items:flex-end;gap:2px;height:12px"><div style="width:3px;height:4px;border-radius:1px;background:{{ c }}"></div><div style="width:3px;height:6px;border-radius:1px;background:{{ c }}"></div><div style="width:3px;height:9px;border-radius:1px;background:{{ c }}"></div><div style="width:3px;height:12px;border-radius:1px;background:{{ c }}"></div></div><div style="width:25px;height:12px;border:1.5px solid {{ c }};border-radius:4px;padding:1.5px;box-sizing:border-box;opacity:.9"><div style="width:70%;height:100%;background:{{ c }};border-radius:1.5px"></div></div></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return { t: this.props.time ?? '13:10', c: this.props.light ? '#FFFFFF' : '#2A2520' };
+  }
+}
+</script>
+</body>
+</html>

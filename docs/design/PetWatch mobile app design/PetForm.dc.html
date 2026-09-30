@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:390px;min-height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12);font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 8px;border-bottom:1px solid #E9E3DA"><div style="width:88px"><dc-import name="Btn" variant="link" action="secondary" size="sm" label="Cancel" hint-size="70px,44px"></dc-import></div><span style="font-size:17px;line-height:22px;font-weight:700">{{ heading }}</span><div style="width:88px"></div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:20px;padding:24px 16px 28px">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px">
+<sc-if value="{{ photo }}"><div role="button" aria-label="Change photo" style="position:relative;width:128px;height:128px"><dc-import name="PetPhoto" pet="rex" w="128px" h="128px" r="16px" hint-size="128px,128px"></dc-import><sc-if value="{{ uploading }}"><div style="position:absolute;inset:0;border-radius:16px;background:rgba(42,37,32,.62);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:16px"><span style="font-size:14px;line-height:20px;font-weight:700;color:#FFFFFF">Uploading… 64%</span><div style="width:100%;height:6px;border-radius:999px;background:rgba(255,255,255,.3);overflow:hidden"><div style="width:64%;height:100%;background:#FFFFFF;border-radius:999px"></div></div></div></sc-if><sc-if value="{{ notUploading }}"><div style="position:absolute;right:-6px;bottom:-6px;width:40px;height:40px;border-radius:999px;background:#FFFFFF;border:1px solid #E9E3DA;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(42,37,32,.14)"><dc-import name="Icon" icon="camera" size="20" color="#2A2520" hint-size="20px,20px"></dc-import></div></sc-if></div><span style="font-size:14px;line-height:20px;color:#4A433B">{{ photoHint }}</span></sc-if>
+<sc-if value="{{ noPhoto }}"><div role="button" style="width:128px;height:128px;border-radius:16px;border:1.5px dashed #8C8174;background:#FFFFFF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;box-sizing:border-box"><dc-import name="Icon" icon="camera" size="28" color="#4A433B" hint-size="28px,28px"></dc-import><span style="font-size:15px;font-weight:600;color:#2A2520">Add photo</span></div><span style="font-size:14px;line-height:20px;color:#4A433B">Optional</span></sc-if>
+</div>
+<dc-import name="Field" label="Name" required="{{ true }}" value="{{ nameVal }}" placeholder="e.g. Rex" error="{{ nameError }}" hint-size="100%,74px"></dc-import>
+<dc-import name="Field" label="Species" value="{{ speciesVal }}" placeholder="Choose species" trailing="chevronDown" hint-size="100%,74px"></dc-import>
+<dc-import name="Field" label="Breed" optional="{{ true }}" value="{{ breedVal }}" placeholder="e.g. Labrador" hint-size="100%,74px"></dc-import>
+<dc-import name="Field" label="Age in years" optional="{{ true }}" value="{{ ageVal }}" placeholder="e.g. 4" hint-size="100%,74px"></dc-import>
+<dc-import name="Field" label="Notes" optional="{{ true }}" multiline="{{ true }}" value="{{ notesVal }}" placeholder="Anything a sitter should know" hint-size="100%,138px"></dc-import>
+<sc-if value="{{ edit }}"><div style="display:flex;flex-direction:column;gap:8px;padding-top:20px;border-top:1px solid #E9E3DA;margin-top:8px"><dc-import name="Btn" label="Delete pet" icon="trash" action="negative" variant="outline" full="{{ true }}" hint-size="100%,48px"></dc-import><span style="font-size:14px;line-height:20px;color:#4A433B;text-align:center">Removes Rex's care routine and everyone's access.</span></div></sc-if>
+</div>
+<div style="background:#FFFFFF;border-top:1px solid #E9E3DA;padding:12px 16px 0;display:flex;flex-direction:column;gap:6px"><dc-import name="Btn" label="{{ saveLabel }}" size="lg" full="{{ true }}" loading="{{ saving }}" disabled="{{ uploading }}" hint-size="100%,52px"></dc-import><sc-if value="{{ uploading }}"><span style="font-size:14px;line-height:20px;color:#4A433B;text-align:center">Save is available once the photo has uploaded.</span></sc-if><div style="height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box"><div style="width:134px;height:5px;border-radius:999px;background:#2A2520"></div></div></div>
+<sc-if value="{{ sheet }}"><div style="position:absolute;inset:0;background:rgba(42,37,32,.55);display:flex;flex-direction:column;justify-content:flex-end"><div role="dialog" style="background:#FFFFFF;border-radius:16px 16px 0 0;padding:8px 8px 0;display:flex;flex-direction:column"><div style="width:40px;height:5px;border-radius:999px;background:#DCD4C8;align-self:center;margin:4px 0 12px"></div><span style="font-size:14px;line-height:20px;font-weight:600;color:#4A433B;padding:0 16px 8px">Rex's photo</span><div role="button" style="display:flex;align-items:center;gap:14px;min-height:56px;padding:0 16px;font-size:17px;font-weight:500;border-radius:8px"><dc-import name="Icon" icon="camera" size="22" color="#2A2520" hint-size="22px,22px"></dc-import><span>Take photo</span></div><div role="button" style="display:flex;align-items:center;gap:14px;min-height:56px;padding:0 16px;font-size:17px;font-weight:500;border-radius:8px"><dc-import name="Icon" icon="image" size="22" color="#2A2520" hint-size="22px,22px"></dc-import><span>Choose from library</span></div><div role="button" style="display:flex;align-items:center;gap:14px;min-height:56px;padding:0 16px;font-size:17px;font-weight:500;border-radius:8px;color:#962A23"><dc-import name="Icon" icon="trash" size="22" color="#962A23" hint-size="22px,22px"></dc-import><span>Remove photo</span></div><div style="height:1px;background:#E9E3DA;margin:8px 16px"></div><div role="button" style="display:flex;align-items:center;justify-content:center;min-height:56px;font-size:17px;font-weight:600">Cancel</div><div style="height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box"><div style="width:134px;height:5px;border-radius:999px;background:#2A2520"></div></div></div></div></sc-if>
+<sc-if value="{{ confirm }}"><div style="position:absolute;inset:0;background:rgba(42,37,32,.55);display:flex;align-items:center;justify-content:center;padding:24px"><div role="alertdialog" style="width:100%;background:#FFFFFF;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 16px 40px rgba(42,37,32,.3)"><span style="font-family:Newsreader,Georgia,serif;font-size:24px;line-height:30px;font-weight:600">Delete Rex?</span><span style="font-size:16px;line-height:24px;color:#4A433B">Rex's care routine (4 tasks) will be deleted, and 2 watchers and 1 pending invite will lose access. This can't be undone.</span><div style="display:flex;flex-direction:column;gap:8px;margin-top:12px"><dc-import name="Btn" label="Delete pet" action="negative" full="{{ true }}" hint-size="100%,48px"></dc-import><dc-import name="Btn" label="Keep Rex" action="secondary" variant="outline" full="{{ true }}" hint-size="100%,48px"></dc-import></div></div></div></sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:1100},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;add&quot;,&quot;edit&quot;],&quot;default&quot;:&quot;add&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;nameError&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;uploading&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;saving&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;sheet&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;confirm&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const edit = (this.props.mode ?? 'add') === 'edit';
+    const photo = edit && !this.props.noPhoto;
+    const uploading = !!this.props.uploading;
+    return {
+      edit, photo, noPhoto: !photo, uploading, notUploading: !uploading,
+      heading: edit ? 'Edit Rex' : 'Add pet',
+      photoHint: uploading ? 'Keep the app open while it uploads.' : 'Tap to change photo',
+      nameVal: edit ? 'Rex' : (this.props.nameError ? '' : ''),
+      speciesVal: edit ? 'Dog' : (this.props.nameError ? 'Dog' : ''),
+      breedVal: edit ? 'Labrador' : '', ageVal: edit ? '4' : '',
+      notesVal: edit ? 'Scared of thunder — close the curtains. Loves ear scratches.' : '',
+      nameError: this.props.nameError ? 'Give your pet a name.' : '',
+      saving: !!this.props.saving, saveLabel: this.props.saving ? 'Saving…' : (edit ? 'Save changes' : 'Save pet'),
+      sheet: !!this.props.sheet, confirm: !!this.props.confirm,
+    };
+  }
+}
+</script>
+</body>
+</html>

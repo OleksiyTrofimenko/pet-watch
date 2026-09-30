@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:inline-flex;align-items:center;gap:4px;padding:3px 8px 3px 6px;border-radius:999px;background:{{ bg }};color:{{ fg }};font-family:Figtree,system-ui,sans-serif;font-size:13px;line-height:16px;font-weight:700;white-space:nowrap"><dc-import name="Icon" icon="{{ icon }}" size="14" color="{{ fg }}" stroke="2.4" hint-size="14px,14px"></dc-import><span>{{ label }}</span></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:120,&quot;height&quot;:32},&quot;kind&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;owner&quot;,&quot;watching&quot;,&quot;pending&quot;],&quot;default&quot;:&quot;owner&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const m = {
+      owner: ['Owner', 'home', '#F6E0D5', '#8F4227'],
+      watching: ['Watching', 'eye', '#D8E4F4', '#2E4E7D'],
+      pending: ['Pending', 'clock', '#FAEACB', '#8F6014'],
+    };
+    const [label, icon, bg, fg] = m[this.props.kind] || m.owner;
+    return { label, icon, bg, fg };
+  }
+}
+</script>
+</body>
+</html>

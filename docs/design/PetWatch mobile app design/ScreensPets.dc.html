@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:28px;font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">07 – 08</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Pets</span><span style="font-size:15px;line-height:22px;color:#4A433B">Role is per pet. Ana owns Rex and watches Miso (owned by Sam). The pet detail is one screen with owner-only blocks — watchers get the same layout with every edit affordance removed, not disabled.</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">07-pets/default</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0"><span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Pets</span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:20px 16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px"><span style="font-size:13px;line-height:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A433B">My pets</span><span style="font-size:14px;color:#4A433B">1</span></div>
+<dc-import name="PetCard" pet="rex" role="owner" watchers="2 watchers" hint-size="100%,108px"></dc-import>
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 4px 0"><span style="font-size:13px;line-height:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A433B">Pets I'm watching</span><span style="font-size:14px;color:#4A433B">1</span></div>
+<dc-import name="PetCard" pet="miso" role="watching" owner="sam@example.com" no-photo="{{ true }}" hint-size="100%,108px"></dc-import>
+</div>
+<div role="button" style="position:absolute;right:16px;bottom:113px;display:flex;align-items:center;gap:8px;min-height:56px;padding:0 22px 0 18px;border-radius:999px;background:#AE5230;color:#FFFFFF;font-size:16px;font-weight:600;box-shadow:0 6px 16px rgba(143,66,39,.32)"><dc-import name="Icon" icon="plus" size="22" color="#FFFFFF" stroke="2.4" hint-size="22px,22px"></dc-import><span>Add pet</span></div>
+<dc-import name="TabBar" active="pets" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Whole card is one Pressable → pet detail.</span><span>• Miso has no photo → species placeholder (paw + “Cat”).</span><span>• Fab is labelled (“Add pet”), not icon-only. Anyone can add a pet — they become its owner.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">07-pets/empty</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0"><span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Pets</span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:12px;padding:20px 16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px"><span style="font-size:13px;line-height:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A433B">My pets</span></div>
+<div style="background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px"><dc-import name="EmptyState" icon="paw" tone="primary" title="No pets yet" body="Add a pet to set up their care routine and invite people to help." cta="Add your first pet" cta-icon="plus" hint-size="100%,300px"></dc-import></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:16px 4px 0"><span style="font-size:13px;line-height:16px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#4A433B">Pets I'm watching</span></div>
+<div style="background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px"><dc-import name="EmptyState" icon="eye" tone="info" title="Not watching any pets" body="When someone invites you, their pets appear here." hint-size="100%,200px"></dc-import></div>
+</div>
+<dc-import name="TabBar" active="pets" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Fab hidden while the in-card CTA is on screen — one primary action.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">07-pets/error</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0"><span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Pets</span></div>
+<div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:20px 16px 80px"><dc-import name="EmptyState" icon="alert" tone="error" title="We couldn't load your pets" body="Check your connection and try again." cta="Try again" cta-icon="refresh" cta-variant="outline" hint-size="100%,300px"></dc-import></div>
+<dc-import name="TabBar" active="pets" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• The one error state: same layout as empty state, error tone, “Try again”.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">08-pet-detail/owner · full scroll</span>
+<div style="width:390px;min-height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<div style="position:relative;height:280px;flex:none">
+<dc-import name="PetPhoto" pet="rex" w="390px" h="280px" r="0" hint-size="390px,280px"></dc-import>
+<dc-import name="StatusBar" style="position:absolute;top:0;left:0;right:0" hint-size="390px,47px"></dc-import>
+<div style="position:absolute;top:55px;left:16px;right:16px;display:flex;justify-content:space-between"><div role="button" aria-label="Back to pets" style="width:44px;height:44px;border-radius:999px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(42,37,32,.16)"><dc-import name="Icon" icon="chevronLeft" size="22" color="#2A2520" hint-size="22px,22px"></dc-import></div><div role="button" style="min-height:44px;padding:0 16px 0 12px;border-radius:999px;background:#FFFFFF;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(42,37,32,.16);font-size:15px;font-weight:600;color:#2A2520"><dc-import name="Icon" icon="pencil" size="18" color="#2A2520" hint-size="18px,18px"></dc-import><span>Edit pet</span></div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:28px;padding:20px 16px 28px">
+<div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Rex</span><span style="font-size:16px;line-height:24px;color:#4A433B">Dog · Labrador · 4 years</span><div style="display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap"><dc-import name="RoleBadge" kind="owner" hint-size="70px,22px"></dc-import><span style="font-size:14px;color:#4A433B">You own Rex</span></div><span style="font-size:15px;line-height:22px;color:#2A2520;margin-top:8px;padding:12px 14px;background:#FFFFFF;border:1px solid #E9E3DA;border-radius:8px">Scared of thunder — close the curtains. Loves ear scratches.</span></div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 4px"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Care routine</span><span style="font-size:14px;color:#4A433B">4 tasks</span></div>
+<dc-import name="RuleRow" type="medication" title="Joint supplement" time="07:30" repeat="Wed" editable="{{ true }}" hint-size="100%,84px"></dc-import>
+<dc-import name="RuleRow" type="feeding" title="Breakfast" time="08:00" repeat="Every day" editable="{{ true }}" hint-size="100%,84px"></dc-import>
+<dc-import name="RuleRow" type="other" title="Refill water fountain" time="11:00" repeat="Thu" editable="{{ true }}" hint-size="100%,84px"></dc-import>
+<dc-import name="RuleRow" type="walk" title="Walk" time="18:30" repeat="Mon, Wed, Fri" editable="{{ true }}" hint-size="100%,84px"></dc-import>
+<div style="margin-top:4px"><dc-import name="Btn" label="Add task" icon="plus" variant="outline" full="{{ true }}" hint-size="100%,48px"></dc-import></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 4px;gap:8px;flex-wrap:wrap"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Watchers</span><span style="font-size:14px;color:#4A433B">Only you see this</span></div>
+<dc-import name="WatcherRow" email="sam@example.com" since="Watching since 12 Sep" hint-size="100%,76px"></dc-import>
+<dc-import name="WatcherRow" email="jo@example.com" since="Watching since 20 Sep" hint-size="100%,76px"></dc-import>
+<dc-import name="WatcherRow" email="lee@example.com" pending="{{ true }}" expires="Expires in 5 days" hint-size="100%,76px"></dc-import>
+<div style="margin-top:4px"><dc-import name="Btn" label="Invite watcher" icon="userPlus" variant="outline" full="{{ true }}" hint-size="100%,48px"></dc-import></div>
+</div>
+</div>
+<dc-import name="TabBar" active="pets" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Owner-only: “Edit pet”, pencil/trash per rule, “Add task”, the whole Watchers block.</span><span>• Trash → confirm dialog “Delete Breakfast from Rex's routine?”.</span><span>• “Remove” (active) and “Cancel” (pending) both open an AlertDialog.</span><span>• Pending invite: badge + expiry text, never colour alone.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">08-pet-detail/watcher · signed in as sam</span>
+<div style="width:390px;min-height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<div style="position:relative;height:280px;flex:none">
+<dc-import name="PetPhoto" pet="rex" w="390px" h="280px" r="0" hint-size="390px,280px"></dc-import>
+<dc-import name="StatusBar" style="position:absolute;top:0;left:0;right:0" hint-size="390px,47px"></dc-import>
+<div style="position:absolute;top:55px;left:16px"><div role="button" aria-label="Back to pets" style="width:44px;height:44px;border-radius:999px;background:#FFFFFF;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(42,37,32,.16)"><dc-import name="Icon" icon="chevronLeft" size="22" color="#2A2520" hint-size="22px,22px"></dc-import></div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:28px;padding:20px 16px 28px">
+<div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Rex</span><span style="font-size:16px;line-height:24px;color:#4A433B">Dog · Labrador · 4 years</span><div style="display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap"><dc-import name="RoleBadge" kind="watching" hint-size="84px,22px"></dc-import><span style="font-size:14px;color:#4A433B">Owned by ana@example.com</span></div><span style="font-size:15px;line-height:22px;color:#2A2520;margin-top:8px;padding:12px 14px;background:#FFFFFF;border:1px solid #E9E3DA;border-radius:8px">Scared of thunder — close the curtains. Loves ear scratches.</span>
+<div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:8px;background:#EEF3FA;color:#2E4E7D;font-size:15px;line-height:22px;margin-top:4px"><div style="padding-top:2px"><dc-import name="Icon" icon="eye" size="18" color="#2E4E7D" hint-size="18px,18px"></dc-import></div><span>You can see Rex's routine. Only Ana can change it.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 4px"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Care routine</span><span style="font-size:14px;color:#4A433B">4 tasks</span></div>
+<dc-import name="RuleRow" type="medication" title="Joint supplement" time="07:30" repeat="Wed" hint-size="100%,84px"></dc-import>
+<dc-import name="RuleRow" type="feeding" title="Breakfast" time="08:00" repeat="Every day" hint-size="100%,84px"></dc-import>
+<dc-import name="RuleRow" type="other" title="Refill water fountain" time="11:00" repeat="Thu" hint-size="100%,84px"></dc-import>
+<dc-import name="RuleRow" type="walk" title="Walk" time="18:30" repeat="Mon, Wed, Fri" hint-size="100%,84px"></dc-import>
+</div>
+</div>
+<dc-import name="TabBar" active="pets" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Same layout, owner controls removed (not greyed): no Edit, no row actions, no Add task, no Watchers.</span><span>• “Watching” badge + owner email + one plain-language line explain why.</span><span>• Rule rows are not tappable for watchers.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">08-pet-detail/owner-revoke-dialog</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;padding:12px 16px">
+<dc-import name="RuleRow" type="walk" title="Walk" time="18:30" repeat="Mon, Wed, Fri" editable="{{ true }}" hint-size="100%,84px"></dc-import>
+<div style="margin:4px 0 20px"><dc-import name="Btn" label="Add task" icon="plus" variant="outline" full="{{ true }}" hint-size="100%,48px"></dc-import></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;padding:0 4px 4px"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Watchers</span><span style="font-size:14px;color:#4A433B">Only you see this</span></div>
+<dc-import name="WatcherRow" email="sam@example.com" since="Watching since 12 Sep" hint-size="100%,76px"></dc-import>
+<dc-import name="WatcherRow" email="jo@example.com" since="Watching since 20 Sep" hint-size="100%,76px"></dc-import>
+<dc-import name="WatcherRow" email="lee@example.com" pending="{{ true }}" hint-size="100%,76px"></dc-import>
+</div>
+<dc-import name="TabBar" active="pets" hint-size="390px,97px"></dc-import>
+<div style="position:absolute;inset:0;background:rgba(42,37,32,.55);display:flex;align-items:center;justify-content:center;padding:24px">
+<div role="alertdialog" style="width:100%;background:#FFFFFF;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;box-shadow:0 16px 40px rgba(42,37,32,.3)"><span style="font-family:Newsreader,Georgia,serif;font-size:24px;line-height:30px;font-weight:600">Remove Sam's access to Rex?</span><span style="font-size:16px;line-height:24px;color:#4A433B">sam@example.com won't see Rex's routine or schedule anymore. You can invite them again later.</span><div style="display:flex;flex-direction:column;gap:8px;margin-top:12px"><dc-import name="Btn" label="Remove access" action="negative" full="{{ true }}" hint-size="100%,48px"></dc-import><dc-import name="Btn" label="Cancel" action="secondary" variant="outline" full="{{ true }}" hint-size="100%,48px"></dc-import></div></div>
+</div>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Destructive action names the consequence; Cancel is the default focus.</span><span>• After removing: row disappears + toast “Sam can no longer see Rex”.</span></div>
+</div>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

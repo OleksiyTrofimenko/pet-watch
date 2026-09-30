@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12);font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:center;gap:8px;min-height:52px"><dc-import name="Icon" icon="paw" fill="{{ true }}" size="20" color="#AE5230" hint-size="20px,20px"></dc-import><span style="font-family:Newsreader,Georgia,serif;font-size:19px;font-weight:600">PetWatch</span></div>
+<sc-if value="{{ isLoading }}"><div aria-busy="true" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;padding:32px 24px 16px"><div style="width:144px;height:144px;border-radius:999px;background:#EFEBE5"></div><div style="width:80%;height:24px;border-radius:8px;background:#EFEBE5;margin-top:8px"></div><div style="width:55%;height:24px;border-radius:8px;background:#EFEBE5"></div><div style="width:100%;height:132px;border-radius:16px;background:#FFFFFF;border:1px solid #E9E3DA;margin-top:8px"></div><div style="margin-top:auto;width:100%;display:flex;flex-direction:column;gap:8px"><div style="height:52px;border-radius:8px;background:#EFEBE5"></div><div style="height:52px;border-radius:8px;background:#F3EEE6"></div></div></div></sc-if>
+<sc-if value="{{ isInvite }}"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;padding:24px 24px 16px;text-align:center">
+<div style="position:relative"><dc-import name="PetPhoto" pet="rex" w="144px" h="144px" r="999px" hint-size="144px,144px"></dc-import><div style="position:absolute;right:-4px;bottom:0;border-radius:999px;border:3px solid #FAF7F2"><dc-import name="Avatar" letter="A" tone="primary" size="44" hint-size="44px,44px"></dc-import></div></div>
+<span style="font-family:Newsreader,Georgia,serif;font-size:28px;line-height:34px;font-weight:600;text-wrap:balance">Ana invited you to help look after Rex</span>
+<span style="font-size:15px;line-height:22px;color:#4A433B;margin-top:-6px">From ana@example.com</span>
+<div style="width:100%;background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px;padding:4px 16px;text-align:left;box-sizing:border-box">
+<div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #E9E3DA"><dc-import name="Icon" icon="eye" size="20" color="#2E4E7D" hint-size="20px,20px"></dc-import><span style="font-size:15px;line-height:22px">You'll see Rex's care routine and daily schedule.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #E9E3DA"><dc-import name="Icon" icon="lock" size="20" color="#4A433B" hint-size="20px,20px"></dc-import><span style="font-size:15px;line-height:22px">Only Ana can change it. You can leave any time.</span></div>
+<div style="display:flex;gap:12px;align-items:flex-start;padding:12px 0"><dc-import name="Icon" icon="clock" size="20" color="#8F6014" hint-size="20px,20px"></dc-import><span style="font-size:15px;line-height:22px">This invite expires on Monday, 5 October.</span></div>
+</div>
+<span style="font-size:14px;line-height:20px;color:#4A433B">Signed in as sam@example.com</span>
+<div style="margin-top:auto;width:100%;display:flex;flex-direction:column;gap:8px"><dc-import name="Btn" label="Accept" size="lg" full="{{ true }}" hint-size="100%,52px"></dc-import><dc-import name="Btn" label="Not now" variant="outline" action="secondary" size="lg" full="{{ true }}" hint-size="100%,52px"></dc-import></div>
+</div></sc-if>
+<sc-if value="{{ isResult }}"><div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:16px;padding:56px 24px 16px;text-align:center">
+<sc-if value="{{ showPet }}"><div style="position:relative;margin-bottom:8px"><dc-import name="PetPhoto" pet="rex" w="120px" h="120px" r="999px" hint-size="120px,120px"></dc-import><div style="position:absolute;right:-6px;bottom:-2px;width:48px;height:48px;border-radius:999px;background:{{ circleBg }};border:3px solid #FAF7F2;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" icon="{{ icon }}" size="24" color="{{ iconC }}" hint-size="24px,24px"></dc-import></div></div></sc-if>
+<sc-if value="{{ hidePet }}"><div style="width:72px;height:72px;border-radius:999px;background:{{ circleBg }};display:flex;align-items:center;justify-content:center;margin-bottom:8px"><dc-import name="Icon" icon="{{ icon }}" size="32" color="{{ iconC }}" hint-size="32px,32px"></dc-import></div></sc-if>
+<span style="font-family:Newsreader,Georgia,serif;font-size:28px;line-height:34px;font-weight:600;text-wrap:balance">{{ title }}</span>
+<span style="font-size:16px;line-height:24px;color:#4A433B;text-wrap:pretty">{{ body }}</span>
+<div style="margin-top:auto;width:100%;display:flex;flex-direction:column;gap:8px"><dc-import name="Btn" label="{{ primary }}" icon="{{ primaryIcon }}" size="lg" full="{{ true }}" hint-size="100%,52px"></dc-import><sc-if value="{{ secondary }}"><dc-import name="Btn" label="{{ secondary }}" variant="outline" action="secondary" size="lg" full="{{ true }}" hint-size="100%,52px"></dc-import></sc-if></div>
+</div></sc-if>
+<div style="height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box"><div style="width:134px;height:5px;border-radius:999px;background:#2A2520"></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:844},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;loading&quot;,&quot;invite&quot;,&quot;accepted&quot;,&quot;expired&quot;,&quot;already&quot;,&quot;cancelled&quot;,&quot;unavailable&quot;,&quot;wrongaccount&quot;],&quot;default&quot;:&quot;invite&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.props.state ?? 'invite';
+    const tones = { success: ['#D9EBDC', '#2F653C'], warning: ['#FAEACB', '#8F6014'], neutral: ['#EFEBE5', '#62594F'], info: ['#D8E4F4', '#2E4E7D'], error: ['#FADCD7', '#962A23'] };
+    const R = {
+      accepted: ['checkCircle', 'success', true, 'Rex is now in your pets', "You'll see Rex's tasks in your schedule from today.", "View Rex's schedule", 'calendar', ''],
+      expired: ['clock', 'warning', true, 'This invite has expired', 'Ask Ana to send you a new one. Invites last 7 days.', 'Go to my pets', '', ''],
+      already: ['eye', 'info', true, "You're already watching Rex", 'You accepted this invite earlier. Nothing else to do.', "View Rex's schedule", 'calendar', ''],
+      cancelled: ['ban', 'neutral', true, 'This invite was cancelled', 'Ana cancelled it. If you think that was a mistake, ask them to invite you again.', 'Go to my pets', '', ''],
+      unavailable: ['heartOff', 'neutral', false, 'This pet is no longer available', 'The owner removed this pet from PetWatch, so the invite no longer works.', 'Go to my pets', '', ''],
+      wrongaccount: ['switchUser', 'warning', false, 'This invite is for a different account', "This invite is for sam@example.com, and you're signed in as ana@example.com.", 'Switch account', 'switchUser', 'Not now'],
+    };
+    const r = R[s];
+    const base = { isLoading: s === 'loading', isInvite: s === 'invite', isResult: !!r };
+    if (!r) return { ...base, showPet: false, hidePet: false };
+    const [icon, tone, showPet, title, body, primary, primaryIcon, secondary] = r;
+    return { ...base, icon, circleBg: tones[tone][0], iconC: tones[tone][1], showPet, hidePet: !showPet, title, body, primary, primaryIcon, secondary };
+  }
+}
+</script>
+</body>
+</html>

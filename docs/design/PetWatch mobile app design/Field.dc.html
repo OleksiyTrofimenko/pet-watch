@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:6px;font-family:Figtree,system-ui,sans-serif;min-width:0"><div style="display:flex;gap:8px;align-items:baseline;flex-wrap:wrap"><span style="font-size:14px;line-height:20px;font-weight:600;color:{{ labelC }}">{{ label }}</span><sc-if value="{{ optional }}"><span style="font-size:13px;line-height:18px;color:#6A6158">Optional</span></sc-if><sc-if value="{{ required }}"><span style="font-size:13px;line-height:18px;color:#6A6158">Required</span></sc-if></div><div style="display:flex;align-items:{{ align }};box-sizing:border-box;min-height:{{ h }}px;padding:{{ pad }};border-radius:8px;background:{{ bg }};border:{{ bw }}px solid {{ bd }};box-shadow:{{ ring }}"><span style="flex:1;min-width:0;font-size:16px;line-height:24px;color:{{ tc }};letter-spacing:{{ ls }};overflow-wrap:anywhere">{{ shown }}<sc-if value="{{ focus }}"><span style="display:inline-block;width:2px;height:20px;background:#AE5230;vertical-align:-4px;margin-left:1px"></span></sc-if></span><sc-if value="{{ trailing }}"><div style="width:44px;height:44px;flex:none;display:flex;align-items:center;justify-content:center"><dc-import name="Icon" icon="{{ trailing }}" size="20" color="{{ iconC }}" hint-size="20px,20px"></dc-import></div></sc-if></div><sc-if value="{{ error }}"><div style="display:flex;gap:6px;align-items:flex-start;color:#962A23;font-size:14px;line-height:20px;font-weight:500"><div style="padding-top:2px;flex:none"><dc-import name="Icon" icon="alert" size="16" color="#962A23" hint-size="16px,16px"></dc-import></div><span>{{ error }}</span></div></sc-if><sc-if value="{{ helperShown }}"><span style="font-size:14px;line-height:20px;color:#6A6158">{{ helperShown }}</span></sc-if></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:340,&quot;height&quot;:120},&quot;label&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Email&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;value&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;placeholder&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;you@example.com&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;state&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;default&quot;,&quot;focus&quot;,&quot;error&quot;,&quot;disabled&quot;],&quot;default&quot;:&quot;default&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;helper&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;error&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;trailing&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;password&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;multiline&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const st = this.props.error ? 'error' : (this.props.state ?? 'default');
+    const val = this.props.value;
+    const pw = !!this.props.password && !!val;
+    const multi = !!this.props.multiline;
+    let bg = '#FFFFFF', bd = '#8C8174', bw = 1, ring = 'none', tc = val ? '#2A2520' : '#6A6158', iconC = '#4A433B', labelC = '#2A2520';
+    if (st === 'focus') { bd = '#AE5230'; bw = 2; ring = '0 0 0 3px #F6E0D5'; }
+    if (st === 'error') { bd = '#B8342B'; bw = 2; }
+    if (st === 'disabled') { bg = '#F3EEE6'; bd = '#DCD4C8'; tc = '#6A6158'; iconC = '#6A6158'; labelC = '#4A433B'; }
+    return {
+      label: this.props.label ?? 'Label', optional: !!this.props.optional, required: !!this.props.required,
+      shown: pw ? '••••••••••' : (val || this.props.placeholder || ''),
+      ls: pw ? '2px' : 'normal',
+      focus: st === 'focus', error: this.props.error || '',
+      helperShown: this.props.error ? '' : (this.props.helper || ''),
+      trailing: this.props.trailing || '',
+      bg, bd, bw, ring, tc, iconC, labelC,
+      h: multi ? 112 : 48, align: multi ? 'flex-start' : 'center',
+      pad: multi ? '11px 14px' : (this.props.trailing ? '0 2px 0 14px' : '0 14px'),
+    };
+  }
+}
+</script>
+</body>
+</html>

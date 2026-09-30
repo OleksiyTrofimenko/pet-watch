@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:28px;font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">09 – 10 · owner only</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Add / edit forms</span><span style="font-size:15px;line-height:22px;color:#4A433B">The shared form layout: modal header (Cancel · title) → fields → sticky Save bar above the home indicator. Watchers never reach these screens — the entry points aren't rendered for them.</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/add</span><dc-import name="PetForm" mode="add" hint-size="390px,1000px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Only Name is required; the others say “Optional”.</span><span>• Species is a Select (Dog, Cat, Bird, Rabbit, Fish, Reptile, Other). Age uses the numeric keypad.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/add-name-error</span><dc-import name="PetForm" mode="add" name-error="{{ true }}" hint-size="390px,1000px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Save stays tappable; tapping it reveals the error and scrolls to it.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/edit</span><dc-import name="PetForm" mode="edit" hint-size="390px,1100px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Photo tap → Actionsheet. Camera badge signals it's tappable.</span><span>• “Delete pet” sits below a divider, far from Save.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/photo-actionsheet</span><dc-import name="PetForm" mode="edit" sheet="{{ true }}" hint-size="390px,1100px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• “Remove photo” only appears when a photo is set.</span><span>• Rows are 56pt; Cancel separated by a divider.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/uploading</span><dc-import name="PetForm" mode="edit" uploading="{{ true }}" hint-size="390px,1100px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Disabled Save always carries its reason underneath.</span><span>• Progress in text (“64%”) as well as the bar.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/saving</span><dc-import name="PetForm" mode="edit" saving="{{ true }}" hint-size="390px,1100px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Spinner + “Saving…”; button ignores repeat taps. Success → back to detail + toast “Rex updated”.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">09-pet-form/delete-confirm</span><dc-import name="PetForm" mode="edit" confirm="{{ true }}" hint-size="390px,1100px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Copy spells out what is lost: routine + watcher access. Safe option is worded (“Keep Rex”).</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">10-task-form/add-daily</span><dc-import name="TaskForm" type="feeding" title="Breakfast" time="08:00" repeat="daily" notes="1 cup dry food, fresh water." hint-size="390px,1100px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Type chips: icon + label + tint; selected adds 2px border + check.</span><span>• Time field opens the native picker; only the field is designed.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">10-task-form/edit-weekly</span><dc-import name="TaskForm" mode="edit" type="walk" title="Walk" time="18:30" repeat="weekly" days="0,2,4" notes="Park loop. Keep him on the lead near the road." hint-size="390px,1200px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Weekly reveals 7 day toggles (44pt), each with a full-day accessibility label.</span><span>• Summary line “Repeats Mon, Wed, Fri” confirms the choice in words.</span></div></div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">10-task-form/weekly-no-days</span><dc-import name="TaskForm" type="walk" title="Walk" time="18:30" repeat="weekly" days="" day-error="{{ true }}" hint-size="390px,1200px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Shown after tapping Save with no days; toggles get red outlines + message.</span></div></div>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

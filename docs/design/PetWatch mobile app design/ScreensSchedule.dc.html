@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:28px;font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">05 – 06</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Schedule</span><span style="font-size:15px;line-height:22px;color:#4A433B">Signed in as ana@example.com — owns Rex, watches Miso. Today is Wednesday 30 September, 13:10. Both roles see the same schedule; watchers simply can't edit what they tap into.</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">05-schedule-today/all</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span>
+<div role="tablist" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="tab" aria-selected="true" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(42,37,32,.16);font-size:15px;font-weight:700;color:#2A2520">Today</div><div role="tab" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;font-weight:500;color:#4A433B">This week</div></div>
+<div style="display:flex;gap:8px;overflow:hidden;margin:0 -16px;padding:0 16px">
+<div role="button" aria-pressed="true" style="display:flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 12px;border-radius:999px;background:#AE5230;border:1.5px solid #AE5230;color:#FFFFFF;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Icon" icon="check" size="18" color="#FFFFFF" stroke="2.6" hint-size="18px,18px"></dc-import><span>All pets</span></div>
+<div role="button" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 6px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="rex" size="30" hint-size="30px,30px"></dc-import><span>Rex</span></div>
+<div role="button" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 6px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="miso" size="30" hint-size="30px,30px"></dc-import><span>Miso</span></div>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:20px 16px 16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0 4px 4px;flex-wrap:wrap"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Wednesday, 30 September</span><span style="font-size:14px;color:#4A433B">4 tasks</span></div>
+<dc-import name="TaskRow" time="07:30" type="medication" title="Joint supplement" pet="rex" notes="Hide it in a spoon of wet food." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="font-size:13px;line-height:16px;font-weight:700;color:#8F4227">Now · 13:10</span><div style="flex:1;height:2px;background:#AE5230;border-radius:999px"></div></div>
+<dc-import name="TaskRow" time="17:00" type="play" title="Feather wand time" pet="miso" notes="10 minutes, then two treats." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="18:30" type="walk" title="Evening walk" pet="rex" notes="Park loop. Keep him on the lead near the road." hint-size="100%,96px"></dc-import>
+</div>
+<dc-import name="TabBar" active="schedule" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Segmented control = 2 Buttons; selected one is raised + bold, not just recoloured.</span><span>• Selected chip adds a check icon. Chips scroll horizontally.</span><span>• Past rows: muted surface + “Past” label. Text stays ≥ 4.5:1.</span><span>• Tap a row → task detail (owner: Edit; watcher: read-only).</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">05-schedule-today/filtered-rex</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span>
+<div role="tablist" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="tab" aria-selected="true" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(42,37,32,.16);font-size:15px;font-weight:700;color:#2A2520">Today</div><div role="tab" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;font-weight:500;color:#4A433B">This week</div></div>
+<div style="display:flex;gap:8px;overflow:hidden;margin:0 -16px;padding:0 16px">
+<div role="button" style="display:flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><span>All pets</span></div>
+<div role="button" aria-pressed="true" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 6px;border-radius:999px;background:#AE5230;border:1.5px solid #AE5230;color:#FFFFFF;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="rex" size="30" ring="{{ true }}" hint-size="30px,30px"></dc-import><span>Rex</span><dc-import name="Icon" icon="check" size="18" color="#FFFFFF" stroke="2.6" hint-size="18px,18px"></dc-import></div>
+<div role="button" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 6px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="miso" size="30" hint-size="30px,30px"></dc-import><span>Miso</span></div>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:20px 16px 16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0 4px 4px;flex-wrap:wrap"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Wednesday, 30 September</span><span style="font-size:14px;color:#4A433B">3 tasks for Rex</span></div>
+<dc-import name="TaskRow" time="07:30" type="medication" title="Joint supplement" pet="rex" notes="Hide it in a spoon of wet food." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<div style="display:flex;align-items:center;gap:8px;padding:4px 0"><span style="font-size:13px;line-height:16px;font-weight:700;color:#8F4227">Now · 13:10</span><div style="flex:1;height:2px;background:#AE5230;border-radius:999px"></div></div>
+<dc-import name="TaskRow" time="18:30" type="walk" title="Evening walk" pet="rex" notes="Park loop. Keep him on the lead near the road." hint-size="100%,96px"></dc-import>
+</div>
+<dc-import name="TabBar" active="schedule" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• One pet selected at a time; “All pets” clears the filter.</span><span>• Count copy names the filter so the state is readable by screen readers.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">05-schedule-today/offline</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div role="status" style="display:flex;gap:10px;align-items:center;padding:10px 16px;background:#FAEACB;color:#56390B;font-size:14px;line-height:20px;font-weight:600"><dc-import name="Icon" icon="wifiOff" size="18" color="#56390B" hint-size="18px,18px"></dc-import><span>You're offline. Showing saved data.</span></div>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span>
+<div role="tablist" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="tab" aria-selected="true" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(42,37,32,.16);font-size:15px;font-weight:700;color:#2A2520">Today</div><div role="tab" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;font-weight:500;color:#4A433B">This week</div></div>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:20px 16px 16px">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:0 4px 4px;flex-wrap:wrap"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Wednesday, 30 September</span><span style="font-size:14px;color:#4A433B">Updated 12:42</span></div>
+<dc-import name="TaskRow" time="07:30" type="medication" title="Joint supplement" pet="rex" notes="Hide it in a spoon of wet food." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="17:00" type="play" title="Feather wand time" pet="miso" notes="10 minutes, then two treats." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="18:30" type="walk" title="Evening walk" pet="rex" notes="Park loop. Keep him on the lead near the road." hint-size="100%,96px"></dc-import>
+</div>
+<dc-import name="TabBar" active="schedule" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Banner sits under the status bar on every tab while offline.</span><span>• “Updated 12:42” replaces the count so staleness is explicit.</span><span>• Any save/invite button is disabled with helper “Connect to the internet to save.”</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">05-schedule-today/loading</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span>
+<div role="tablist" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="tab" aria-selected="true" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(42,37,32,.16);font-size:15px;font-weight:700;color:#2A2520">Today</div><div role="tab" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;font-weight:500;color:#4A433B">This week</div></div>
+<div style="display:flex;gap:8px"><div style="width:96px;height:44px;border-radius:999px;background:#EFEBE5"></div><div style="width:84px;height:44px;border-radius:999px;background:#EFEBE5"></div><div style="width:92px;height:44px;border-radius:999px;background:#EFEBE5"></div></div>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px;padding:20px 16px 16px">
+<div style="width:62%;height:24px;border-radius:8px;background:#EFEBE5;margin:2px 4px 8px"></div>
+<dc-import name="Skeleton" kind="task" hint-size="100%,96px"></dc-import>
+<dc-import name="Skeleton" kind="task" hint-size="100%,96px"></dc-import>
+<dc-import name="Skeleton" kind="task" hint-size="100%,96px"></dc-import>
+<dc-import name="Skeleton" kind="task" hint-size="100%,96px"></dc-import>
+</div>
+<dc-import name="TabBar" active="schedule" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Segmented control stays live while rows load.</span><span>• Skeleton rows match TaskRow height to avoid layout jump.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">06-schedule-week/all · full scroll</span>
+<div style="width:390px;min-height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span>
+<div role="tablist" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="tab" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;font-weight:500;color:#4A433B">Today</div><div role="tab" aria-selected="true" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(42,37,32,.16);font-size:15px;font-weight:700;color:#2A2520">This week</div></div>
+<div style="display:flex;gap:8px;overflow:hidden;margin:0 -16px;padding:0 16px">
+<div role="button" aria-pressed="true" style="display:flex;align-items:center;gap:6px;min-height:44px;padding:0 16px 0 12px;border-radius:999px;background:#AE5230;border:1.5px solid #AE5230;color:#FFFFFF;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Icon" icon="check" size="18" color="#FFFFFF" stroke="2.6" hint-size="18px,18px"></dc-import><span>All pets</span></div>
+<div role="button" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 6px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="rex" size="30" hint-size="30px,30px"></dc-import><span>Rex</span></div>
+<div role="button" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 6px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="miso" size="30" hint-size="30px,30px"></dc-import><span>Miso</span></div>
+</div>
+<span style="font-size:14px;line-height:20px;color:#4A433B;font-weight:600">28 September – 4 October</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px;padding:16px 16px 24px">
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Mon</span><span style="font-size:15px;color:#4A433B">28 Sep</span></div><span style="font-size:14px;color:#4A433B">2 tasks</span></div>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="18:30" type="walk" title="Evening walk" pet="rex" notes="Park loop. Keep him on the lead near the road." past="{{ true }}" hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Tue</span><span style="font-size:15px;color:#4A433B">29 Sep</span></div><span style="font-size:14px;color:#4A433B">2 tasks</span></div>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="09:00" type="feeding" title="Top up dry food" pet="miso" notes="Fill the bowl to the line." past="{{ true }}" hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px;margin:0 -12px;border-radius:16px;background:#FBF1EC;border:1.5px solid #AE5230"><div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px;gap:8px"><div style="display:flex;gap:8px;align-items:center"><span style="font-size:17px;line-height:22px;font-weight:700">Wed</span><span style="font-size:15px;color:#4A433B">30 Sep</span><span style="font-size:12px;line-height:16px;font-weight:700;color:#FFFFFF;background:#AE5230;padding:3px 8px;border-radius:999px">Today</span></div><span style="font-size:14px;color:#4A433B">4 tasks</span></div>
+<dc-import name="TaskRow" time="07:30" type="medication" title="Joint supplement" pet="rex" notes="Hide it in a spoon of wet food." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." past="{{ true }}" hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="17:00" type="play" title="Feather wand time" pet="miso" notes="10 minutes, then two treats." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="18:30" type="walk" title="Evening walk" pet="rex" notes="Park loop. Keep him on the lead near the road." hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Thu</span><span style="font-size:15px;color:#4A433B">1 Oct</span></div><span style="font-size:14px;color:#4A433B">2 tasks</span></div>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="11:00" type="other" title="Refill water fountain" pet="rex" notes="Rinse the filter while you're at it." hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Fri</span><span style="font-size:15px;color:#4A433B">2 Oct</span></div><span style="font-size:14px;color:#4A433B">3 tasks</span></div>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="09:00" type="feeding" title="Top up dry food" pet="miso" notes="Fill the bowl to the line." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="18:30" type="walk" title="Evening walk" pet="rex" notes="Park loop. Keep him on the lead near the road." hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Sat</span><span style="font-size:15px;color:#4A433B">3 Oct</span></div><span style="font-size:14px;color:#4A433B">2 tasks</span></div>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="17:00" type="play" title="Feather wand time" pet="miso" notes="10 minutes, then two treats." hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Sun</span><span style="font-size:15px;color:#4A433B">4 Oct</span></div><span style="font-size:14px;color:#4A433B">2 tasks</span></div>
+<dc-import name="TaskRow" time="08:00" type="feeding" title="Breakfast" pet="rex" notes="1 cup dry food, fresh water." hint-size="100%,96px"></dc-import>
+<dc-import name="TaskRow" time="10:00" type="grooming" title="Brush coat" pet="miso" notes="Gentle on the belly. Stop if she swishes her tail." hint-size="100%,96px"></dc-import></div>
+</div>
+<dc-import name="TabBar" active="schedule" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Today block: tinted + outlined + “Today” pill (three cues, not colour alone).</span><span>• Opens scrolled to Today. Same TaskRow as the Today view.</span></div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:12px;width:390px">
+<span style="font:600 13px/16px ui-monospace,Menlo,monospace">06-schedule-week/filtered-miso</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0;display:flex;flex-direction:column;gap:16px">
+<span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span>
+<div role="tablist" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="tab" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-size:15px;font-weight:500;color:#4A433B">Today</div><div role="tab" aria-selected="true" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#FFFFFF;box-shadow:0 1px 3px rgba(42,37,32,.16);font-size:15px;font-weight:700;color:#2A2520">This week</div></div>
+<div style="display:flex;gap:8px;overflow:hidden;margin:0 -16px;padding:0 16px">
+<div role="button" style="display:flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><span>All pets</span></div>
+<div role="button" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 6px;border-radius:999px;background:#FFFFFF;border:1.5px solid #DCD4C8;color:#2A2520;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="rex" size="30" hint-size="30px,30px"></dc-import><span>Rex</span></div>
+<div role="button" aria-pressed="true" style="display:flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 6px;border-radius:999px;background:#AE5230;border:1.5px solid #AE5230;color:#FFFFFF;font-size:15px;font-weight:600;flex:none;box-sizing:border-box"><dc-import name="Avatar" pet="miso" size="30" ring="{{ true }}" hint-size="30px,30px"></dc-import><span>Miso</span><dc-import name="Icon" icon="check" size="18" color="#FFFFFF" stroke="2.6" hint-size="18px,18px"></dc-import></div>
+</div>
+</div>
+<div style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:20px;padding:20px 16px 16px">
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Mon</span><span style="font-size:15px;color:#4A433B">28 Sep</span></div><span style="font-size:14px;color:#4A433B">0 tasks</span></div><div style="padding:13px 16px;border-radius:16px;border:1.5px dashed #DCD4C8;font-size:15px;line-height:20px;color:#6A6158">Nothing scheduled</div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Tue</span><span style="font-size:15px;color:#4A433B">29 Sep</span></div><span style="font-size:14px;color:#4A433B">1 task</span></div>
+<dc-import name="TaskRow" time="09:00" type="feeding" title="Top up dry food" pet="miso" notes="Fill the bowl to the line." past="{{ true }}" hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px;padding:12px;margin:0 -12px;border-radius:16px;background:#FBF1EC;border:1.5px solid #AE5230"><div style="display:flex;align-items:center;justify-content:space-between;padding:0 4px;gap:8px"><div style="display:flex;gap:8px;align-items:center"><span style="font-size:17px;line-height:22px;font-weight:700">Wed</span><span style="font-size:15px;color:#4A433B">30 Sep</span><span style="font-size:12px;line-height:16px;font-weight:700;color:#FFFFFF;background:#AE5230;padding:3px 8px;border-radius:999px">Today</span></div><span style="font-size:14px;color:#4A433B">1 task</span></div>
+<dc-import name="TaskRow" time="17:00" type="play" title="Feather wand time" pet="miso" notes="10 minutes, then two treats." hint-size="100%,96px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Thu</span><span style="font-size:15px;color:#4A433B">1 Oct</span></div><span style="font-size:14px;color:#4A433B">0 tasks</span></div><div style="padding:13px 16px;border-radius:16px;border:1.5px dashed #DCD4C8;font-size:15px;line-height:20px;color:#6A6158">Nothing scheduled</div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;align-items:baseline;justify-content:space-between;padding:0 4px"><div style="display:flex;gap:8px;align-items:baseline"><span style="font-size:17px;line-height:22px;font-weight:700">Fri</span><span style="font-size:15px;color:#4A433B">2 Oct</span></div><span style="font-size:14px;color:#4A433B">1 task</span></div>
+<dc-import name="TaskRow" time="09:00" type="feeding" title="Top up dry food" pet="miso" notes="Fill the bowl to the line." hint-size="100%,96px"></dc-import></div>
+</div>
+<dc-import name="TabBar" active="schedule" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Empty days keep their header so the week reads Mon–Sun without gaps.</span><span>• Dashed placeholder is not tappable.</span></div>
+</div>
+
+</div>
+</div>
+</x-dc>
+</body>
+</html>

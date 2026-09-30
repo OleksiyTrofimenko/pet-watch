@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:56px;font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">11 · owner only</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Invite watcher</span><span style="font-size:15px;line-height:22px;color:#4A433B">Actionsheet over Rex's detail. Success results replace the sheet content; problems stay on the form so the email can be fixed in place.</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/form</span><dc-import name="InviteSheet" result="form" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Email keyboard, autofocus. Lead copy states the permission up front.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/sending</span><dc-import name="InviteSheet" result="sending" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/sent</span><dc-import name="InviteSheet" result="sent" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Behind the sheet, a Pending row is added to Watchers.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/resent</span><dc-import name="InviteSheet" result="resent" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Inviting a pending email re-sends; expiry resets.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/already-watching</span><dc-import name="InviteSheet" result="already" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Info, not error: nothing went wrong.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/no-account</span><dc-import name="InviteSheet" result="noaccount" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">11-invite/self</span><dc-import name="InviteSheet" result="self" hint-size="390px,844px"></dc-import></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">12 · deep link</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Accept invitation</span><span style="font-size:15px;line-height:22px;color:#4A433B">Opened from the email, signed in as sam@example.com. Trust comes from specifics: the inviter's email, the pet's photo, exactly what access means, when it expires, and which account you're using. No tab bar — it's a focused step.</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/loading</span><dc-import name="AcceptScreen" state="loading" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/invite</span><dc-import name="AcceptScreen" state="invite" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• “Not now” leaves the invite pending; the link keeps working until expiry.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/accepted</span><dc-import name="AcceptScreen" state="accepted" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/expired</span><dc-import name="AcceptScreen" state="expired" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/already-accepted</span><dc-import name="AcceptScreen" state="already" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/cancelled</span><dc-import name="AcceptScreen" state="cancelled" hint-size="390px,844px"></dc-import></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/pet-unavailable</span><dc-import name="AcceptScreen" state="unavailable" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• No pet photo here — the pet's data is gone.</span></div></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">12-accept/wrong-account</span><dc-import name="AcceptScreen" state="wrongaccount" hint-size="390px,844px"></dc-import><div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• “Switch account” logs out and returns to this invite after login.</span></div></div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:28px">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">13</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Account</span></div>
+<div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+<div style="display:flex;flex-direction:column;gap:12px;width:390px"><span style="font:600 13px/16px ui-monospace,Menlo,monospace">13-account/default</span>
+<div style="width:390px;height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12)">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="padding:8px 16px 0"><span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Account</span></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:16px;padding:20px 16px">
+<div style="display:flex;align-items:center;gap:14px;padding:16px;background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px"><dc-import name="Avatar" letter="A" tone="primary" size="48" hint-size="48px,48px"></dc-import><div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-size:14px;line-height:20px;color:#4A433B">Signed in as</span><span style="font-size:17px;line-height:22px;font-weight:600;overflow-wrap:anywhere">ana@example.com</span></div></div>
+<dc-import name="Btn" label="Log out" icon="logout" variant="outline" action="secondary" full="{{ true }}" hint-size="100%,48px"></dc-import>
+<span style="margin-top:auto;text-align:center;font-size:13px;line-height:18px;color:#6A6158">PetWatch 1.0</span>
+</div>
+<dc-import name="TabBar" active="account" hint-size="390px,97px"></dc-import>
+</div>
+<div style="font-size:13px;line-height:19px;color:#4A433B;display:flex;flex-direction:column;gap:4px"><span>• Log out is immediate (no confirm) — nothing is lost.</span></div>
+</div>
+</div>
+</div>
+
+</div>
+</x-dc>
+</body>
+</html>

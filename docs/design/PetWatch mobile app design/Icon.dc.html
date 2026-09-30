@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<span style="display:inline-flex;flex:none;line-height:0">{{ svg }}</span>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:48,&quot;height&quot;:48},&quot;icon&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;paw&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;size&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:24,&quot;tsType&quot;:&quot;number&quot;},&quot;color&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2A2520&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;fill&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  paths() {
+    const c = (x, y, r) => `M${x - r} ${y}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
+    return {
+      feeding: ['M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2', 'M7 2v20', 'M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7'],
+      walk: ['M4 16v-2.38C4 11.5 2.97 10.5 3 8c.03-2.72 1.49-6 4.5-6C9.37 2 10 3.8 10 5.5c0 3.11-2 5.66-2 8.68V16a2 2 0 1 1-4 0Z', 'M20 20v-2.38c0-2.12 1.03-3.12 1-5.62-.03-2.72-1.49-6-4.5-6C14.63 6 14 7.8 14 9.5c0 3.11 2 5.66 2 8.68V20a2 2 0 1 0 4 0Z', 'M16 17h4', 'M4 13h4'],
+      medication: ['m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z', 'm8.5 8.5 7 7'],
+      play: [c(12, 12, 10), 'M6 4.9a10 10 0 0 1 0 14.2', 'M18 4.9a10 10 0 0 0 0 14.2'],
+      grooming: [c(6, 6, 3), c(6, 18, 3), 'M20 4 8.12 15.88', 'M14.47 14.48 20 20', 'M8.12 8.12 12 12'],
+      other: ['M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z', 'M14 2v6h6', 'M8 13h8', 'M8 17h5'],
+      paw: [c(5, 10, 1.8), c(9, 5.5, 1.8), c(15, 5.5, 1.8), c(19, 10, 1.8), 'M12 12c-3 0-6 3.5-6 6.2C6 20 7.3 21 9 21c1.2 0 2-.6 3-.6s1.8.6 3 .6c1.7 0 3-1 3-2.8C18 15.5 15 12 12 12Z'],
+      calendar: ['M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z', 'M16 2v4', 'M8 2v4', 'M3 10h18'],
+      user: ['M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2', c(12, 7, 4)],
+      users: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', c(9, 7, 4), 'M22 21v-2a4 4 0 0 0-3-3.87', 'M16 3.13a4 4 0 0 1 0 7.75'],
+      userPlus: ['M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', c(9, 7, 4), 'M19 8v6', 'M22 11h-6'],
+      plus: ['M12 5v14', 'M5 12h14'],
+      eye: ['M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z', c(12, 12, 3)],
+      eyeOff: ['M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z', c(12, 12, 3), 'M3 3l18 18'],
+      chevronLeft: ['m15 18-6-6 6-6'],
+      chevronRight: ['m9 18 6-6-6-6'],
+      chevronDown: ['m6 9 6 6 6-6'],
+      pencil: ['M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'],
+      trash: ['M3 6h18', 'M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6', 'M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2'],
+      mail: ['M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z', 'm22 6-10 7L2 6'],
+      clock: [c(12, 12, 10), 'M12 6v6l4 2'],
+      camera: ['M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3Z', c(12, 13, 3)],
+      image: ['M3 5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z', c(9, 9, 2), 'm21 15-5-5L5 21'],
+      wifiOff: ['M2 2l20 20', 'M8.5 16.5a5 5 0 0 1 7 0', 'M5 12.9a10 10 0 0 1 5.2-2.8', 'M19 12.9a10 10 0 0 0-2.3-1.6', 'M2 8.8a15 15 0 0 1 4.2-2.6', 'M22 8.8a15 15 0 0 0-11.3-3.7', 'M12 20h.01'],
+      alert: [c(12, 12, 10), 'M12 8v4', 'M12 16h.01'],
+      check: ['M20 6 9 17l-5-5'],
+      checkCircle: [c(12, 12, 10), 'm9 12 2 2 4-4'],
+      info: [c(12, 12, 10), 'M12 16v-4', 'M12 8h.01'],
+      x: ['M18 6 6 18', 'm6 6 12 12'],
+      logout: ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'm16 17 5-5-5-5', 'M21 12H9'],
+      shield: ['M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z', 'm9 12 2 2 4-4'],
+      lock: ['M5 11h14v10H5Z', 'M7 11V7a5 5 0 0 1 10 0v4'],
+      home: ['M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z'],
+      refresh: ['M21 12a9 9 0 1 1-2.64-6.36L21 8', 'M21 3v5h-5'],
+      send: ['m22 2-7 20-4-9-9-4Z', 'M22 2 11 13'],
+      ban: [c(12, 12, 10), 'm4.9 4.9 14.2 14.2'],
+      heartOff: ['M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z', 'M2 2l20 20'],
+      switchUser: [c(9, 7, 4), 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2', 'm19 9 3 3-3 3', 'M16 12h6'],
+    };
+  }
+  renderVals() {
+    const P = this.paths();
+    const d = P[this.props.icon] || P.other;
+    const s = Number(this.props.size ?? 20);
+    const col = this.props.color ?? 'currentColor';
+    const filled = !!this.props.fill;
+    const svg = React.createElement('svg', {
+      width: s, height: s, viewBox: '0 0 24 24', 'aria-hidden': true,
+      fill: filled ? col : 'none', stroke: filled ? 'none' : col,
+      strokeWidth: this.props.stroke ?? 2, strokeLinecap: 'round', strokeLinejoin: 'round',
+      style: { display: 'block', flex: 'none' }
+    }, d.map((p, i) => React.createElement('path', { key: i, d: p })));
+    return { svg };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="width:390px;min-height:844px;background:#FAF7F2;border-radius:40px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(42,37,32,.10),0 16px 40px rgba(90,60,30,.12);font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<dc-import name="StatusBar" hint-size="390px,47px"></dc-import>
+<div style="display:flex;align-items:center;justify-content:space-between;min-height:52px;padding:0 8px;border-bottom:1px solid #E9E3DA"><div style="width:88px"><dc-import name="Btn" variant="link" action="secondary" size="sm" label="Cancel" hint-size="70px,44px"></dc-import></div><span style="font-size:17px;line-height:22px;font-weight:700">{{ heading }}</span><div style="width:88px"></div></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:22px;padding:20px 16px 28px">
+<div style="display:flex;align-items:center;gap:8px"><dc-import name="Avatar" pet="rex" size="28" hint-size="28px,28px"></dc-import><span style="font-size:15px;font-weight:600;color:#4A433B">For Rex</span></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;line-height:20px;font-weight:600">Type</span><div role="radiogroup" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px"><sc-for list="{{ types }}" as="t" hint-placeholder-count="6"><div role="radio" style="display:flex;align-items:center;gap:10px;min-height:52px;padding:0 12px;border-radius:8px;background:{{ t.bg }};border:{{ t.bw }} solid {{ t.bd }};box-sizing:border-box"><dc-import name="Icon" icon="{{ t.id }}" size="20" color="{{ t.fg }}" hint-size="20px,20px"></dc-import><span style="flex:1;font-size:15px;line-height:20px;font-weight:{{ t.w }};color:{{ t.tc }}">{{ t.label }}</span><sc-if value="{{ t.on }}"><dc-import name="Icon" icon="check" size="18" color="{{ t.fg }}" stroke="2.8" hint-size="18px,18px"></dc-import></sc-if></div></sc-for></div></div>
+<dc-import name="Field" label="Title" value="{{ title }}" placeholder="e.g. Breakfast" hint-size="100%,74px"></dc-import>
+<dc-import name="Field" label="Time" value="{{ time }}" trailing="clock" helper="Opens your phone's time picker." hint-size="100%,100px"></dc-import>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;line-height:20px;font-weight:600">Repeat</span><div role="radiogroup" style="display:flex;padding:3px;border-radius:8px;background:#EFEBE5;gap:3px"><div role="radio" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:{{ dBg }};box-shadow:{{ dSh }};font-size:15px;font-weight:{{ dW }};color:#2A2520">Daily</div><div role="radio" style="flex:1;min-height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:{{ wBg }};box-shadow:{{ wSh }};font-size:15px;font-weight:{{ wW }};color:#2A2520">Weekly</div></div>
+<sc-if value="{{ weekly }}"><div style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div style="display:flex;justify-content:space-between"><sc-for list="{{ days }}" as="d" hint-placeholder-count="7"><div role="checkbox" aria-label="{{ d.full }}" style="width:44px;height:44px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:{{ d.bg }};border:1.5px solid {{ d.bd }};color:{{ d.fg }};font-size:15px;font-weight:700;box-sizing:border-box">{{ d.l }}</div></sc-for></div><sc-if value="{{ dayError }}"><div role="alert" style="display:flex;gap:6px;align-items:center;color:#962A23;font-size:14px;line-height:20px;font-weight:500"><dc-import name="Icon" icon="alert" size="16" color="#962A23" hint-size="16px,16px"></dc-import><span>Pick at least one day.</span></div></sc-if><sc-if value="{{ daySummary }}"><span style="font-size:14px;line-height:20px;color:#4A433B">{{ daySummary }}</span></sc-if></div></sc-if></div>
+<dc-import name="Field" label="Notes" optional="{{ true }}" multiline="{{ true }}" value="{{ notes }}" placeholder="What should the watcher know?" hint-size="100%,138px"></dc-import>
+<sc-if value="{{ edit }}"><div style="display:flex;justify-content:center"><dc-import name="Btn" label="Delete task" variant="link" action="negative" size="sm" hint-size="110px,44px"></dc-import></div></sc-if>
+</div>
+<div style="background:#FFFFFF;border-top:1px solid #E9E3DA;padding:12px 16px 0;display:flex;flex-direction:column;gap:6px"><dc-import name="Btn" label="{{ saveLabel }}" size="lg" full="{{ true }}" hint-size="100%,52px"></dc-import><div style="height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box"><div style="width:134px;height:5px;border-radius:999px;background:#2A2520"></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:1150},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;add&quot;,&quot;edit&quot;],&quot;default&quot;:&quot;add&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;type&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;feeding&quot;,&quot;walk&quot;,&quot;medication&quot;,&quot;play&quot;,&quot;grooming&quot;,&quot;other&quot;],&quot;default&quot;:&quot;feeding&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;repeat&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;daily&quot;,&quot;weekly&quot;],&quot;default&quot;:&quot;daily&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;days&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;0,2,4&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;dayError&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const sel = this.props.type ?? 'feeding';
+    const meta = { feeding: ['Feeding', '#FAEACB', '#8F6014'], walk: ['Walk', '#D9EBDC', '#2F653C'], medication: ['Medication', '#D8E4F4', '#2E4E7D'], play: ['Play', '#F6E0D5', '#8F4227'], grooming: ['Grooming', '#EEDFEE', '#663866'], other: ['Other', '#EFEBE5', '#62594F'] };
+    const types = Object.keys(meta).map(id => {
+      const [label, bg, fg] = meta[id]; const on = id === sel;
+      return { id, label, on, fg, bg: on ? bg : '#FFFFFF', bd: on ? fg : '#DCD4C8', bw: on ? '2px' : '1.5px', w: on ? 700 : 500, tc: on ? fg : '#2A2520' };
+    });
+    const weekly = (this.props.repeat ?? 'daily') === 'weekly';
+    const picked = String(this.props.days ?? '').split(',').filter(Boolean).map(Number);
+    const full = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((l, i) => {
+      const on = picked.includes(i);
+      return { l, full: full[i], bg: on ? '#AE5230' : '#FFFFFF', bd: on ? '#AE5230' : (this.props.dayError ? '#B8342B' : '#8C8174'), fg: on ? '#FFFFFF' : '#2A2520' };
+    });
+    const short = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const edit = this.props.mode === 'edit';
+    return {
+      types, weekly, days, edit, dayError: !!this.props.dayError,
+      daySummary: picked.length && !this.props.dayError ? 'Repeats ' + picked.map(i => short[i]).join(', ') : '',
+      heading: edit ? 'Edit task' : 'New task', saveLabel: edit ? 'Save changes' : 'Add task',
+      title: this.props.title ?? '', time: this.props.time ?? '08:00', notes: this.props.notes ?? '',
+      dBg: weekly ? 'transparent' : '#FFFFFF', dSh: weekly ? 'none' : '0 1px 3px rgba(42,37,32,.16)', dW: weekly ? 500 : 700,
+      wBg: weekly ? '#FFFFFF' : 'transparent', wSh: weekly ? '0 1px 3px rgba(42,37,32,.16)' : 'none', wW: weekly ? 700 : 500,
+    };
+  }
+}
+</script>
+</body>
+</html>

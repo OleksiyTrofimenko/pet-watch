@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;flex-direction:column;gap:28px;font-family:Figtree,system-ui,sans-serif;color:#2A2520">
+<div style="display:flex;flex-direction:column;gap:6px;max-width:760px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#8F4227;letter-spacing:.08em">DELIVERABLE 1</span><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Tokens</span><span style="font-size:15px;line-height:22px;color:#4A433B">Gluestack v3 scale names. One accent (primary · clay), warm-stone neutrals. Text pairs used in the UI are all ≥ 4.5:1; the 500 step is for icons/fills only, never body text on light surfaces.</span></div>
+<div style="display:flex;flex-direction:column;gap:10px;background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px;padding:24px;max-width:1240px">
+<div style="display:grid;grid-template-columns:150px repeat(6,minmax(0,1fr)) 240px;gap:8px;font:600 12px/16px ui-monospace,Menlo,monospace;color:#4A433B"><span>scale</span><span>50</span><span>100</span><span>500</span><span>600</span><span>700</span><span>900</span><span>used for</span></div>
+<sc-for list="{{ scales }}" as="s" hint-placeholder-count="10"><div style="display:grid;grid-template-columns:150px repeat(6,minmax(0,1fr)) 240px;gap:8px;align-items:stretch"><div style="display:flex;flex-direction:column;justify-content:center"><span style="font-size:15px;font-weight:700">{{ s.name }}</span></div><sc-for list="{{ s.steps }}" as="c"><div style="display:flex;flex-direction:column;border-radius:8px;overflow:hidden;border:1px solid #E9E3DA"><div style="height:40px;background:{{ c.hex }}"></div><span style="font:500 11px/14px ui-monospace,Menlo,monospace;padding:5px 6px;color:#2A2520;background:#FFFFFF">{{ c.hex }}</span></div></sc-for><span style="font-size:13px;line-height:18px;color:#4A433B;align-self:center">{{ s.use }}</span></div></sc-for>
+</div>
+<div style="display:flex;flex-wrap:wrap;gap:24px;align-items:flex-start">
+<div style="flex:1 1 520px;max-width:620px;background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">TYPE · Newsreader (Heading) + Figtree (Text)</span>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #E9E3DA;padding-bottom:10px"><span style="font-family:Newsreader,Georgia,serif;font-size:36px;line-height:42px;font-weight:600">Rex</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Heading 3xl · 36/42 · pet name</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #E9E3DA;padding-bottom:10px"><span style="font-family:Newsreader,Georgia,serif;font-size:32px;line-height:38px;font-weight:600">Schedule</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Heading 2xl · 32/38 · screen</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #E9E3DA;padding-bottom:10px"><span style="font-family:Newsreader,Georgia,serif;font-size:22px;line-height:28px;font-weight:600">Care routine</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Heading lg · 22/28 · section</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #E9E3DA;padding-bottom:10px"><span style="font-size:17px;line-height:22px;font-weight:700">Edit task</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Text lg bold · 17/22 · nav title</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #E9E3DA;padding-bottom:10px"><span style="font-size:16px;line-height:24px">Rex's dinner is at 18:00.</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Text md · 16/24 · body, inputs</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid #E9E3DA;padding-bottom:10px"><span style="font-size:14px;line-height:20px;color:#4A433B">Watching since 12 Sep</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Text sm · 14/20 · secondary</span></div>
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px"><span style="font-size:13px;line-height:16px;font-weight:600">Medication</span><span style="font:500 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">Text xs · 13/16 · badges (floor)</span></div>
+<span style="font-size:13px;line-height:18px;color:#4A433B">All sizes scale with OS text size; rows use min-height + wrap, never fixed height. Tab labels are the only 12pt text.</span>
+</div>
+<div style="flex:1 1 300px;max-width:380px;display:flex;flex-direction:column;gap:24px">
+<div style="background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:10px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">SPACING · 4-pt</span>
+<sc-for list="{{ spacing }}" as="sp" hint-placeholder-count="8"><div style="display:flex;align-items:center;gap:12px"><span style="width:64px;font:500 12px/16px ui-monospace,Menlo,monospace">{{ sp.name }}</span><div style="height:12px;width:{{ sp.px }}px;background:#C8643B;border-radius:2px"></div><span style="font-size:13px;color:#4A433B">{{ sp.px }} · {{ sp.use }}</span></div></sc-for>
+</div>
+<div style="background:#FFFFFF;border:1px solid #E9E3DA;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:14px"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#4A433B">RADII · 3 only</span>
+<div style="display:flex;gap:16px;align-items:flex-end"><div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:64px;height:48px;border-radius:8px;background:#F6E0D5;border:1.5px solid #AE5230"></div><span style="font:500 12px/16px ui-monospace,Menlo,monospace">sm · 8</span></div><div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:64px;height:48px;border-radius:16px;background:#F6E0D5;border:1.5px solid #AE5230"></div><span style="font:500 12px/16px ui-monospace,Menlo,monospace">xl · 16</span></div><div style="display:flex;flex-direction:column;gap:6px;align-items:center"><div style="width:64px;height:48px;border-radius:999px;background:#F6E0D5;border:1.5px solid #AE5230"></div><span style="font:500 12px/16px ui-monospace,Menlo,monospace">full</span></div></div>
+<span style="font-size:13px;line-height:18px;color:#4A433B">8 — inputs, buttons, segmented, thumbnails. 16 — cards, rows, sheets, dialogs. full — chips, badges, avatars, Fab.</span>
+</div>
+<div style="background:#1E1B18;border-radius:16px;padding:24px;display:flex;flex-direction:column;gap:12px;color:#F3EEE6"><span style="font:600 12px/16px ui-monospace,Menlo,monospace;color:#CFC6B8">DARK MODE (bonus) · same names, remapped</span>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;font:500 12px/16px ui-monospace,Menlo,monospace"><span>background-50 → #1E1B18</span><span>background-0 → #2A2520</span><span>typography-900 → #F3EEE6</span><span>typography-600 → #CFC6B8</span><span>primary-600 → #E08A63</span><span>outline-200 → #4A433B</span></div>
+<div style="display:flex;gap:8px;align-items:center"><div style="padding:10px 16px;border-radius:8px;background:#E08A63;color:#1E1B18;font:600 15px Figtree,system-ui,sans-serif">Save pet</div><span style="font-size:13px;color:#CFC6B8">dark text on clay-300 in dark mode</span></div>
+</div>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const S = [
+      ['primary', ['#FBF1EC', '#F6E0D5', '#C8643B', '#AE5230', '#8F4227', '#5A2A1A'], 'Accent. 600 buttons/selected, 700 text on 100 tints.'],
+      ['secondary', ['#F7F5F2', '#EFEBE5', '#9A8F82', '#7D7367', '#62594F', '#34302B'], 'Neutral buttons, segmented track, “Other”.'],
+      ['tertiary', ['#F7F1F7', '#EEDFEE', '#9A5B98', '#80477F', '#663866', '#3D223D'], 'Grooming type; Miso avatar.'],
+      ['error', ['#FDF0EE', '#FADCD7', '#D6453A', '#B8342B', '#962A23', '#5C1A16'], 'Field errors, destructive actions.'],
+      ['success', ['#EFF6F0', '#D9EBDC', '#4E9A5E', '#3C7F4B', '#2F653C', '#1C3D24'], 'Walk type; success toasts.'],
+      ['warning', ['#FDF6E9', '#FAEACB', '#D99A2B', '#B77D1B', '#8F6014', '#56390B'], 'Feeding type; Pending; offline.'],
+      ['info', ['#EEF3FA', '#D8E4F4', '#4A78B8', '#3A629C', '#2E4E7D', '#1B2F4C'], 'Medication type; Watching badge.'],
+      ['typography', ['#F7F5F2', '#EFEBE5', '#7A7065', '#6A6158', '#4A433B', '#2A2520'], '900 primary text, 700 secondary, 600 min.'],
+      ['outline', ['#F4F0EA', '#E9E3DA', '#A89D8F', '#8C8174', '#6E655A', '#3A342E'], '100 card borders; 600 input borders (3:1).'],
+      ['background', ['#FAF7F2', '#F3EEE6', '#CFC6B8', '#9A8F82', '#4A433B', '#1E1B18'], '50 app surface, 0 = #FFFFFF cards, 100 past rows.'],
+    ];
+    const steps = ['50', '100', '500', '600', '700', '900'];
+    return {
+      scales: S.map(([name, hexes, use]) => ({ name, use, steps: hexes.map((hex, i) => ({ hex, step: steps[i] })) })),
+      spacing: [['1', 4, 'icon gaps'], ['2', 8, 'row gaps'], ['3', 12, 'card padding'], ['4', 16, 'screen margin'], ['5', 20, 'section gap'], ['6', 24, 'dialog padding'], ['8', 32, 'hero gaps'], ['12', 48, 'large']].map(([name, px, use]) => ({ name, px, use })),
+    };
+  }
+}
+</script>
+</body>
+</html>

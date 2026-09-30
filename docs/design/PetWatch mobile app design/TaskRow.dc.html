@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div role="button" style="display:flex;gap:12px;padding:12px 16px 12px 14px;border-radius:16px;background:{{ bg }};border:1px solid {{ bd }};font-family:Figtree,system-ui,sans-serif;box-sizing:border-box;min-height:72px"><div style="width:48px;flex:none;display:flex;flex-direction:column;gap:2px;padding-top:2px"><span style="font-size:16px;line-height:20px;font-weight:700;color:{{ timeC }};font-variant-numeric:tabular-nums">{{ time }}</span><sc-if value="{{ past }}"><span style="font-size:12px;line-height:16px;font-weight:600;color:#6A6158">Past</span></sc-if></div><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px"><div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between"><dc-import name="TypeTag" type="{{ type }}" hint-size="84px,24px"></dc-import><sc-if value="{{ showPet }}"><div style="display:flex;align-items:center;gap:6px"><dc-import name="Avatar" pet="{{ pet }}" size="22" hint-size="22px,22px"></dc-import><span style="font-size:14px;line-height:20px;font-weight:600;color:#4A433B">{{ petName }}</span></div></sc-if></div><span style="font-size:16px;line-height:22px;font-weight:600;color:{{ titleC }}">{{ title }}</span><sc-if value="{{ notes }}"><span style="font-size:14px;line-height:20px;color:#6A6158;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ notes }}</span></sc-if></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:358,&quot;height&quot;:110},&quot;time&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;08:00&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;type&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;feeding&quot;,&quot;walk&quot;,&quot;medication&quot;,&quot;play&quot;,&quot;grooming&quot;,&quot;other&quot;],&quot;default&quot;:&quot;feeding&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Breakfast&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;pet&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;rex&quot;,&quot;miso&quot;],&quot;default&quot;:&quot;rex&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;notes&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;1 cup dry food, fresh water.&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;past&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const past = !!this.props.past;
+    const names = { rex: 'Rex', miso: 'Miso' };
+    return {
+      time: this.props.time ?? '08:00', type: this.props.type ?? 'feeding', title: this.props.title ?? 'Breakfast',
+      notes: this.props.notes ?? '', pet: this.props.pet ?? 'rex', petName: names[this.props.pet ?? 'rex'] ?? 'Rex',
+      showPet: !this.props.hidePet, past,
+      bg: past ? '#F3EEE6' : '#FFFFFF', bd: past ? '#F3EEE6' : '#E9E3DA',
+      timeC: past ? '#6A6158' : '#2A2520', titleC: past ? '#4A433B' : '#2A2520',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="display:flex;align-items:center;gap:8px;padding:12px 4px 12px 16px;min-height:72px;box-sizing:border-box;background:#FFFFFF;border-radius:16px;border:1px solid #E9E3DA;font-family:Figtree,system-ui,sans-serif"><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;align-items:flex-start"><span style="font-size:16px;line-height:22px;font-weight:600;color:#2A2520">{{ title }} · {{ time }} · {{ repeat }}</span><dc-import name="TypeTag" type="{{ type }}" hint-size="84px,24px"></dc-import></div><sc-if value="{{ editable }}"><div style="display:flex;flex:none"><div role="button" aria-label="Edit" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px"><dc-import name="Icon" icon="pencil" size="20" color="#4A433B" hint-size="20px,20px"></dc-import></div><div role="button" aria-label="Delete" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:8px"><dc-import name="Icon" icon="trash" size="20" color="#962A23" hint-size="20px,20px"></dc-import></div></div></sc-if></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:358,&quot;height&quot;:90},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Breakfast&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;time&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;08:00&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;repeat&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Every day&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;type&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;feeding&quot;,&quot;walk&quot;,&quot;medication&quot;,&quot;play&quot;,&quot;grooming&quot;,&quot;other&quot;],&quot;default&quot;:&quot;feeding&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;editable&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return { title: this.props.title ?? 'Breakfast', time: this.props.time ?? '08:00', repeat: this.props.repeat ?? 'Every day', type: this.props.type ?? 'feeding', editable: !!this.props.editable };
+  }
+}
+</script>
+</body>
+</html>

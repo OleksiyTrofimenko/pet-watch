@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div role="status" style="display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:16px;background:#2A2520;box-shadow:0 8px 24px rgba(42,37,32,.24);font-family:Figtree,system-ui,sans-serif;box-sizing:border-box"><div style="width:28px;height:28px;border-radius:999px;background:{{ bg }};display:flex;align-items:center;justify-content:center;flex:none"><dc-import name="Icon" icon="{{ icon }}" size="16" color="{{ fg }}" stroke="2.4" hint-size="16px,16px"></dc-import></div><div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:3px"><span style="font-size:15px;line-height:20px;font-weight:600;color:#FFFFFF">{{ title }}</span><sc-if value="{{ body }}"><span style="font-size:14px;line-height:20px;color:#E9E3DA">{{ body }}</span></sc-if></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:358,&quot;height&quot;:90},&quot;kind&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;success&quot;,&quot;error&quot;,&quot;info&quot;],&quot;default&quot;:&quot;success&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;title&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Task saved&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;body&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const m = { success: ['checkCircle', '#D9EBDC', '#2F653C'], error: ['alert', '#FADCD7', '#962A23'], info: ['info', '#D8E4F4', '#2E4E7D'] };
+    const [icon, bg, fg] = m[this.props.kind] || m.info;
+    return { icon, bg, fg, title: this.props.title ?? 'Saved', body: this.props.body ?? '' };
+  }
+}
+</script>
+</body>
+</html>

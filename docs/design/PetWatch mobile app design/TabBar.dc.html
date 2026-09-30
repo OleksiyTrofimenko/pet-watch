@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<div style="flex:none;margin-top:auto;background:#FFFFFF;border-top:1px solid #E9E3DA;padding-top:6px;display:flex;flex-direction:column;font-family:Figtree,system-ui,sans-serif"><div style="display:flex;padding:0 8px"><sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><div role="tab" style="flex:1;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px"><div style="width:56px;height:28px;border-radius:999px;background:{{ t.bg }};display:flex;align-items:center;justify-content:center"><dc-import name="Icon" icon="{{ t.icon }}" size="20" color="{{ t.fg }}" hint-size="20px,20px"></dc-import></div><span style="font-size:12px;line-height:16px;font-weight:{{ t.w }};color:{{ t.fg }}">{{ t.label }}</span></div></sc-for></div><div style="height:34px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:8px;box-sizing:border-box"><div style="width:134px;height:5px;border-radius:999px;background:#2A2520"></div></div></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const a = this.props.active ?? 'schedule';
+    const tabs = [['schedule', 'Schedule', 'calendar'], ['pets', 'Pets', 'paw'], ['account', 'Account', 'user']].map(([id, label, icon]) => {
+      const on = id === a;
+      return { label, icon, bg: on ? '#F6E0D5' : 'transparent', fg: on ? '#8F4227' : '#6A6158', w: on ? 700 : 500 };
+    });
+    return { tabs };
+  }
+}
+</script>
+</body>
+</html>
