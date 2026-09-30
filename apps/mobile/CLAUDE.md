@@ -19,6 +19,7 @@ ESLint (`eslint.config.js`) enforces:
 - presentational components (`features/*/components`) don't import TanStack Query, `api` or `queries`;
 - screens don't import `features/*/api` (only hooks from `queries.ts`);
 - the design system doesn't import features, API code or the shared contract.
+- screens and features use `Button` from the design system, never `components/ui/button`.
 
 ## Styling rules
 
@@ -87,7 +88,8 @@ export function useUpdatePet(id: string) {
 - `useForm<Input>({ resolver: zodResolver(sharedSchema) })` + `<FormInput control name label />`.
 - Server `fieldErrors` from `ApiErrorBody` are mapped onto fields with `setError`, so API validation
   and client validation look identical.
-- Submit buttons show loading from `mutation.isPending` and are disabled while offline.
+- Buttons are the design-system `<Button>`: loading from `mutation.isPending`; `isDisabled` requires a
+  `disabledReason` (the type enforces it), e.g. offline → "Connect to the internet to send invites."
 
 ## Testing
 

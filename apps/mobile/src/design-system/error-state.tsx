@@ -1,7 +1,8 @@
-import { Button, ButtonText } from '@/components/ui/button';
+import { RotateCcw } from 'lucide-react-native';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
+import { Button } from './button';
 
 type ErrorStateProps = {
   message: string;
@@ -14,9 +15,7 @@ export function ErrorState({ message, onRetry }: ErrorStateProps) {
       <Heading size="md">Something went wrong</Heading>
       <Text className="text-center text-typography-500">{message}</Text>
       {onRetry ? (
-        <Button variant="outline" className="mt-2" onPress={onRetry}>
-          <ButtonText>Try again</ButtonText>
-        </Button>
+        <Button label="Try again" variant="outline" icon={RotateCcw} onPress={onRetry} />
       ) : null}
     </VStack>
   );

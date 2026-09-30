@@ -65,12 +65,12 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 ## Nice to have
 
-| ID  | Item                                                                 | Plan                                                                         | Status                 |
-| --- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------- |
-| N-1 | Tests for a non-trivial unit                                         | `expandOccurrences` (shared), invite service outcomes, auth refresh rotation | ⬜                     |
-| N-2 | Loading states + skeletons                                           | Pet list, schedule, pet detail                                               | ⬜                     |
-| N-3 | Offline-aware                                                        | NetInfo banner; queries paused; mutations disabled with message              | 🟨 onlineManager wired |
-| N-4 | Clear invite feedback ("added to their list" vs "invite email sent") | API returns explicit `outcome`; UI copy per outcome                          | 🟨 contract            |
+| ID  | Item                                                                 | Plan                                                                                                 | Status                                          |
+| --- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------- |
+| N-1 | Tests for a non-trivial unit                                         | `expandOccurrences` (shared), invite service outcomes, auth refresh rotation                         | ⬜                                              |
+| N-2 | Loading states + skeletons                                           | Pet list, schedule, pet detail; EmptyState slice: tone circle, CTA icon, 16px gap above CTA (design) | ⬜                                              |
+| N-3 | Offline-aware                                                        | NetInfo banner; queries paused; mutations disabled with message                                      | 🟨 onlineManager wired; `Button` disabledReason |
+| N-4 | Clear invite feedback ("added to their list" vs "invite email sent") | API returns explicit `outcome`; UI copy per outcome                                                  | 🟨 contract                                     |
 
 ## Ambiguities → assumptions (put these in the README)
 

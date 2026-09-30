@@ -1,9 +1,9 @@
 import type { LucideIcon } from 'lucide-react-native';
-import { Button, ButtonText } from '@/components/ui/button';
 import { Heading } from '@/components/ui/heading';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
+import { Button } from './button';
 
 export type EmptyStateProps = {
   title: string;
@@ -20,11 +20,7 @@ export function EmptyState({ title, description, icon, action }: EmptyStateProps
         {title}
       </Heading>
       {description ? <Text className="text-center text-typography-500">{description}</Text> : null}
-      {action ? (
-        <Button className="mt-2" onPress={action.onPress}>
-          <ButtonText>{action.label}</ButtonText>
-        </Button>
-      ) : null}
+      {action ? <Button label={action.label} onPress={action.onPress} /> : null}
     </VStack>
   );
 }

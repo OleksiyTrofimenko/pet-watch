@@ -61,6 +61,9 @@
   "private": true,
   "jest": {
     "preset": "jest-expo",
+    "transform": {
+      "^.+\\.mjs$": "babel-jest"
+    },
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|expo-router|react-native-svg|@gluestack-ui/.*|lucide-react-native|nativewind|react-native-css-interop|@legendapp/.*)"
     ]
