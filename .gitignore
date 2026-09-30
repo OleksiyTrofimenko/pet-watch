@@ -12,3 +12,6 @@ android/
 web-build/
 # Prisma generated client
 apps/api/src/generated/
+
+# Claude Code: personal settings stay local; shared config (.claude/settings.json, commands) is committed
+.claude/settings.local.json
