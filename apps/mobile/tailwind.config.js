@@ -48,6 +48,7 @@ module.exports = {
           950: 'rgb(var(--color-secondary-950)/<alpha-value>)',
         },
         tertiary: {
+          0: 'rgb(var(--color-tertiary-0)/<alpha-value>)',
           50: 'rgb(var(--color-tertiary-50)/<alpha-value>)',
           100: 'rgb(var(--color-tertiary-100)/<alpha-value>)',
           200: 'rgb(var(--color-tertiary-200)/<alpha-value>)',
@@ -174,15 +175,20 @@ module.exports = {
           error: 'rgb(var(--color-indicator-error)/<alpha-value>)',
         },
       },
+      // Loaded natively by the expo-font config plugin (app.json); weights resolve per family.
       fontFamily: {
-        heading: undefined,
-        body: undefined,
+        heading: ['Newsreader'],
+        body: ['Figtree'],
         mono: undefined,
-        jakarta: ['var(--font-plus-jakarta-sans)'],
-        roboto: ['var(--font-roboto)'],
-        code: ['var(--font-source-code-pro)'],
-        inter: ['var(--font-inter)'],
-        'space-mono': ['var(--font-space-mono)'],
+      },
+      // The design uses three radii: 8 (controls), 16 (surfaces), full (pills). Every class snaps to one.
+      borderRadius: {
+        DEFAULT: '8px',
+        sm: '8px',
+        md: '16px',
+        lg: '16px',
+        xl: '16px',
+        '2xl': '16px',
       },
       fontWeight: {
         extrablack: '950',
