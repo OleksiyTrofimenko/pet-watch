@@ -1,0 +1,9 @@
+# Taps a native tab by its label (TAB: Schedule | Pets | Account), on both platforms.
+# iOS exposes the trigger testID (tab.index/tab.pets/tab.account). Android's native tabs put the
+# testID on the view tag, which Maestro can't read, so match Material's tab label view instead.
+# The id narrows the match to the tab bar; the label alone would also hit screen titles ("Pets").
+appId: com.petwatch.app
+---
+- tapOn:
+    id: 'tab\..*|.*:id/navigation_bar_item_(small|large)_label_view'
+    text: ${TAB}

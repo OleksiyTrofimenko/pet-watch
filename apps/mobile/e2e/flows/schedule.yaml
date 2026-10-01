@@ -38,8 +38,10 @@ env:
 - assertVisible: 'Nothing scheduled today'
 
 # Daily 08:00 feeding (type and time are the form's defaults)
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - tapOn:
     id: 'pets.card-Rex'
 - tapOn:
@@ -91,8 +93,10 @@ env:
 # Today: the daily rule is always there
 - tapOn:
     id: 'pet.back'
-- tapOn:
-    id: 'tab.index'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Schedule
 - assertVisible:
     id: 'task.Breakfast'
 
@@ -132,8 +136,10 @@ env:
     id: 'task.Big breakfast'
 
 # Delete from the pet's routine
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - tapOn:
     id: 'pets.card-Rex'
 - retry:

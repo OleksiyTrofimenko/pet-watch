@@ -1,8 +1,10 @@
 # Logs out from the Account tab.
 appId: com.petwatch.app
 ---
-- tapOn:
-    id: 'tab.account'
+- runFlow:
+    file: open-tab.yaml
+    env:
+      TAB: Account
 - tapOn:
     id: 'account.logout'
 - assertVisible:

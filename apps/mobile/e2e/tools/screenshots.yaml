@@ -24,8 +24,10 @@ name: README screenshots
     id: 'schedule.view-week'
 - waitForAnimationToEnd
 - takeScreenshot: ${PLATFORM}-2-week
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - waitForAnimationToEnd
 - takeScreenshot: ${PLATFORM}-3-pets
 - tapOn:

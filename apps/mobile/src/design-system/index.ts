@@ -10,7 +10,7 @@ export { SelectField } from './select-field';
 export { TimeField } from './time-field';
 export { SegmentedControl } from './segmented-control';
 export { Chip } from './chip';
-export { TabBar, type TabItem } from './tab-bar';
+export { useTokenColor, type ColorToken } from './token-color';
 export { OptionSheet, type SheetOption } from './option-sheet';
 export { ConfirmDialog } from './confirm-dialog';
 export { Fab } from './fab';

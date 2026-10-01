@@ -22,8 +22,10 @@ env:
     env:
       EMAIL: ${output.email}
       PASSWORD: ${PASSWORD}
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - assertVisible: 'No pets yet'
 
 # Add

@@ -32,8 +32,10 @@ env:
 - assertVisible:
     id: 'schedule.title'
 # Visit the pet once online so its detail is cached too.
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - tapOn:
     id: 'pets.card-Rex'
 - assertVisible:
@@ -60,8 +62,10 @@ env:
     id: 'task-form.cancel'
 - tapOn:
     id: 'pet.back'
-- tapOn:
-    id: 'tab.index'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Schedule
 - assertVisible: 'Updated \d\d:\d\d'
 
 - setAirplaneMode: disabled

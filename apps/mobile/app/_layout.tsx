@@ -17,10 +17,14 @@ import { AppProviders } from '@/src/providers/app-providers';
 // is exactly what the offline mode (N-3) is for; it reconnects by itself.
 // "Response.blob() is using React Native's Blob": Expo's perf hint for large responses; the photo
 // upload reads one already-resized image (upload-file.ts). Not worth a new dependency (expo-blob).
+// "Sending `onAnimatedValueUpdate` with no listeners": React Native's native-driver bookkeeping when a
+// native screen container (the native tabs) animates a value JS isn't listening to. Harmless; the
+// overlay would sit on the tab bar.
 LogBox.ignoreLogs([
   "Can't perform a React state update on a component that hasn't mounted yet",
   'Cannot connect to Expo CLI',
   "Response.blob() is using React Native's Blob",
+  'Sending `onAnimatedValueUpdate` with no listeners registered',
 ]);
 
 export default function RootLayout() {

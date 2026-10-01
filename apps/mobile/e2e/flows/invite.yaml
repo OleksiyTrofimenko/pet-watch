@@ -39,8 +39,10 @@ env:
     visible:
       id: 'schedule.title'
     timeout: 15000
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - tapOn:
     id: 'pets.card-Rex'
 - scrollUntilVisible:
@@ -103,8 +105,10 @@ env:
 - assertVisible: '.* for Rex'
 
 # Watching: same pet, no owner controls
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - assertVisible: "Pets I'm watching"
 - tapOn:
     id: 'pets.card-Rex'
@@ -127,8 +131,10 @@ env:
     visible:
       id: 'schedule.title'
     timeout: 15000
-- tapOn:
-    id: 'tab.pets'
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
 - tapOn:
     id: 'pets.card-Rex'
 - scrollUntilVisible:
