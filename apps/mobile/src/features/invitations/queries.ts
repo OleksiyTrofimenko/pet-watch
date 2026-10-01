@@ -4,7 +4,7 @@ import { careTaskKeys } from '@/src/features/care-tasks/queries';
 import { petKeys } from '@/src/features/pets/queries';
 import { invitationsApi } from './api';
 
-export const invitationKeys = {
+const invitationKeys = {
   watchers: (petId: string) => ['watchers', petId] as const,
   preview: (token: string) => ['invitation', token] as const,
 };

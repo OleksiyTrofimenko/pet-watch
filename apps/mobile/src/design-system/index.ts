@@ -16,6 +16,5 @@ export { ConfirmDialog } from './confirm-dialog';
 export { Fab } from './fab';
 export { useNotify } from './use-notify';
 export { EmptyState, type EmptyStateProps } from './empty-state';
-export { ErrorState } from './error-state';
 export { QueryView } from './query-view';
 export { RowSkeleton } from './row-skeleton';
