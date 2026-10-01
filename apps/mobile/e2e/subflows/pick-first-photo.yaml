@@ -1,21 +1,36 @@
-# Android system photo picker (no app testIDs here): allow access if asked, pick the newest photo.
+# System photo picker (no app testIDs here): pick the newest photo, which addMedia just added.
 appId: com.petwatch.app
 ---
+# Android (Google photo picker): allow access if asked; newer pickers confirm with "Done".
 - runFlow:
     when:
-      visible: 'Allow'
+      platform: Android
     commands:
-      - tapOn: 'Allow'
-- extendedWaitUntil:
-    visible: 'Photo taken on.*'
-    timeout: 15000
-# The grid is newest first; addMedia just added the fixture.
-- tapOn:
-    text: 'Photo taken on.*'
-    index: 0
-# Newer Android pickers select first and confirm with "Done"; older ones return immediately.
+      - runFlow:
+          when:
+            visible: 'Allow'
+          commands:
+            - tapOn: 'Allow'
+      - extendedWaitUntil:
+          visible: 'Photo taken on.*'
+          timeout: 15000
+      - tapOn:
+          text: 'Photo taken on.*'
+          index: 0
+      - runFlow:
+          when:
+            visible: 'Done'
+          commands:
+            - tapOn: 'Done'
+# iOS (PHPicker): grid cells are labelled "Photo, <date>", newest first; a tap returns it.
 - runFlow:
     when:
-      visible: 'Done'
+      platform: iOS
     commands:
-      - tapOn: 'Done'
+      - extendedWaitUntil:
+          visible:
+            id: 'PXGGridLayout-Info'
+          timeout: 15000
+      - tapOn:
+          id: 'PXGGridLayout-Info'
+          index: 0

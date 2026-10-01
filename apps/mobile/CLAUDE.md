@@ -114,12 +114,19 @@ e2e/scripts/        runScript JS on the host: api.js (create data via HTTP), mai
   `pet-form.name`, `schedule.tab-week`, `invite.email`, `invite.result`. Flows select by `id:`,
   never by visible text (copy changes must not break tests).
 - Every interactive element in a journey gets a testID; icon-only buttons also get `accessibilityLabel`.
-  Design-system components forward `testID` to the touchable/input, not to a wrapper.
+  Design-system components forward `testID` to the touchable, not to a wrapper. Text fields are the
+  exception: the id goes on the Gluestack `Input` wrapper, because iOS exposes field + wrapper as one
+  element carrying the wrapper's id (`FormInput`, `TimeField`).
 - Flows create their own data (unique email per run, e.g. `e2e+${Date.now()}@petwatch.test` in a script)
   through `scripts/api.js`, so they never need a DB reset and run in any order. Only the journey under
   test goes through the UI.
-- Run: API + Metro + dev build on a booted simulator, then `pnpm e2e:mobile` (one flow:
-  `maestro test apps/mobile/e2e/flows/<name>.yaml`).
+- Run: API + Metro + dev build on a booted device, then `pnpm e2e:mobile` (Android) or
+  `pnpm e2e:mobile:ios` (one flow: `maestro test apps/mobile/e2e/flows/<name>.yaml`). The iOS script runs
+  `e2e/prepare-ios-simulator.sh` (no autocorrect/prediction, no password AutoFill) and skips flows
+  tagged `android-only` (offline: `setAirplaneMode` doesn't exist on the iOS simulator).
+- Flows start with `subflows/launch-signed-out.yaml`: on iOS the session survives `clearState` in the
+  Keychain. Don't `hideKeyboard` on iOS (it can submit the form or fail); tap buttons with the keyboard
+  open, and `scroll` when the keyboard covers the next field.
 - Photo flows: `addMedia` + `subflows/pick-first-photo.yaml` (system picker, no testIDs there).
   `e2e/reset-android-media.sh` runs first: duplicate test photos crash Google's photo picker.
 - Android emulator: `adb reverse tcp:8081 tcp:8081`, `tcp:3000` and `tcp:9000` (S3 uploads) so

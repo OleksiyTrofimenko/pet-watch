@@ -1,0 +1,11 @@
+# Fresh app, nobody signed in. clearState wipes app data, but on iOS the session lives in the
+# Keychain (expo-secure-store), which survives it, so clear that too.
+appId: com.petwatch.app
+---
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - clearKeychain
+- launchApp:
+    clearState: true

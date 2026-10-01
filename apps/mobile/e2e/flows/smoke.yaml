@@ -2,8 +2,7 @@
 appId: com.petwatch.app
 name: Smoke – app launches
 ---
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 # A cold Metro can take a while to build the first bundle.
 - extendedWaitUntil:
     visible:

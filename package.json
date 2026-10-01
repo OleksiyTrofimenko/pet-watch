@@ -16,6 +16,7 @@
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @petwatch/api test:e2e",
     "e2e:mobile": "sh apps/mobile/e2e/reset-android-media.sh && maestro test apps/mobile/e2e",
+    "e2e:mobile:ios": "sh apps/mobile/e2e/prepare-ios-simulator.sh && maestro test --exclude-tags android-only apps/mobile/e2e",
     "lint": "pnpm -r lint",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

@@ -7,6 +7,5 @@ appId: com.petwatch.app
 - tapOn:
     id: 'login.password'
 - inputText: ${PASSWORD}
-- hideKeyboard
 - tapOn:
     id: 'login.submit'

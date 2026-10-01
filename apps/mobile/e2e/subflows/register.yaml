@@ -10,6 +10,5 @@ appId: com.petwatch.app
 - tapOn:
     id: 'register.password'
 - inputText: ${PASSWORD}
-- hideKeyboard
 - tapOn:
     id: 'register.submit'

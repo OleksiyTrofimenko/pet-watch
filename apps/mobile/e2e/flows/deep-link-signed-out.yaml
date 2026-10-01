@@ -10,8 +10,7 @@ env:
     env:
       EMAIL: ${output.email}
       PASSWORD: ${PASSWORD}
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 - stopApp
 - openLink: petwatch://invites/e2e-token-that-does-not-exist-000000000000
 - extendedWaitUntil:

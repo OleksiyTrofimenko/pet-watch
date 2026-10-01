@@ -44,24 +44,24 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 ## Technical requirements
 
-| ID   | Requirement                                                                  | How                                                     | Status                                                                           |
-| ---- | ---------------------------------------------------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| T-1  | Expo React Native, runs on iOS + Android simulators                          | Expo SDK 57 dev build                                   | 🟨 Android ✅; iOS build blocked locally (Xcode 26.3 vs expo-modules-jsi 57.1.1) |
-| T-2  | NestJS + TypeScript, organised in modules                                    | One module per feature                                  | ✅ auth, users, pets, storage, care-tasks, invitations, mail                     |
-| T-3  | PostgreSQL via ORM, migrations committed                                     | Prisma 7, `apps/api/prisma/migrations`                  | ✅ schema + init migration                                                       |
-| T-4  | JWT auth; client token storage + auto-attach, reusable                       | See AUTH-4                                              | ✅                                                                               |
-| T-5  | DTO validation on **every** endpoint, sensible errors                        | Global `ZodValidationPipe` + `ApiExceptionFilter`       | ✅ infra                                                                         |
-| T-6  | Server-side access rules: only pets you own or watch                         | `PetAccessService` + guard/decorator; 404 for invisible | ✅ PetAccessService; e2e: stranger 404, watcher 403                              |
-| T-7  | Docker Compose for DB + README run instructions                              | Postgres, SeaweedFS (S3), Mailpit                       | ✅                                                                               |
-| T-8  | Email + S3 may be stubbed; README says what + how to wire real               | Mailpit + SeaweedFS (real protocols)                    | 🟨 Mailpit + SeaweedFS; README section in Phase 9                                |
-| T-9  | Deep link opens accept-invite screen; no store fallback                      | Expo Router file route                                  | ✅ app/(app)/invites/[token]; signed-out link replayed after login               |
-| T-10 | Jotai/Context for UI state; TanStack Query for **all** server state          | Rule in CLAUDE.md                                       | ✅ Jotai: schedule view + filter; Context: session                               |
-| T-11 | React Hook Form + Zod on **all** forms                                       | login, register, forgot, reset, pet, care task, invite  | ✅ 7 forms, shared schemas                                                       |
-| T-12 | Photo via camera or library; direct S3 upload via presigned URL              | expo-image-picker + presigned PUT                       | ✅ camera/library → resize → presigned PUT → confirm                             |
-| T-13 | Gluestack UI                                                                 | v3 + NativeWind v4                                      | ✅ installed                                                                     |
-| T-14 | Fully typed, no `any`; focused components; hooks separated from presentation | CLAUDE.md rules                                         | ✅ lint-enforced layers, no `any`                                                |
-| T-15 | AI config committed                                                          | `CLAUDE.md`, `.claude/`                                 | ✅                                                                               |
-| T-16 | README: setup, choices, limitations, stubs                                   |                                                         | 🟨 Phase 9                                                                       |
+| ID   | Requirement                                                                  | How                                                     | Status                                                                 |
+| ---- | ---------------------------------------------------------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------- |
+| T-1  | Expo React Native, runs on iOS + Android simulators                          | Expo SDK 57 dev build                                   | ✅ Android + iOS 27 (Xcode 27; UIScene via D55); Maestro green on both |
+| T-2  | NestJS + TypeScript, organised in modules                                    | One module per feature                                  | ✅ auth, users, pets, storage, care-tasks, invitations, mail           |
+| T-3  | PostgreSQL via ORM, migrations committed                                     | Prisma 7, `apps/api/prisma/migrations`                  | ✅ schema + init migration                                             |
+| T-4  | JWT auth; client token storage + auto-attach, reusable                       | See AUTH-4                                              | ✅                                                                     |
+| T-5  | DTO validation on **every** endpoint, sensible errors                        | Global `ZodValidationPipe` + `ApiExceptionFilter`       | ✅ infra                                                               |
+| T-6  | Server-side access rules: only pets you own or watch                         | `PetAccessService` + guard/decorator; 404 for invisible | ✅ PetAccessService; e2e: stranger 404, watcher 403                    |
+| T-7  | Docker Compose for DB + README run instructions                              | Postgres, SeaweedFS (S3), Mailpit                       | ✅                                                                     |
+| T-8  | Email + S3 may be stubbed; README says what + how to wire real               | Mailpit + SeaweedFS (real protocols)                    | 🟨 Mailpit + SeaweedFS; README section in Phase 9                      |
+| T-9  | Deep link opens accept-invite screen; no store fallback                      | Expo Router file route                                  | ✅ app/(app)/invites/[token]; signed-out link replayed after login     |
+| T-10 | Jotai/Context for UI state; TanStack Query for **all** server state          | Rule in CLAUDE.md                                       | ✅ Jotai: schedule view + filter; Context: session                     |
+| T-11 | React Hook Form + Zod on **all** forms                                       | login, register, forgot, reset, pet, care task, invite  | ✅ 7 forms, shared schemas                                             |
+| T-12 | Photo via camera or library; direct S3 upload via presigned URL              | expo-image-picker + presigned PUT                       | ✅ camera/library → resize → presigned PUT → confirm                   |
+| T-13 | Gluestack UI                                                                 | v3 + NativeWind v4                                      | ✅ installed                                                           |
+| T-14 | Fully typed, no `any`; focused components; hooks separated from presentation | CLAUDE.md rules                                         | ✅ lint-enforced layers, no `any`                                      |
+| T-15 | AI config committed                                                          | `CLAUDE.md`, `.claude/`                                 | ✅                                                                     |
+| T-16 | README: setup, choices, limitations, stubs                                   |                                                         | 🟨 Phase 9                                                             |
 
 ## Nice to have
 

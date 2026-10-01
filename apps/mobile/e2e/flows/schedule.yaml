@@ -23,8 +23,7 @@ env:
       ACCESS_TOKEN: ${output.accessToken}
       NAME: Miso
       SPECIES: CAT
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 - extendedWaitUntil:
     visible:
       id: 'login.submit'

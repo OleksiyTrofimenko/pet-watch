@@ -2,6 +2,8 @@
 # schedule with "Updated HH:MM", writes disabled with a reason; back online: banner goes away.
 appId: com.petwatch.app
 name: Offline – banner, cached data, writes disabled
+tags:
+  - android-only
 env:
   PASSWORD: walkies-123
 ---
@@ -17,8 +19,7 @@ env:
       ACCESS_TOKEN: ${output.accessToken}
       NAME: Rex
       SPECIES: DOG
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 - extendedWaitUntil:
     visible:
       id: 'login.submit'

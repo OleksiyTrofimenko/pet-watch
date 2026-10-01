@@ -6,8 +6,7 @@ env:
   NEW_PASSWORD: walkies-456
 ---
 - runFlow: ../subflows/new-email.yaml
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 - extendedWaitUntil:
     visible:
       id: 'login.submit'
@@ -35,7 +34,6 @@ env:
     id: 'login.password'
 - eraseText
 - inputText: ${PASSWORD}
-- hideKeyboard
 - tapOn:
     id: 'login.submit'
 - assertVisible:
@@ -48,7 +46,6 @@ env:
 - tapOn:
     id: 'forgot.email'
 - inputText: ${output.email}
-- hideKeyboard
 - tapOn:
     id: 'forgot.submit'
 - assertVisible:
@@ -67,7 +64,6 @@ env:
 - tapOn:
     id: 'reset.confirm'
 - inputText: ${NEW_PASSWORD}
-- hideKeyboard
 - tapOn:
     id: 'reset.submit'
 - assertVisible:

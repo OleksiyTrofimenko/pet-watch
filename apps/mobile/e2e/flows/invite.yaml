@@ -25,8 +25,7 @@ env:
       PASSWORD: ${PASSWORD}
 
 # Ana invites Sam
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 - extendedWaitUntil:
     visible:
       id: 'login.submit'
@@ -36,6 +35,10 @@ env:
     env:
       EMAIL: ${output.ana}
       PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
 - tapOn:
     id: 'tab.pets'
 - tapOn:
@@ -112,6 +115,10 @@ env:
     env:
       EMAIL: ${output.ana}
       PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
 - tapOn:
     id: 'tab.pets'
 - tapOn:

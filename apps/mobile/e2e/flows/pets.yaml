@@ -12,8 +12,7 @@ env:
       PASSWORD: ${PASSWORD}
 - addMedia:
     - ../fixtures/rex.jpg
-- launchApp:
-    clearState: true
+- runFlow: ../subflows/launch-signed-out.yaml
 - extendedWaitUntil:
     visible:
       id: 'login.submit'
@@ -39,10 +38,15 @@ env:
 - tapOn:
     id: 'pet-form.breed'
 - inputText: Labrador
+# On iOS the keyboard covers the next field; scroll it into view (a tap there would hit the keyboard).
+- scroll
 - tapOn:
     id: 'pet-form.age'
 - inputText: '4'
-- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'pet-form.photo'
+    direction: UP
 - tapOn:
     id: 'pet-form.photo'
 - tapOn:
@@ -66,7 +70,12 @@ env:
     id: 'pet.back'
 - assertVisible:
     id: 'pets.card-Rex'
-- assertVisible: 'Photo of Rex'
+# iOS exposes the card as one button (its label only), so the photo inside is checked on Android.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - assertVisible: 'Photo of Rex'
 
 # Edit
 - tapOn:
@@ -92,6 +101,8 @@ env:
 - scrollUntilVisible:
     element:
       id: 'pet-form.delete'
+    # Centred: "visible" counts a sliver at the screen edge, too low to tap on iOS.
+    centerElement: true
 - waitForAnimationToEnd
 # The first tap after a scroll can be eaten by the ScrollView. Retry "tap → dialog shows" as a
 # unit, never a blind second tap (it could land on the dialog's confirm button).
