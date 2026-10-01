@@ -5,7 +5,7 @@
   "dependencies": {
     "@expo-google-fonts/figtree": "^0.4.1",
     "@expo-google-fonts/newsreader": "^0.4.1",
-    "@expo/html-elements": "^0.10.1",
+    "@expo/html-elements": "^0.12.5",
     "@gluestack-ui/core": "^3.0.25",
     "@gluestack-ui/utils": "^3.0.21",
     "@hookform/resolvers": "^5.9.1",

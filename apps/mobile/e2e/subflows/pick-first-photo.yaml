@@ -1,0 +1,21 @@
+# Android system photo picker (no app testIDs here): allow access if asked, pick the newest photo.
+appId: com.petwatch.app
+---
+- runFlow:
+    when:
+      visible: 'Allow'
+    commands:
+      - tapOn: 'Allow'
+- extendedWaitUntil:
+    visible: 'Photo taken on.*'
+    timeout: 15000
+# The grid is newest first; addMedia just added the fixture.
+- tapOn:
+    text: 'Photo taken on.*'
+    index: 0
+# Newer Android pickers select first and confirm with "Done"; older ones return immediately.
+- runFlow:
+    when:
+      visible: 'Done'
+    commands:
+      - tapOn: 'Done'

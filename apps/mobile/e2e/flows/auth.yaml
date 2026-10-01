@@ -20,9 +20,9 @@ env:
       EMAIL: ${output.email}
       PASSWORD: ${PASSWORD}
 - assertVisible:
-    id: 'home.title'
+    id: 'pets.title'
 - tapOn:
-    id: 'home.logout'
+    id: 'pets.logout'
 
 # Wrong password: form-level alert, not a field error.
 - runFlow:
@@ -40,9 +40,9 @@ env:
 - tapOn:
     id: 'login.submit'
 - assertVisible:
-    id: 'home.title'
+    id: 'pets.title'
 - tapOn:
-    id: 'home.logout'
+    id: 'pets.logout'
 
 # Forgot password → reset link from Mailpit → new password signs the user in.
 - tapOn:
@@ -73,15 +73,15 @@ env:
 - tapOn:
     id: 'reset.submit'
 - assertVisible:
-    id: 'home.title'
+    id: 'pets.title'
 
 # The old password no longer works; the new one does.
 - tapOn:
-    id: 'home.logout'
+    id: 'pets.logout'
 - runFlow:
     file: ../subflows/login.yaml
     env:
       EMAIL: ${output.email}
       PASSWORD: ${NEW_PASSWORD}
 - assertVisible:
-    id: 'home.title'
+    id: 'pets.title'

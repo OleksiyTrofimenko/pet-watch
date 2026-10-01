@@ -118,3 +118,9 @@ e2e/scripts/        runScript JS on the host: api.js (create data via HTTP), mai
   test goes through the UI.
 - Run: API + Metro + dev build on a booted simulator, then `pnpm e2e:mobile` (one flow:
   `maestro test apps/mobile/e2e/flows/<name>.yaml`).
+- Photo flows: `addMedia` + `subflows/pick-first-photo.yaml` (system picker, no testIDs there).
+  `e2e/reset-android-media.sh` runs first: duplicate test photos crash Google's photo picker.
+- Android emulator: `adb reverse tcp:8081 tcp:8081`, `tcp:3000` and `tcp:9000` (S3 uploads) so
+  `localhost` works for Metro, the API and presigned URLs.
+- After a scroll, `waitForAnimationToEnd` before tapping; retry "tap → dialog visible" as one unit
+  (a blind retried tap can hit the dialog's confirm button).

@@ -58,7 +58,7 @@ export function FormInput<T extends FieldValues>({
           <FormControlLabel>
             <FormControlLabelText>{label}</FormControlLabelText>
           </FormControlLabel>
-          <Input>
+          <Input className={inputProps.multiline ? 'h-auto min-h-24 items-start py-2' : undefined}>
             <InputField
               {...inputProps}
               // RHF focuses the first invalid field on submit through this ref.

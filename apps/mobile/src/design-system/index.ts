@@ -1,9 +1,14 @@
 // App-level building blocks composed from Gluestack primitives (components/ui).
 // Rule: nothing in here knows about pets, tasks or the API.
 export { Screen } from './screen';
+export { ScreenHeader } from './screen-header';
 export { Button, type ButtonProps } from './button';
 export { FormInput } from './form-input';
 export { FormAlert } from './form-alert';
+export { SelectField } from './select-field';
+export { OptionSheet, type SheetOption } from './option-sheet';
+export { ConfirmDialog } from './confirm-dialog';
+export { Fab } from './fab';
 export { useNotify } from './use-notify';
 export { EmptyState, type EmptyStateProps } from './empty-state';
 export { ErrorState } from './error-state';

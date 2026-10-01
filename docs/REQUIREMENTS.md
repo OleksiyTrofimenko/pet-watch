@@ -18,9 +18,9 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 | ID    | Requirement                                    | Edge cases / acceptance                                                                                                                                                   | Status |
 | ----- | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| PET-1 | Add pet: name, species, breed, age, notes      | Name required; species enum; age 0–50 optional                                                                                                                            | ⬜     |
-| PET-2 | Upload a photo per pet (camera **or** library) | Permissions denied → explain + settings link; resize/compress before upload; presigned PUT direct to S3; server checks key belongs to pet and object exists before saving | ⬜     |
-| PET-3 | Edit / remove pet                              | Owner only (watcher → 403); delete cascades tasks, watchers, invites; S3 object deleted best-effort                                                                       | ⬜     |
+| PET-1 | Add pet: name, species, breed, age, notes      | Name required; species enum; age 0–50 optional                                                                                                                            | ✅     |
+| PET-2 | Upload a photo per pet (camera **or** library) | Permissions denied → explain + settings link; resize/compress before upload; presigned PUT direct to S3; server checks key belongs to pet and object exists before saving | ✅     |
+| PET-3 | Edit / remove pet                              | Owner only (watcher → 403); delete cascades tasks, watchers, invites; S3 object deleted best-effort                                                                       | ✅     |
 
 ### Care schedule
 

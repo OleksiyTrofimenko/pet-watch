@@ -40,11 +40,12 @@ export function applyServerErrors<T extends FieldValues>(
  * handleSubmit for forms backed by an API call: validates with the form's resolver, awaits
  * `onSubmit`, and routes a rejection through applyServerErrors. `formError` feeds a FormAlert.
  */
-export function useApiSubmit<T extends FieldValues>(
-  form: UseFormReturn<T>,
-  fields: readonly Path<T>[],
-  onSubmit: (values: T) => Promise<unknown>,
-  codeFields?: CodeFields<T>,
+export function useApiSubmit<TInput extends FieldValues, TOutput = TInput>(
+  form: UseFormReturn<TInput, unknown, TOutput>,
+  fields: readonly Path<TInput>[],
+  /** Receives the schema's output (e.g. blanks already turned into null). */
+  onSubmit: (values: TOutput) => Promise<unknown>,
+  codeFields?: CodeFields<TInput>,
 ) {
   const [formError, setFormError] = useState<string | null>(null);
   const submit = form.handleSubmit(async (values) => {

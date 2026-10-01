@@ -1,0 +1,107 @@
+# PET-1..3: add a pet with a library photo, see it on the list, edit it, delete it.
+appId: com.petwatch.app
+name: Pets – add with photo, edit, delete
+env:
+  PASSWORD: walkies-123
+---
+- runFlow: ../subflows/new-email.yaml
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- addMedia:
+    - ../fixtures/rex.jpg
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- assertVisible: 'No pets yet'
+
+# Add
+- tapOn: 'Add pet'
+- tapOn:
+    id: 'pet-form.name'
+- inputText: Rex
+- tapOn:
+    id: 'pet-form.species'
+- tapOn:
+    id: 'pet-form.species-DOG'
+- tapOn:
+    id: 'pet-form.breed'
+- inputText: Labrador
+- tapOn:
+    id: 'pet-form.age'
+- inputText: '4'
+- hideKeyboard
+- tapOn:
+    id: 'pet-form.photo'
+- tapOn:
+    id: 'photo.library'
+- runFlow: ../subflows/pick-first-photo.yaml
+- assertVisible: 'Tap to change photo'
+- scrollUntilVisible:
+    element:
+      id: 'pet-form.save'
+- waitForAnimationToEnd
+- tapOn:
+    id: 'pet-form.save'
+- extendedWaitUntil:
+    visible:
+      id: 'pet.title'
+    timeout: 20000
+- assertVisible: 'Photo of Rex'
+
+# List shows the card with the photo
+- tapOn:
+    id: 'pet.back'
+- assertVisible:
+    id: 'pets.card-Rex'
+- assertVisible: 'Photo of Rex'
+
+# Edit
+- tapOn:
+    id: 'pets.card-Rex'
+- tapOn:
+    id: 'pet.edit'
+- tapOn:
+    id: 'pet-form.name'
+- eraseText
+- inputText: Rexy
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'pet-form.save'
+- waitForAnimationToEnd
+- tapOn:
+    id: 'pet-form.save'
+- assertVisible: 'Rexy'
+
+# Delete
+- tapOn:
+    id: 'pet.edit'
+- scrollUntilVisible:
+    element:
+      id: 'pet-form.delete'
+- waitForAnimationToEnd
+# The first tap after a scroll can be eaten by the ScrollView. Retry "tap → dialog shows" as a
+# unit, never a blind second tap (it could land on the dialog's confirm button).
+- retry:
+    maxRetries: 3
+    commands:
+      - tapOn:
+          id: 'pet-form.delete'
+          retryTapIfNoChange: false
+      - extendedWaitUntil:
+          visible: 'Delete Rexy\?'
+          timeout: 3000
+- tapOn:
+    id: 'pet-delete-confirm'
+- assertVisible: 'No pets yet'

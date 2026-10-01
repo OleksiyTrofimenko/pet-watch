@@ -5,8 +5,12 @@
 const INVITE_LINK = /(?:^|\/)invites\/([^/?#]+)/;
 
 let pendingInviteToken: string | null = null;
+// The launch URL stays the same for the whole session; after a logout it must not come back.
+let lastSeenUrl: string | null = null;
 
 export function rememberPendingLink(url: string): void {
+  if (url === lastSeenUrl) return;
+  lastSeenUrl = url;
   const match = INVITE_LINK.exec(url);
   if (match?.[1]) pendingInviteToken = decodeURIComponent(match[1]);
 }
