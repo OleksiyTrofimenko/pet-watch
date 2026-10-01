@@ -1,4 +1,6 @@
 import { z } from 'zod';
+import { optionalText } from './common';
+import type { PetRole } from './pets';
 
 export const CARE_TASK_TYPES = [
   'FEEDING',
@@ -27,7 +29,7 @@ export const careTaskSchema = z
   .object({
     type: careTaskTypeSchema,
     title: z.string().trim().min(1, 'Title is required').max(80),
-    notes: z.string().trim().max(500).optional(),
+    notes: optionalText(500),
     timeOfDay: z
       .number()
       .int()
@@ -56,7 +58,20 @@ export const careTaskSchema = z
 export type CareTaskInput = z.input<typeof careTaskSchema>;
 export type CareTaskPayload = z.output<typeof careTaskSchema>;
 
-export interface CareTaskDto extends CareTaskPayload {
+export interface CareTaskDto {
   id: string;
   petId: string;
+  type: CareTaskType;
+  title: string;
+  notes: string | null;
+  timeOfDay: number;
+  recurrence: Recurrence;
+  daysOfWeek: number[];
+}
+
+/** GET /care-tasks: a task with the pet it belongs to, for the cross-pet schedule. */
+export interface ScheduleTaskDto extends CareTaskDto {
+  pet: { id: string; name: string };
+  /** The viewer's relationship to the pet: only owners can edit. */
+  role: PetRole;
 }

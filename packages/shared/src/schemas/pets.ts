@@ -1,18 +1,9 @@
 import { z } from 'zod';
+import { optionalText } from './common';
 
 export const SPECIES = ['DOG', 'CAT', 'BIRD', 'RABBIT', 'FISH', 'REPTILE', 'OTHER'] as const;
 export const speciesSchema = z.enum(SPECIES);
 export type Species = z.infer<typeof speciesSchema>;
-
-/** Optional free text: blank means "none" (null), so an edit can clear it. */
-const optionalText = (max: number) =>
-  z
-    .string()
-    .trim()
-    .max(max)
-    .transform((value) => (value === '' ? null : value))
-    .nullable()
-    .optional();
 
 export const createPetSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(50),

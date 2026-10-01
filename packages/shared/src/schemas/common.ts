@@ -8,3 +8,13 @@ import { z } from 'zod';
 export const emailSchema = z.string().trim().toLowerCase().pipe(z.email('Enter a valid email'));
 
 export const idSchema = z.uuid();
+
+/** Optional free text: blank means "none" (null), so an edit can clear it. */
+export const optionalText = (max: number) =>
+  z
+    .string()
+    .trim()
+    .max(max)
+    .transform((value) => (value === '' ? null : value))
+    .nullable()
+    .optional();

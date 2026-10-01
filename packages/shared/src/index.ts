@@ -4,3 +4,4 @@ export * from './schemas/pets';
 export * from './schemas/care-tasks';
 export * from './schemas/invitations';
 export * from './errors';
+export * from './schedule/expand-occurrences';
