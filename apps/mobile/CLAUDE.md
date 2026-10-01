@@ -92,7 +92,9 @@ export function useUpdatePet(id: string) {
 - Form components own `useForm` and take `onSubmit: (values) => Promise` (the screen passes
   `mutation.mutateAsync`); loading comes from `formState.isSubmitting`.
 - Buttons are the design-system `<Button>`: loading from `mutation.isPending`; `isDisabled` requires a
-  `disabledReason` (the type enforces it), e.g. offline → "Connect to the internet to send invites."
+  `disabledReason` (the type enforces it).
+- Every button that writes through the API gets `requiresNetwork="save"` (the verb): offline it
+  disables itself with "Connect to the internet to save." (D51). Navigation/cancel buttons don't.
 
 ## Testing
 

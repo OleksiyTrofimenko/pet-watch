@@ -51,7 +51,8 @@
     "prisma:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "lint": "eslint .",
-    "test:e2e": "NODE_OPTIONS=--experimental-vm-modules jest --config test/jest-e2e.json --runInBand"
+    "test:e2e": "NODE_OPTIONS=--experimental-vm-modules jest --config test/jest-e2e.json --runInBand",
+    "db:seed": "node --experimental-strip-types --disable-warning=ExperimentalWarning scripts/seed.ts"
   },
   "jest": {
     "preset": "ts-jest",

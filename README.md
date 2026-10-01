@@ -35,6 +35,20 @@ adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<toke
 
 Invite and reset emails are captured by Mailpit at http://localhost:8025.
 
+## Demo data
+
+With `pnpm db:up` and `pnpm dev:api` running:
+
+```bash
+pnpm db:seed   # opt-in, safe to re-run; goes through the API (real hashing, access rules, invite flow)
+```
+
+| Account (password `petwatch-demo`) | What you'll see                                             |
+| ---------------------------------- | ----------------------------------------------------------- |
+| `ana@example.com`                  | Owns Rex and Miso, both with care routines; Sam watches Rex |
+| `sam@example.com`                  | Watches Rex: read-only pet and schedule                     |
+| `lee@example.com`                  | Pending invite to Miso (open the link from Mailpit, :8025)  |
+
 ## Running tests
 
 ```bash

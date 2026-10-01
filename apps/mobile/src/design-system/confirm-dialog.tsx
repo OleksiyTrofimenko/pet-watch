@@ -21,6 +21,8 @@ type ConfirmDialogProps = {
   /** `negative` for destructive actions; `primary` for e.g. "Open Settings". */
   action?: 'negative' | 'primary';
   isLoading?: boolean;
+  /** Passed to the confirm Button, e.g. "delete" (Open Settings needs no network). */
+  requiresNetwork?: string;
   testID?: string;
 };
 
@@ -34,6 +36,7 @@ export function ConfirmDialog({
   onCancel,
   action = 'negative',
   isLoading = false,
+  requiresNetwork,
   testID,
 }: ConfirmDialogProps) {
   return (
@@ -52,6 +55,7 @@ export function ConfirmDialog({
             label={confirmLabel}
             action={action}
             isLoading={isLoading}
+            requiresNetwork={requiresNetwork}
             onPress={onConfirm}
             testID={testID ? `${testID}-confirm` : undefined}
           />

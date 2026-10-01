@@ -5,6 +5,7 @@ import {
   ButtonText as UIButtonText,
 } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { useIsOnline } from '@/src/lib/use-is-online';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import {
@@ -29,6 +30,11 @@ type BaseProps = {
   fullWidth?: boolean;
   /** E2E selector, `<screen>.<element>` (see apps/mobile/CLAUDE.md). */
   testID?: string;
+  /**
+   * The action needs the API, e.g. "save": offline, the button disables itself and says
+   * "Connect to the internet to save." (N-3). Cached screens stay usable; only writes wait.
+   */
+  requiresNetwork?: string;
 };
 
 /**
@@ -49,9 +55,13 @@ export function Button(props: ButtonProps) {
     isLoading = false,
     fullWidth = false,
     testID,
-    isDisabled = false,
-    disabledReason,
+    requiresNetwork,
   } = props;
+  const online = useIsOnline();
+  const offlineReason =
+    requiresNetwork && !online ? `Connect to the internet to ${requiresNetwork}.` : undefined;
+  const isDisabled = props.isDisabled === true || offlineReason !== undefined;
+  const disabledReason = props.disabledReason ?? offlineReason;
   const colours = isDisabled ? DISABLED[variant] : COLOURS[action][variant];
   const rootClassName = [
     'rounded border-[1.5px] data-[disabled=true]:opacity-100',

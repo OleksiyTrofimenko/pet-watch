@@ -1,22 +1,20 @@
-import { RotateCcw } from 'lucide-react-native';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import { VStack } from '@/components/ui/vstack';
-import { Button } from './button';
+import { CircleAlert, RotateCcw } from 'lucide-react-native';
+import { EmptyState } from './empty-state';
 
 type ErrorStateProps = {
   message: string;
   onRetry?: () => void;
 };
 
+/** The one error state: same layout as the empty state, error tone, "Try again" (design 07-pets/error). */
 export function ErrorState({ message, onRetry }: ErrorStateProps) {
   return (
-    <VStack space="sm" className="flex-1 items-center justify-center px-6 py-10">
-      <Heading size="md">Something went wrong</Heading>
-      <Text className="text-center text-typography-500">{message}</Text>
-      {onRetry ? (
-        <Button label="Try again" variant="outline" icon={RotateCcw} onPress={onRetry} />
-      ) : null}
-    </VStack>
+    <EmptyState
+      icon={CircleAlert}
+      tone="error"
+      title="Something went wrong"
+      description={message}
+      action={onRetry ? { label: 'Try again', icon: RotateCcw, onPress: onRetry } : undefined}
+    />
   );
 }

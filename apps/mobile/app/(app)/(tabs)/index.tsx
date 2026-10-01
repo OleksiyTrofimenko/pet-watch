@@ -12,6 +12,8 @@ import { TodayView } from '@/src/features/schedule/components/today-view';
 import { WeekView } from '@/src/features/schedule/components/week-view';
 import { effectiveFilter, filterTasks } from '@/src/features/schedule/schedule-view';
 import { useNow } from '@/src/features/schedule/use-now';
+import { formatTime } from '@/src/features/care-tasks/format';
+import { useIsOnline } from '@/src/lib/use-is-online';
 
 const VIEW_OPTIONS = [
   { value: 'today', label: 'Today' },
@@ -26,6 +28,12 @@ export default function ScheduleScreen() {
   const schedule = useSchedule();
   const pets = usePets();
   const now = useNow();
+  const online = useIsOnline();
+  const updatedAt = new Date(schedule.dataUpdatedAt);
+  const staleLabel =
+    !online && schedule.dataUpdatedAt > 0
+      ? `Updated ${formatTime(updatedAt.getHours() * 60 + updatedAt.getMinutes())}`
+      : undefined;
 
   const petList = (pets.data ?? []).map((pet) => ({ id: pet.id, name: pet.name }));
   const active = effectiveFilter(
@@ -58,7 +66,13 @@ export default function ScheduleScreen() {
         {(tasks) => {
           const visible = filterTasks(tasks, active);
           return mode === 'today' ? (
-            <TodayView tasks={visible} now={now} petName={petName} onOpen={openTask} />
+            <TodayView
+              tasks={visible}
+              now={now}
+              petName={petName}
+              staleLabel={staleLabel}
+              onOpen={openTask}
+            />
           ) : (
             <WeekView tasks={visible} now={now} petName={petName} onOpen={openTask} />
           );

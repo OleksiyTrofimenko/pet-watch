@@ -64,6 +64,7 @@ export default function EditPetScreen() {
               )}
             />
             <ConfirmDialog
+              requiresNetwork="delete"
               isOpen={confirmingDelete}
               title={`Delete ${data.name}?`}
               body={`${data.name}'s care routine will be deleted and everyone watching loses access. This can't be undone.`}

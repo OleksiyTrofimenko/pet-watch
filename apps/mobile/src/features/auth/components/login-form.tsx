@@ -77,6 +77,7 @@ export function LoginForm({
         fullWidth
         isLoading={form.formState.isSubmitting}
         onPress={() => void submit()}
+        requiresNetwork="log in"
         testID="login.submit"
       />
     </AuthLayout>

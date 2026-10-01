@@ -4,7 +4,6 @@ import { useSetAtom } from 'jotai';
 import { PawPrint } from 'lucide-react-native';
 import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
-import { Spinner } from '@/components/ui/spinner';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { Button, Screen } from '@/src/design-system';
@@ -13,6 +12,7 @@ import { useLogout } from '@/src/features/auth/queries';
 import { useSession } from '@/src/features/auth/session-provider';
 import { InviteCard } from '@/src/features/invitations/components/invite-card';
 import { InviteResult } from '@/src/features/invitations/components/invite-result';
+import { InviteSkeleton } from '@/src/features/invitations/components/invite-skeleton';
 import { stateForError, type InviteResultState } from '@/src/features/invitations/invite-state';
 import { useAcceptInvitation, useInvitationPreview } from '@/src/features/invitations/queries';
 import { petFilterAtom, viewModeAtom } from '@/src/features/schedule/atoms';
@@ -59,9 +59,7 @@ export default function AcceptInviteScreen() {
         <Text className="text-[19px] font-semibold text-typography-900">PetWatch</Text>
       </HStack>
       {state === 'loading' ? (
-        <VStack className="flex-1 items-center justify-center" accessibilityLabel="Loading invite">
-          <Spinner size="large" />
-        </VStack>
+        <InviteSkeleton />
       ) : state === 'invite' && preview.data ? (
         <InviteCard invite={preview.data} signedInAs={me} />
       ) : state !== 'invite' ? (
@@ -76,6 +74,7 @@ export default function AcceptInviteScreen() {
               fullWidth
               isLoading={accept.isPending}
               onPress={() => accept.mutate(undefined, { onSuccess: setAccepted })}
+              requiresNetwork="accept"
               testID="invite.accept"
             />
             {/* The invite stays pending; the link keeps working until it expires. */}

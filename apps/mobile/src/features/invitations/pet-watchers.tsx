@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { PendingInvitationDto, WatcherDto } from '@petwatch/shared';
-import { ConfirmDialog, QueryView, useNotify } from '@/src/design-system';
+import { ConfirmDialog, QueryView, RowSkeleton, useNotify } from '@/src/design-system';
 import { useNow } from '@/src/features/schedule/use-now';
 import { InviteSheet } from './components/invite-sheet';
 import { WatchersSection } from './components/watchers-section';
@@ -36,7 +36,7 @@ export function PetWatchers({ petId, petName }: { petId: string; petName: string
 
   return (
     <>
-      <QueryView query={watchers} loading={null}>
+      <QueryView query={watchers} loading={<RowSkeleton count={1} label="Loading watchers" />}>
         {(data) => (
           <WatchersSection
             data={data}
@@ -54,6 +54,7 @@ export function PetWatchers({ petId, petName }: { petId: string; petName: string
         onClose={() => setInviting(false)}
       />
       <ConfirmDialog
+        requiresNetwork="update access"
         isOpen={confirming !== null}
         title={
           confirming?.kind === 'remove'

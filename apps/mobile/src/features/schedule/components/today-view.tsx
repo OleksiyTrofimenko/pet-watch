@@ -15,11 +15,13 @@ type TodayViewProps = {
   now: Date;
   /** Set when filtered to one pet: named in the count, pet hidden on rows. */
   petName?: string;
+  /** Offline: "Updated 12:42" replaces the count, so staleness is explicit. */
+  staleLabel?: string;
   onOpen: (task: ScheduleTaskDto) => void;
 };
 
 /** Every task due today, by time, with a "Now" line between past and upcoming. */
-export function TodayView({ tasks, now, petName, onOpen }: TodayViewProps) {
+export function TodayView({ tasks, now, petName, staleLabel, onOpen }: TodayViewProps) {
   const occurrences = expandOccurrences(tasks, now, 1);
   const firstUpcoming = occurrences.findIndex((occurrence) => !isPast(occurrence, now));
   const nowTime = formatTime(now.getHours() * 60 + now.getMinutes());
@@ -31,7 +33,7 @@ export function TodayView({ tasks, now, petName, onOpen }: TodayViewProps) {
           {longDay(now)}
         </Text>
         <Text className="text-sm text-typography-700" testID="schedule.count">
-          {countLabel(occurrences.length, petName)}
+          {staleLabel ?? countLabel(occurrences.length, petName)}
         </Text>
       </HStack>
       {occurrences.length === 0 ? (

@@ -1,5 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { EmptyState, QueryView, Screen, ScreenHeader } from '@/src/design-system';
+import { EmptyState, QueryView, RowSkeleton, Screen, ScreenHeader } from '@/src/design-system';
 import { TaskForm } from '@/src/features/care-tasks/components/task-form';
 import { usePetTasks, useReplaceTask } from '@/src/features/care-tasks/queries';
 
@@ -15,7 +15,7 @@ export default function EditTaskScreen() {
         title="Edit task"
         leading={{ label: 'Cancel', onPress: () => router.back(), testID: 'task-form.cancel' }}
       />
-      <QueryView query={tasks} loading={null}>
+      <QueryView query={tasks} loading={<RowSkeleton count={4} label="Loading task" />}>
         {(list) => {
           const task = list.find((t) => t.id === taskId);
           if (!task) return <EmptyState title="This task no longer exists" />;

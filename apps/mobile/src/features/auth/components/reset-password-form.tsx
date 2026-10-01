@@ -58,6 +58,7 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
         fullWidth
         isLoading={form.formState.isSubmitting}
         onPress={() => void submit()}
+        requiresNetwork="save your password"
         testID="reset.submit"
       />
     </AuthLayout>

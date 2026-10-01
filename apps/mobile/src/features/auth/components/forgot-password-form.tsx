@@ -53,6 +53,7 @@ export function ForgotPasswordForm({
         fullWidth
         isLoading={form.formState.isSubmitting}
         onPress={() => void submit()}
+        requiresNetwork="send the link"
         testID="forgot.submit"
       />
     </AuthLayout>

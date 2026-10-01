@@ -26,5 +26,6 @@ export function useResetPassword() {
 
 export function useLogout() {
   const { signOut } = useSession();
-  return useMutation({ mutationFn: signOut });
+  // Local sign-out must work offline; TanStack would otherwise pause the mutation until online.
+  return useMutation({ mutationFn: signOut, networkMode: 'always' });
 }

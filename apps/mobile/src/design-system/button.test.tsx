@@ -1,3 +1,4 @@
+import { onlineManager } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react-native';
 import { Plus } from 'lucide-react-native';
 import { Button } from './button';
@@ -43,5 +44,28 @@ describe('Button', () => {
     // Type test (D39): a disabled Button without a reason must not compile.
     // @ts-expect-error disabledReason is required when isDisabled is true
     void (<Button label="Send invite" isDisabled onPress={onPress} />);
+  });
+});
+
+describe('Button requiresNetwork', () => {
+  afterEach(() => onlineManager.setOnline(true));
+
+  it('disables itself offline and says what is waiting for the connection', async () => {
+    const onPress = jest.fn();
+    onlineManager.setOnline(false);
+    await render(<Button label="Save" onPress={onPress} requiresNetwork="save" />);
+
+    expect(screen.getByText('Connect to the internet to save.')).toBeTruthy();
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it('works normally online', async () => {
+    const onPress = jest.fn();
+    await render(<Button label="Save" onPress={onPress} requiresNetwork="save" />);
+
+    expect(screen.queryByText('Connect to the internet to save.')).toBeNull();
+    await fireEvent.press(screen.getByRole('button', { name: 'Save' }));
+    expect(onPress).toHaveBeenCalledTimes(1);
   });
 });

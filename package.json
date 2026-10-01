@@ -8,6 +8,7 @@
   "scripts": {
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
+    "db:seed": "pnpm --filter @petwatch/api db:seed",
     "dev:api": "pnpm --filter @petwatch/api start:dev",
     "dev:mobile": "pnpm --filter @petwatch/mobile start",
     "build:shared": "pnpm --filter @petwatch/shared build",

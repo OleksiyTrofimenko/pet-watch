@@ -103,6 +103,7 @@ export function PetForm({ pet, photo, onSubmit, saveDisabledReason, onDelete }: 
           fullWidth
           isLoading={form.formState.isSubmitting}
           onPress={() => void submit()}
+          requiresNetwork="save"
           testID="pet-form.save"
         />
       )}
@@ -115,6 +116,7 @@ export function PetForm({ pet, photo, onSubmit, saveDisabledReason, onDelete }: 
             variant="outline"
             fullWidth
             onPress={onDelete}
+            requiresNetwork="delete"
             testID="pet-form.delete"
           />
           <Text className="text-center text-sm text-typography-700">

@@ -30,9 +30,10 @@ export default function PetsScreen() {
         empty={
           <EmptyState
             icon={PawPrint}
+            tone="primary"
             title="No pets yet"
             description="Add a pet to set up its care routine, then invite someone to look after it."
-            action={{ label: 'Add pet', onPress: addPet }}
+            action={{ label: 'Add pet', icon: Plus, onPress: addPet, testID: 'pets.empty-add' }}
           />
         }
       >

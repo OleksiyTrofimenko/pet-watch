@@ -132,6 +132,7 @@ export function InviteSheet({ isOpen, petName, onInvite, onClose }: InviteSheetP
               fullWidth
               isLoading={form.formState.isSubmitting}
               onPress={() => void submit()}
+              requiresNetwork="send invites"
               testID="invite.send"
             />
             <Button label="Cancel" variant="link" action="secondary" fullWidth onPress={close} />

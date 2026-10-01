@@ -78,6 +78,7 @@ export function RegisterForm({ onSubmit, onLogin }: RegisterFormProps) {
         fullWidth
         isLoading={form.formState.isSubmitting}
         onPress={() => void submit()}
+        requiresNetwork="create an account"
         testID="register.submit"
       />
     </AuthLayout>

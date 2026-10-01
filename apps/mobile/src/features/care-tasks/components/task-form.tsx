@@ -154,6 +154,7 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
         fullWidth
         isLoading={form.formState.isSubmitting}
         onPress={() => void submit()}
+        requiresNetwork="save"
         testID="task-form.save"
       />
     </VStack>

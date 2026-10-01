@@ -3,6 +3,8 @@ import { useEffect } from 'react';
 import { LogBox } from 'react-native';
 import { useLinkingURL } from 'expo-linking';
 import { Stack } from 'expo-router';
+import { Box } from '@/components/ui/box';
+import { OfflineBanner } from '@/src/design-system';
 import { rememberPendingLink } from '@/src/features/auth/pending-link';
 import { useSession } from '@/src/features/auth/session-provider';
 import { AppProviders } from '@/src/providers/app-providers';
@@ -11,7 +13,12 @@ import { AppProviders } from '@/src/providers/app-providers';
 // <ContextNavigator> mounts, so React warns from inside the router on slow devices. Not our code and
 // harmless; the dev-only overlay would sit over the screen (and break e2e taps). Still logged to Metro.
 // Remove when Expo Router fixes it.
-LogBox.ignoreLogs(["Can't perform a React state update on a component that hasn't mounted yet"]);
+// "Cannot connect to Expo CLI": the dev client losing Metro whenever the device goes offline, which
+// is exactly what the offline mode (N-3) is for; it reconnects by itself.
+LogBox.ignoreLogs([
+  "Can't perform a React state update on a component that hasn't mounted yet",
+  'Cannot connect to Expo CLI',
+]);
 
 export default function RootLayout() {
   return (
@@ -39,15 +46,18 @@ function RootNavigator() {
   const signedIn = session.status === 'signed-in';
 
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={signedIn}>
-        <Stack.Screen name="(app)" />
-      </Stack.Protected>
-      <Stack.Protected guard={!signedIn}>
-        <Stack.Screen name="(auth)" />
-      </Stack.Protected>
-      {/* Opened from the email, signed in or not. */}
-      <Stack.Screen name="reset-password" />
-    </Stack>
+    <Box className="flex-1 bg-background-0">
+      <OfflineBanner />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Protected guard={signedIn}>
+          <Stack.Screen name="(app)" />
+        </Stack.Protected>
+        <Stack.Protected guard={!signedIn}>
+          <Stack.Screen name="(auth)" />
+        </Stack.Protected>
+        {/* Opened from the email, signed in or not. */}
+        <Stack.Screen name="reset-password" />
+      </Stack>
+    </Box>
   );
 }

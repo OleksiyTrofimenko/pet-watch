@@ -7,6 +7,7 @@ import {
   Button,
   ConfirmDialog,
   QueryView,
+  RowSkeleton,
   Screen,
   ScreenHeader,
   useNotify,
@@ -15,7 +16,7 @@ import { CareRoutine } from '@/src/features/care-tasks/components/care-routine';
 import { useDeleteTask, usePetTasks } from '@/src/features/care-tasks/queries';
 import { PetWatchers } from '@/src/features/invitations/pet-watchers';
 import { PetDetails } from '@/src/features/pets/components/pet-details';
-import { PetListSkeleton } from '@/src/features/pets/components/pet-list-skeleton';
+import { PetDetailSkeleton } from '@/src/features/pets/components/pet-detail-skeleton';
 import { usePet } from '@/src/features/pets/queries';
 
 export default function PetScreen() {
@@ -53,11 +54,11 @@ export default function PetScreen() {
           ) : null
         }
       />
-      <QueryView query={pet} loading={<PetListSkeleton />}>
+      <QueryView query={pet} loading={<PetDetailSkeleton />}>
         {(data) => (
           <VStack className="gap-6 pb-6">
             <PetDetails pet={data} />
-            <QueryView query={tasks} loading={null}>
+            <QueryView query={tasks} loading={<RowSkeleton label="Loading care routine" />}>
               {(list) => (
                 <CareRoutine
                   petName={data.name}
@@ -81,6 +82,7 @@ export default function PetScreen() {
             </QueryView>
             {isOwner ? <PetWatchers petId={petId} petName={data.name} /> : null}
             <ConfirmDialog
+              requiresNetwork="delete"
               isOpen={deleting !== null}
               title={deleting ? `Delete ${deleting.title} from ${data.name}'s routine?` : ''}
               body="It disappears from everyone's schedule. This can't be undone."
