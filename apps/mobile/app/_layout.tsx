@@ -15,9 +15,12 @@ import { AppProviders } from '@/src/providers/app-providers';
 // Remove when Expo Router fixes it.
 // "Cannot connect to Expo CLI": the dev client losing Metro whenever the device goes offline, which
 // is exactly what the offline mode (N-3) is for; it reconnects by itself.
+// "Response.blob() is using React Native's Blob": Expo's perf hint for large responses; the photo
+// upload reads one already-resized image (upload-file.ts). Not worth a new dependency (expo-blob).
 LogBox.ignoreLogs([
   "Can't perform a React state update on a component that hasn't mounted yet",
   'Cannot connect to Expo CLI',
+  "Response.blob() is using React Native's Blob",
 ]);
 
 export default function RootLayout() {

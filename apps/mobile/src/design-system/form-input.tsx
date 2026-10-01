@@ -46,6 +46,7 @@ export function FormInput<T extends FieldValues>({
   secureToggle = false,
   format = defaultFormat,
   parse,
+  testID,
   ...inputProps
 }: FormInputProps<T>) {
   const [revealed, setRevealed] = useState(false);
@@ -58,8 +59,14 @@ export function FormInput<T extends FieldValues>({
           <FormControlLabel>
             <FormControlLabelText>{label}</FormControlLabelText>
           </FormControlLabel>
-          <Input className={inputProps.multiline ? 'h-auto min-h-24 items-start py-2' : undefined}>
+          {/* testID goes on the wrapper: iOS exposes field + wrapper as one element with the wrapper's id. */}
+          <Input
+            testID={testID}
+            className={inputProps.multiline ? 'h-auto min-h-24 items-start py-2' : undefined}
+          >
             <InputField
+              // Gluestack defaults to "Input Field"; screen readers should announce the field's label.
+              aria-label={label}
               {...inputProps}
               // RHF focuses the first invalid field on submit through this ref.
               ref={field.ref}
@@ -77,7 +84,7 @@ export function FormInput<T extends FieldValues>({
                 importantForAccessibility="yes"
                 accessibilityRole="button"
                 accessibilityLabel={revealed ? 'Hide password' : 'Show password'}
-                testID={inputProps.testID ? `${inputProps.testID}-toggle` : undefined}
+                testID={testID ? `${testID}-toggle` : undefined}
               >
                 <InputIcon as={revealed ? EyeOff : Eye} className="text-typography-700" />
               </InputSlot>

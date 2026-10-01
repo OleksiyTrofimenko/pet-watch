@@ -25,7 +25,13 @@ export function Screen({ children, scroll = false, floating }: ScreenProps) {
       style={{ paddingTop: online ? insets.top : 0, paddingBottom: insets.bottom }}
     >
       {scroll ? (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps="handled"
+          // iOS: the keyboard overlays the screen; inset the content so focused fields scroll into view.
+          // (Android resizes the window instead.)
+          automaticallyAdjustKeyboardInsets
+        >
           {content}
         </ScrollView>
       ) : (

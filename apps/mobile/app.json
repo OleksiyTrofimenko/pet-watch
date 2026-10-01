@@ -77,7 +77,8 @@
             ]
           }
         }
-      ]
+      ],
+      "./plugins/with-scene-delegate"
     ],
     "experiments": {
       "typedRoutes": true

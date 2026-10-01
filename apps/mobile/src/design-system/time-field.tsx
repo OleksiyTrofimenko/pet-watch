@@ -81,14 +81,15 @@ function TimeInput({
       <FormControlLabel>
         <FormControlLabelText>{label}</FormControlLabelText>
       </FormControlLabel>
-      <Input>
+      {/* testID on the wrapper, as in FormInput: it's the element iOS exposes. */}
+      <Input testID={testID}>
         <InputField
+          aria-label={label}
           ref={inputRef}
           value={text}
           placeholder="08:00"
           keyboardType="numbers-and-punctuation"
           maxLength={5}
-          testID={testID}
           onChangeText={(next) => {
             setText(next);
             onChange(parse(next));
