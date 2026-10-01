@@ -58,7 +58,8 @@ env:
     id: 'task-form.save'
 - assertVisible:
     id: 'rule.Breakfast'
-- assertVisible: 'Breakfast · 08:00 · Daily'
+# Times follow the device locale: 24-hour or 12-hour (ICU puts a narrow space before AM/PM).
+- assertVisible: 'Breakfast · (08:00|8:00.AM) · Daily'
 
 # Weekly Mon/Wed/Fri 18:00 walk
 - tapOn:
@@ -68,11 +69,10 @@ env:
 - tapOn:
     id: 'task-form.title'
 - inputText: Walk
-- tapOn:
-    id: 'task-form.time'
-- eraseText
-- inputText: '18:00'
-- hideKeyboard
+- runFlow:
+    file: ../subflows/set-task-time.yaml
+    env:
+      HOUR: 18
 - tapOn:
     id: 'task-form.repeat-WEEKLY'
 - tapOn:
@@ -86,9 +86,15 @@ env:
     element:
       id: 'task-form.save'
 - waitForAnimationToEnd
-- tapOn:
-    id: 'task-form.save'
-- assertVisible: 'Walk · 18:00 · Mon, Wed, Fri'
+# Tap → result as one unit: the first tap after a scroll can be lost (see apps/mobile/CLAUDE.md).
+- retry:
+    maxRetries: 2
+    commands:
+      - tapOn:
+          id: 'task-form.save'
+      - extendedWaitUntil:
+          visible: 'Walk · (18:00|6:00.PM) · Mon, Wed, Fri'
+          timeout: 10000
 
 # Today: the daily rule is always there
 - tapOn:
@@ -155,4 +161,4 @@ env:
     id: 'task-delete-confirm'
 - assertNotVisible:
     id: 'rule.Big breakfast'
-- assertVisible: 'Walk · 18:00 · Mon, Wed, Fri'
+- assertVisible: 'Walk · (18:00|6:00.PM) · Mon, Wed, Fri'

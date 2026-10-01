@@ -10,7 +10,7 @@ import {
 } from '@petwatch/shared';
 import { Button, FormAlert, FormInput, SegmentedControl, TimeField } from '@/src/design-system';
 import { useApiSubmit } from '@/src/lib/form-errors';
-import { formatTime, parseTime, repeatLabel } from '../format';
+import { repeatLabel } from '../format';
 import { DayToggles } from './day-toggles';
 import { TypeChips } from './type-chips';
 
@@ -68,14 +68,7 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
         submitBehavior="submit"
         onSubmitEditing={() => form.setFocus('notes')}
       />
-      <TimeField
-        control={form.control}
-        name="timeOfDay"
-        label="Time"
-        format={formatTime}
-        parse={parseTime}
-        testID="task-form.time"
-      />
+      <TimeField control={form.control} name="timeOfDay" label="Time" testID="task-form.time" />
       <VStack className="gap-3">
         <Text className="font-semibold text-typography-900">Repeat</Text>
         <Controller

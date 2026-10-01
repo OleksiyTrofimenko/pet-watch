@@ -1,0 +1,52 @@
+# Sets the task form's time to HOUR:00 (HOUR in 24-hour form, 9–23) through the system picker.
+# Assumes the new-task default of 08:00.
+appId: com.petwatch.app
+---
+- tapOn:
+    id: 'task-form.time'
+# Android: the clock dialog's keyboard mode has stable ids; 12-hour devices add an AM/PM spinner.
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          id: 'android:id/toggle_mode'
+      - tapOn:
+          id: 'android:id/input_hour'
+      - eraseText
+      - runFlow:
+          when:
+            visible:
+              id: 'android:id/am_pm_spinner'
+          commands:
+            - inputText: '${HOUR > 12 ? HOUR - 12 : HOUR}'
+            - tapOn:
+                id: 'android:id/am_pm_spinner'
+            - tapOn: "${HOUR >= 12 ? 'PM' : 'AM'}"
+      - runFlow:
+          when:
+            notVisible:
+              id: 'android:id/am_pm_spinner'
+          commands:
+            - inputText: ${HOUR}
+      - tapOn:
+          id: 'android:id/button1'
+# iOS: the compact picker opens hour/minute wheels whose rows aren't in the accessibility tree.
+# Tapping the row just below the selected hour moves the wheel one hour; the popover is anchored to
+# the time pill, so on the iPhone 17 that row is at a fixed point. Then dismiss the popover.
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - extendedWaitUntil:
+          visible: '08 o.clock'
+          timeout: 5000
+      - repeat:
+          times: '${HOUR - 8}'
+          commands:
+            - tapOn:
+                point: '26%,67%'
+            - waitForAnimationToEnd
+      - assertVisible: '${HOUR} o.clock'
+      - tapOn:
+          id: 'PopoverDismissRegion'

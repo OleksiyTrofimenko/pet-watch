@@ -12,7 +12,7 @@ import { TodayView } from '@/src/features/schedule/components/today-view';
 import { WeekView } from '@/src/features/schedule/components/week-view';
 import { effectiveFilter, filterTasks } from '@/src/features/schedule/schedule-view';
 import { useNow } from '@/src/features/schedule/use-now';
-import { formatTime } from '@/src/features/care-tasks/format';
+import { formatTime } from '@/src/lib/time-of-day';
 import { useIsOnline } from '@/src/lib/use-is-online';
 
 const VIEW_OPTIONS = [

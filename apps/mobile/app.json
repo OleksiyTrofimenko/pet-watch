@@ -78,7 +78,8 @@
           }
         }
       ],
-      "./plugins/with-scene-delegate"
+      "./plugins/with-scene-delegate",
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true

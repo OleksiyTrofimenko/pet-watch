@@ -66,11 +66,11 @@ env:
     file: ../subflows/open-tab.yaml
     env:
       TAB: Schedule
-- assertVisible: 'Updated \d\d:\d\d'
+- assertVisible: 'Updated \d{1,2}:\d\d.*'
 
 - setAirplaneMode: disabled
 - extendedWaitUntil:
     notVisible:
       id: 'offline.banner'
     timeout: 30000
-- assertNotVisible: 'Updated \d\d:\d\d'
+- assertNotVisible: 'Updated \d{1,2}:\d\d.*'

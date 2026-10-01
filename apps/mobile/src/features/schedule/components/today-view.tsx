@@ -3,7 +3,7 @@ import { expandOccurrences, type ScheduleTaskDto } from '@petwatch/shared';
 import { HStack } from '@/components/ui/hstack';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-import { formatTime } from '@/src/features/care-tasks/format';
+import { formatTime } from '@/src/lib/time-of-day';
 import { longDay } from '../dates';
 import { countLabel, isPast } from '../schedule-view';
 import { NowMarker } from './now-marker';

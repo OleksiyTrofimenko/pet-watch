@@ -1,17 +1,5 @@
 import type { Recurrence } from '@petwatch/shared';
 
-/** 480 → "08:00" (24-hour, as in the design). */
-export function formatTime(minutes: number): string {
-  const pad = (value: number) => String(value).padStart(2, '0');
-  return `${pad(Math.floor(minutes / 60))}:${pad(minutes % 60)}`;
-}
-
-/** "08:00" / "8:00" → 480; anything else → NaN (the schema turns NaN into a field error). */
-export function parseTime(text: string): number {
-  const match = /^([01]?\d|2[0-3]):([0-5]\d)$/.exec(text.trim());
-  return match ? Number(match[1]) * 60 + Number(match[2]) : Number.NaN;
-}
-
 /** Monday-first, as the week views. Values are JS getDay() numbers (0 = Sunday). */
 export const WEEK_DAYS = [
   { value: 1, short: 'Mon', letter: 'M', full: 'Monday' },

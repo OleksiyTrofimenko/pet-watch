@@ -5,7 +5,8 @@ import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-import { formatTime, repeatLabel } from '../format';
+import { formatTime } from '@/src/lib/time-of-day';
+import { repeatLabel } from '../format';
 import { TypeTag } from './type-tag';
 
 type RuleRowProps = {

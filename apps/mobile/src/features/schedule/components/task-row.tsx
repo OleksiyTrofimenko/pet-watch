@@ -3,7 +3,7 @@ import { HStack } from '@/components/ui/hstack';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-import { formatTime } from '@/src/features/care-tasks/format';
+import { formatTime } from '@/src/lib/time-of-day';
 import { TypeTag } from '@/src/features/care-tasks/components/type-tag';
 
 type TaskRowProps = {

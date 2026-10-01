@@ -1,111 +1,103 @@
-import { useState } from 'react';
+import DateTimePicker, { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
+import { Clock } from 'lucide-react-native';
+import { Platform } from 'react-native';
+import { KeyboardController } from 'react-native-keyboard-controller';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import {
   FormControl,
   FormControlError,
   FormControlErrorText,
-  FormControlHelper,
-  FormControlHelperText,
   FormControlLabel,
   FormControlLabelText,
 } from '@/components/ui/form-control';
-import { Input, InputField } from '@/components/ui/input';
+import { HStack } from '@/components/ui/hstack';
+import { Icon } from '@/components/ui/icon';
+import { Pressable } from '@/components/ui/pressable';
+import { Text } from '@/components/ui/text';
+import { dateToMinutes, formatTime, minutesToDate } from '@/src/lib/time-of-day';
+import { useTokenColor } from './token-color';
 
 type TimeFieldProps<T extends FieldValues> = {
   control: Control<T>;
   name: Path<T>;
   label: string;
-  /** minutes → "08:00" */
-  format: (minutes: number) => string;
-  /** "08:00" → minutes, or NaN while incomplete (the schema reports it). */
-  parse: (text: string) => number;
   testID?: string;
 };
 
 /**
- * A 24-hour HH:MM field holding minutes since midnight. Keeps the typed text locally, so a
- * half-typed "8:" isn't wiped by re-formatting. (A native picker needs a native dependency.)
+ * A time of day held as minutes since midnight, picked with the system time picker: compact
+ * inline on iOS, the clock dialog on Android. 24-hour vs 12-hour follows the device locale.
+ * Opening it closes the text keyboard, which would otherwise cover the rest of the form.
  */
 export function TimeField<T extends FieldValues>({
   control,
   name,
   label,
-  format,
-  parse,
   testID,
 }: TimeFieldProps<T>) {
+  const accent = useTokenColor('primary-600');
   return (
     <Controller
       control={control}
       name={name}
-      render={({ field, fieldState }) => (
-        <TimeInput
-          value={typeof field.value === 'number' ? field.value : null}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
-          inputRef={field.ref}
-          error={fieldState.error?.message}
-          {...{ label, format, parse, testID }}
-        />
-      )}
+      render={({ field, fieldState }) => {
+        const minutes = typeof field.value === 'number' ? field.value : 0;
+        const pick = (date: Date) => {
+          field.onChange(dateToMinutes(date));
+          field.onBlur();
+        };
+        return (
+          <FormControl isInvalid={Boolean(fieldState.error)}>
+            <FormControlLabel>
+              <FormControlLabelText>{label}</FormControlLabelText>
+            </FormControlLabel>
+            {Platform.OS === 'ios' ? (
+              <HStack
+                className="min-h-12 items-center"
+                onTouchStart={() => void KeyboardController.dismiss()}
+              >
+                <DateTimePicker
+                  mode="time"
+                  display="compact"
+                  value={minutesToDate(minutes)}
+                  onValueChange={(_event, date) => pick(date)}
+                  accentColor={accent}
+                  accessibilityLabel={label}
+                  testID={testID}
+                />
+              </HStack>
+            ) : (
+              <Pressable
+                onPress={() => {
+                  void KeyboardController.dismiss();
+                  DateTimePickerAndroid.open({
+                    mode: 'time',
+                    value: minutesToDate(minutes),
+                    onValueChange: (_event, date) => pick(date),
+                    onDismiss: field.onBlur,
+                  });
+                }}
+                accessibilityRole="button"
+                accessibilityLabel={`${label}: ${formatTime(minutes)}`}
+                testID={testID}
+                className={`min-h-12 justify-center rounded border bg-background-0 px-3 ${
+                  fieldState.error ? 'border-2 border-error-600' : 'border-outline-200'
+                }`}
+              >
+                <HStack className="items-center justify-between">
+                  <Text className="text-typography-900">{formatTime(minutes)}</Text>
+                  <Icon as={Clock} className="text-typography-700" />
+                </HStack>
+              </Pressable>
+            )}
+            {fieldState.error?.message ? (
+              <FormControlError>
+                <FormControlErrorText>{fieldState.error.message}</FormControlErrorText>
+              </FormControlError>
+            ) : null}
+          </FormControl>
+        );
+      }}
     />
-  );
-}
-
-type TimeInputProps = {
-  value: number | null;
-  onChange: (minutes: number) => void;
-  onBlur: () => void;
-  inputRef: (instance: unknown) => void;
-  error?: string;
-  label: string;
-  format: (minutes: number) => string;
-  parse: (text: string) => number;
-  testID?: string;
-};
-
-function TimeInput({
-  value,
-  onChange,
-  onBlur,
-  inputRef,
-  error,
-  label,
-  format,
-  parse,
-  testID,
-}: TimeInputProps) {
-  const [text, setText] = useState(value === null || Number.isNaN(value) ? '' : format(value));
-  return (
-    <FormControl isInvalid={Boolean(error)}>
-      <FormControlLabel>
-        <FormControlLabelText>{label}</FormControlLabelText>
-      </FormControlLabel>
-      {/* testID on the wrapper, as in FormInput: it's the element iOS exposes. */}
-      <Input testID={testID}>
-        <InputField
-          aria-label={label}
-          ref={inputRef}
-          value={text}
-          placeholder="08:00"
-          keyboardType="numbers-and-punctuation"
-          maxLength={5}
-          onChangeText={(next) => {
-            setText(next);
-            onChange(parse(next));
-          }}
-          onBlur={onBlur}
-        />
-      </Input>
-      {error ? (
-        <FormControlError>
-          <FormControlErrorText>{error}</FormControlErrorText>
-        </FormControlError>
-      ) : (
-        <FormControlHelper>
-          <FormControlHelperText>24-hour time, e.g. 18:30</FormControlHelperText>
-        </FormControlHelper>
-      )}
-    </FormControl>
   );
 }
