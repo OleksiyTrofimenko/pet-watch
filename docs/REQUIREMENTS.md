@@ -53,7 +53,7 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 | T-5  | DTO validation on **every** endpoint, sensible errors                        | Global `ZodValidationPipe` + `ApiExceptionFilter`       | ✅ infra                                                               |
 | T-6  | Server-side access rules: only pets you own or watch                         | `PetAccessService` + guard/decorator; 404 for invisible | ✅ PetAccessService; e2e: stranger 404, watcher 403                    |
 | T-7  | Docker Compose for DB + README run instructions                              | Postgres, SeaweedFS (S3), Mailpit                       | ✅                                                                     |
-| T-8  | Email + S3 may be stubbed; README says what + how to wire real               | Mailpit + SeaweedFS (real protocols)                    | 🟨 Mailpit + SeaweedFS; README section in Phase 9                      |
+| T-8  | Email + S3 may be stubbed; README says what + how to wire real               | Mailpit + SeaweedFS (real protocols)                    | ✅ Mailpit + SeaweedFS; README "What is stubbed"                       |
 | T-9  | Deep link opens accept-invite screen; no store fallback                      | Expo Router file route                                  | ✅ app/(app)/invites/[token]; signed-out link replayed after login     |
 | T-10 | Jotai/Context for UI state; TanStack Query for **all** server state          | Rule in CLAUDE.md                                       | ✅ Jotai: schedule view + filter; Context: session                     |
 | T-11 | React Hook Form + Zod on **all** forms                                       | login, register, forgot, reset, pet, care task, invite  | ✅ 7 forms, shared schemas                                             |
@@ -61,7 +61,7 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 | T-13 | Gluestack UI                                                                 | v3 + NativeWind v4                                      | ✅ installed                                                           |
 | T-14 | Fully typed, no `any`; focused components; hooks separated from presentation | CLAUDE.md rules                                         | ✅ lint-enforced layers, no `any`                                      |
 | T-15 | AI config committed                                                          | `CLAUDE.md`, `.claude/`                                 | ✅                                                                     |
-| T-16 | README: setup, choices, limitations, stubs                                   |                                                         | 🟨 Phase 9                                                             |
+| T-16 | README: setup, choices, limitations, stubs                                   |                                                         | ✅ README                                                              |
 
 ## Nice to have
 
@@ -72,13 +72,14 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 | N-3 | Offline-aware                                                        | NetInfo banner; queries paused; mutations disabled with message                                      | ✅ OfflineBanner, cached data, `requiresNetwork` buttons, Maestro offline.yaml |
 | N-4 | Clear invite feedback ("added to their list" vs "invite email sent") | API returns explicit `outcome`; UI copy per outcome                                                  | ✅ sent / re-sent / already watching                                           |
 
-## Ambiguities → assumptions (put these in the README)
+## Ambiguities → assumptions (also in the README)
 
 1. **"Added to their list" vs "invite email sent"** — the brief also says the invitee _must click the link_ to be added.
    Interpretation: the invite always sends an email; feedback distinguishes _sent_ / _re-sent_ / _already watching_,
    and the owner's watcher list shows the invite as **Pending** until accepted.
 2. **Unregistered invitee** — not supported by the brief, so we return a clear error. This reveals whether an
-   email has an account; acceptable because only authenticated owners can call it (rate-limited).
+   email has an account; acceptable for an MVP because only a signed-in owner of a pet can ask (not rate-limited:
+   a known limitation in the README).
 3. **Age** — stored as whole years as specified; with more time store `birthDate` so it doesn't go stale.
 4. **Timezone** — schedule times are wall-clock local time; owner and watcher assumed to share a timezone.
 5. **Week** — Monday–Sunday week containing today.

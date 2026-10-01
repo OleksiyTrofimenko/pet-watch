@@ -1,0 +1,38 @@
+# README screenshots, not a test (lives outside flows/). Needs `pnpm db:seed`. PLATFORM (ios|android)
+# names the files; Maestro writes them under the output dir's takeScreenshot/, copy to docs/screenshots/:
+#   maestro test -e PLATFORM=ios --test-output-dir /tmp/shots apps/mobile/e2e/tools/screenshots.yaml
+appId: com.petwatch.app
+name: README screenshots
+---
+- runFlow: ../subflows/launch-signed-out.yaml
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ana@example.com
+      PASSWORD: petwatch-demo
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
+- waitForAnimationToEnd
+- takeScreenshot: ${PLATFORM}-1-today
+- tapOn:
+    id: 'schedule.view-week'
+- waitForAnimationToEnd
+- takeScreenshot: ${PLATFORM}-2-week
+- tapOn:
+    id: 'tab.pets'
+- waitForAnimationToEnd
+- takeScreenshot: ${PLATFORM}-3-pets
+- tapOn:
+    id: 'pets.card-Rex'
+- extendedWaitUntil:
+    visible:
+      id: 'pet.title'
+    timeout: 15000
+- waitForAnimationToEnd
+- takeScreenshot: ${PLATFORM}-4-pet
