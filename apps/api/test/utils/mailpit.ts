@@ -20,15 +20,20 @@ async function getJson<T>(path: string, schema: z.ZodType<T>): Promise<T> {
   return schema.parse(await res.json());
 }
 
+/** Messages currently in the inbox for `email` (pair with a later waitForMessageTo to avoid sleeps). */
+export async function countMessagesTo(email: string): Promise<number> {
+  const { messages } = await getJson(`/search?query=${toQuery(email)}`, searchSchema);
+  return messages.length;
+}
+
 /**
  * Polls until the newest message to `email` arrives (mail is sent without being awaited),
  * instead of sleeping a fixed time.
  */
 export async function waitForMessageTo(email: string, timeoutMs = 5_000): Promise<MailMessage> {
   const deadline = Date.now() + timeoutMs;
-  const query = encodeURIComponent(`to:"${email}"`);
   while (Date.now() < deadline) {
-    const { messages } = await getJson(`/search?query=${query}`, searchSchema);
+    const { messages } = await getJson(`/search?query=${toQuery(email)}`, searchSchema);
     if (messages[0]) {
       const message = await getJson(`/message/${messages[0].ID}`, messageSchema);
       return { subject: message.Subject, text: message.Text };
@@ -36,6 +41,10 @@ export async function waitForMessageTo(email: string, timeoutMs = 5_000): Promis
     await sleep(100);
   }
   throw new Error(`No email to ${email} within ${timeoutMs}ms`);
+}
+
+function toQuery(email: string): string {
+  return encodeURIComponent(`to:"${email}"`);
 }
 
 /** First link in `text` that starts with `prefix`, e.g. extractLink(text, 'petwatch://reset-password'). */
