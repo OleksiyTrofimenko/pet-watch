@@ -30,10 +30,14 @@ import { AuthService } from './auth.service';
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => {
         const ttl = config.get('THROTTLE_TTL_MS', { infer: true });
-        return [
-          { name: 'default', ttl, limit: config.get('THROTTLE_LIMIT', { infer: true }) },
-          { name: 'strict', ttl, limit: config.get('THROTTLE_STRICT_LIMIT', { infer: true }) },
-        ];
+        return {
+          // Shown as-is by the app's form alert (the default is "ThrottlerException: …").
+          errorMessage: 'Too many attempts. Wait a minute and try again.',
+          throttlers: [
+            { name: 'default', ttl, limit: config.get('THROTTLE_LIMIT', { infer: true }) },
+            { name: 'strict', ttl, limit: config.get('THROTTLE_STRICT_LIMIT', { infer: true }) },
+          ],
+        };
       },
     }),
   ],

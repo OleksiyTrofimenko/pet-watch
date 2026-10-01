@@ -69,6 +69,16 @@ API e2e tests truncate all tables before each test and clear the Mailpit inbox t
 don't keep anything you care about in the local Mailpit while they run. Maestro flows create their own
 users through the API (unique emails), so they need no reset.
 
+### Continuous integration
+
+`.github/workflows/ci.yml` runs on every push to `main` and on pull requests: install, build the
+contract, `format:check`, typecheck, lint, unit tests, then the API e2e suite against the same
+`docker-compose.yml` services (Postgres, SeaweedFS, Mailpit). Maestro flows run locally only: they
+need an emulator/simulator with the dev build, which is slow and costly on CI for an MVP.
+
+The API e2e suite includes `access-matrix.e2e-spec.ts`: every pet-scoped route × owner / watcher /
+stranger / anonymous, and a check that no pet route is missing from that table.
+
 ## Repository layout
 
 ```

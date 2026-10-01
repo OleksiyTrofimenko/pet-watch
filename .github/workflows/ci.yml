@@ -1,0 +1,45 @@
+# Static checks, unit tests and API e2e against real Postgres, S3 (SeaweedFS) and SMTP (Mailpit).
+# Maestro (mobile e2e) stays local: it needs an emulator/simulator and a dev build (see README).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm version comes from "packageManager" in package.json.
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install (also generates the Prisma client)
+        run: pnpm install --frozen-lockfile
+      - run: pnpm build:shared
+
+      - run: pnpm format:check
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm test
+
+      # The same docker-compose.yml as local dev, so CI and laptops run identical services.
+      - name: Start Postgres, SeaweedFS and Mailpit
+        run: docker compose up -d --wait postgres s3 mailpit
+      - name: Create the S3 bucket
+        run: docker compose run --rm s3-init
+      - name: API e2e
+        run: |
+          cp apps/api/.env.test.example apps/api/.env.test
+          pnpm test:e2e

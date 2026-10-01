@@ -8,6 +8,8 @@ type QueryViewProps<TData> = {
   loading: ReactNode;
   empty?: ReactNode;
   isEmpty?: (data: TData) => boolean;
+  /** A specific error screen (e.g. "no longer available"); return undefined for the default. */
+  renderError?: (error: unknown) => ReactNode | undefined;
   children: (data: TData) => ReactNode;
 };
 
@@ -20,10 +22,13 @@ export function QueryView<TData>({
   loading,
   empty,
   isEmpty,
+  renderError,
   children,
 }: QueryViewProps<TData>) {
   if (query.isPending) return <>{loading}</>;
   if (query.data === undefined) {
+    const specific = renderError?.(query.error);
+    if (specific) return <>{specific}</>;
     const message = query.error instanceof Error ? query.error.message : 'Please try again.';
     return <ErrorState message={message} onRetry={() => void query.refetch()} />;
   }

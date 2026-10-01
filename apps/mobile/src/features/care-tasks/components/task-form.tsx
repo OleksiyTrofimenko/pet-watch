@@ -1,28 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm, useWatch } from 'react-hook-form';
-import { HStack } from '@/components/ui/hstack';
-import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import {
-  CARE_TASK_TYPES,
   careTaskSchema,
   type CareTaskDto,
   type CareTaskInput,
   type CareTaskPayload,
 } from '@petwatch/shared';
-import {
-  Button,
-  Chip,
-  FormAlert,
-  FormInput,
-  SegmentedControl,
-  TimeField,
-} from '@/src/design-system';
+import { Button, FormAlert, FormInput, SegmentedControl, TimeField } from '@/src/design-system';
 import { useApiSubmit } from '@/src/lib/form-errors';
 import { formatTime, parseTime, repeatLabel } from '../format';
-import { TASK_TYPE_VISUALS } from '../task-type-visuals';
 import { DayToggles } from './day-toggles';
+import { TypeChips } from './type-chips';
 
 const FIELDS = ['type', 'title', 'notes', 'timeOfDay', 'recurrence', 'daysOfWeek'] as const;
 const REPEAT_OPTIONS = [
@@ -64,27 +54,7 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
         <Controller
           control={form.control}
           name="type"
-          render={({ field }) => (
-            <HStack className="flex-wrap gap-2">
-              {CARE_TASK_TYPES.map((type) => {
-                const visual = TASK_TYPE_VISUALS[type];
-                return (
-                  <Chip
-                    key={type}
-                    label={visual.label}
-                    selected={field.value === type}
-                    onPress={() => field.onChange(type)}
-                    leading={
-                      <Icon as={visual.icon} className="h-[18px] w-[18px] text-typography-700" />
-                    }
-                    selectedClassName={`border-2 ${visual.borderClassName} ${visual.badgeClassName}`}
-                    selectedTextClassName={visual.textClassName}
-                    testID={`task-form.type-${type}`}
-                  />
-                );
-              })}
-            </HStack>
-          )}
+          render={({ field }) => <TypeChips value={field.value} onChange={field.onChange} />}
         />
       </VStack>
       <FormInput

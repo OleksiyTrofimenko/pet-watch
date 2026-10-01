@@ -17,6 +17,7 @@ import { useDeleteTask, usePetTasks } from '@/src/features/care-tasks/queries';
 import { PetWatchers } from '@/src/features/invitations/pet-watchers';
 import { PetDetails } from '@/src/features/pets/components/pet-details';
 import { PetDetailSkeleton } from '@/src/features/pets/components/pet-detail-skeleton';
+import { petUnavailable } from '@/src/features/pets/pet-unavailable';
 import { usePet } from '@/src/features/pets/queries';
 
 export default function PetScreen() {
@@ -54,7 +55,11 @@ export default function PetScreen() {
           ) : null
         }
       />
-      <QueryView query={pet} loading={<PetDetailSkeleton />}>
+      <QueryView
+        query={pet}
+        loading={<PetDetailSkeleton />}
+        renderError={(error) => petUnavailable(error, () => router.dismissTo('/pets'))}
+      >
         {(data) => (
           <VStack className="gap-6 pb-6">
             <PetDetails pet={data} />

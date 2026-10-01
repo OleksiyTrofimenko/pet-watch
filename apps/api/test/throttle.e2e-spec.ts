@@ -31,7 +31,11 @@ describe('Throttling (e2e)', () => {
     for (let i = 0; i < STRICT_LIMIT; i++) await login().expect(401);
 
     const res = await login().expect(429);
-    expect(res.body).toMatchObject({ statusCode: 429, code: 'TOO_MANY_REQUESTS' });
+    expect(res.body).toMatchObject({
+      statusCode: 429,
+      code: 'TOO_MANY_REQUESTS',
+      message: 'Too many attempts. Wait a minute and try again.',
+    });
   });
 
   it('limits register with the default throttler only', async () => {

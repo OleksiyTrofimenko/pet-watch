@@ -4,3 +4,9 @@ pnpm-lock.yaml
 apps/api/src/generated
 apps/api/prisma/migrations
 apps/mobile/components/ui
+# Source documents kept verbatim (the brief and the plan as written).
+docs/ORIGINAL_TECH_REQS.md
+docs/IMPLEMENTATION_PLAN.md
+# Generated: the Claude Design export and Expo's env typings.
+docs/design
+apps/mobile/expo-env.d.ts
