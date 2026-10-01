@@ -1,6 +1,6 @@
 // The iOS 27 SDK refuses to launch apps without the UIScene life cycle. Expo 57.0.26 ships the runtime
 // half (ExpoAppSceneDelegate, ExpoReactNativeFactoryProvider) but its prebuild template doesn't use it,
-// so this plugin applies the SDK 58 template's wiring. Delete it after upgrading to SDK 58 (see D-row in
+// so this plugin applies the SDK 58 template's wiring. Delete it after upgrading to SDK 58 (see D55 in
 // docs/DECISIONS.md).
 const fs = require('fs');
 const path = require('path');

@@ -125,8 +125,8 @@ e2e/scripts/        runScript JS on the host: api.js (create data via HTTP), mai
   `e2e/prepare-ios-simulator.sh` (no autocorrect/prediction, no password AutoFill) and skips flows
   tagged `android-only` (offline: `setAirplaneMode` doesn't exist on the iOS simulator).
 - Flows start with `subflows/launch-signed-out.yaml`: on iOS the session survives `clearState` in the
-  Keychain. Don't `hideKeyboard` on iOS (it can submit the form or fail); tap buttons with the keyboard
-  open, and `scroll` when the keyboard covers the next field.
+  Keychain. On iOS `hideKeyboard` can submit the form or fail: never use it right before a submit tap
+  (tap buttons with the keyboard open), and `scroll` when the keyboard covers the next field.
 - Photo flows: `addMedia` + `subflows/pick-first-photo.yaml` (system picker, no testIDs there).
   `e2e/reset-android-media.sh` runs first: duplicate test photos crash Google's photo picker.
 - Android emulator: `adb reverse tcp:8081 tcp:8081`, `tcp:3000` and `tcp:9000` (S3 uploads) so

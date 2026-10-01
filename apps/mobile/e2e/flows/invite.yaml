@@ -52,9 +52,17 @@ env:
 - tapOn:
     id: 'invite.email'
 - inputText: ${output.sam}
-- tapOn:
-    id: 'invite.send'
-- assertVisible: 'Invite sent'
+# The sheet moves above the keyboard as it opens; a tap during that move can be lost. Retry
+# "tap → result" as one unit (the result replaces the form, so a retry can't send twice).
+- waitForAnimationToEnd
+- retry:
+    maxRetries: 2
+    commands:
+      - tapOn:
+          id: 'invite.send'
+      - extendedWaitUntil:
+          visible: 'Invite sent'
+          timeout: 10000
 - tapOn:
     id: 'invite.done'
 - assertVisible: 'Pending'
