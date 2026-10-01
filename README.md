@@ -77,7 +77,8 @@ cp apps/api/.env.test.example apps/api/.env.test   # once
 pnpm db:up
 pnpm test:e2e            # creates petwatch_test if missing, migrate deploy, then test/*.e2e-spec.ts
 
-# Mobile e2e: Maestro (curl -fsSL "https://get.maestro.mobile.dev" | bash), API + Metro + dev build running
+# Mobile e2e: Maestro (curl -fsSL "https://get.maestro.mobile.dev" | bash) and `pnpm db:seed`;
+# API + Metro + the dev build running on the device
 pnpm e2e:mobile          # Android emulator: all 7 flows in apps/mobile/e2e/flows
 pnpm e2e:mobile:ios      # iOS simulator: prepares it (no autocorrect / password AutoFill), 6 flows
 ```
@@ -121,6 +122,10 @@ Full reasoning with the rejected alternatives: [`docs/DECISIONS.md`](docs/DECISI
   design system → Gluestack primitives. Server state only in TanStack Query; Jotai for view mode and filter.
 - **Offline-aware**: a banner, cached data stays visible, and write buttons disable with a reason (D51).
 - **iOS 27** needs the UIScene life cycle; a small config plugin adds it until Expo SDK 58 (D55).
+- **Native UI where the OS does it better**: system tab bar via Expo Router native tabs (Liquid Glass on
+  iOS, Material navigation on Android, D57); the system time picker, with times shown in the device's
+  12/24-hour style (D58); keyboard handling through react-native-keyboard-controller, where form screens
+  use `<Screen keyboardAware>` and "Next" walks the fields.
 
 ## What is stubbed and how to make it real
 
@@ -156,6 +161,10 @@ Full reasoning with the rejected alternatives: [`docs/DECISIONS.md`](docs/DECISI
   pet, declining invites.
 - **Uploads**: a presigned POST with a size limit (today the app resizes before upload, the URL doesn't cap it).
 - **Mobile e2e on CI**: run Maestro on an emulator in CI; locally the offline flow is Android-only.
+- **Open iOS issue**: on the iOS 27 simulator, with the login password field focused, "Create an account"
+  doesn't respond (Android is fine). Not yet diagnosed.
+- **Visual QA** across devices, dark mode and the largest text size is still to do; the README screenshots
+  predate the native tab bar.
 
 ## Working with AI
 

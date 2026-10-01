@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "ios-simulator": {
+      "command": "npx",
+      "args": ["-y", "ios-simulator-mcp@2.1.0"]
+    },
+    "argent": {
+      "command": "npx",
+      "args": ["-y", "@swmansion/argent@0.26.0", "mcp"]
+    }
+  }
+}
