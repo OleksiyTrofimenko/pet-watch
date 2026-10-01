@@ -11,6 +11,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { UsersModule } from './users/users.module';
 import { PetsModule } from './pets/pets.module';
 import { CareTasksModule } from './care-tasks/care-tasks.module';
+import { InvitationsModule } from './invitations/invitations.module';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { CareTasksModule } from './care-tasks/care-tasks.module';
     UsersModule,
     PetsModule,
     CareTasksModule,
-    // Feature modules are added here as they are built: InvitationsModule.
+    InvitationsModule,
   ],
   providers: [
     // Global DTO validation: every @Body/@Query typed with a createZodDto class is validated.

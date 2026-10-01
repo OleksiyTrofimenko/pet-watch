@@ -17,6 +17,19 @@ export class MailService {
     this.from = config.get('MAIL_FROM', { infer: true });
   }
 
+  async sendInvitation(
+    to: string,
+    invite: { inviterEmail: string; petName: string; link: string; expiresAt: Date },
+  ): Promise<void> {
+    const expires = invite.expiresAt.toUTCString().slice(0, 16);
+    await this.transport.sendMail({
+      from: this.from,
+      to,
+      subject: `${invite.inviterEmail} invited you to watch ${invite.petName} on PetWatch`,
+      text: `${invite.inviterEmail} invited you to help look after ${invite.petName}.\n\nOpen this link on your phone (with PetWatch installed) to review and accept:\n\n${invite.link}\n\nThe invite expires on ${expires}. If you weren't expecting it, ignore this email.`,
+    });
+  }
+
   async sendPasswordReset(to: string, link: string): Promise<void> {
     await this.transport.sendMail({
       from: this.from,

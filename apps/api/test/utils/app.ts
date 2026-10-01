@@ -21,7 +21,9 @@ export async function createTestApp(env: Partial<Env> = {}): Promise<INestApplic
   }
   const moduleRef = await builder.compile();
   const app = configureApp(moduleRef.createNestApplication<INestApplication<App>>());
-  await app.init();
+  // Listen on an ephemeral port (listen also runs init): supertest then reuses this server
+  // instead of binding one per request, so concurrent requests in one test work.
+  await app.listen(0);
   return app;
 }
 
