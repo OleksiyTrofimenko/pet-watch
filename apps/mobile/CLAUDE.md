@@ -95,6 +95,14 @@ export function useUpdatePet(id: string) {
   `disabledReason` (the type enforces it).
 - Every button that writes through the API gets `requiresNetwork="save"` (the verb): offline it
   disables itself with "Connect to the internet to save." (D51). Navigation/cancel buttons don't.
+- **Keyboard: react-native-keyboard-controller only.** Form screens render `<Screen keyboardAware>`
+  (its `KeyboardAwareScrollView` keeps the focused field and the row below it visible); a sheet or a
+  non-scrolling view uses its `KeyboardAvoidingView`. Screens never handle the keyboard themselves.
+  Don't use react-native-keyboard-aware-scroll-view, React Native's own `KeyboardAvoidingView`, or
+  hand-tuned keyboard offsets.
+- Field order is explicit in each form: every field but the last gets `returnKeyType="next"`,
+  `submitBehavior="submit"` and `onSubmitEditing={() => form.setFocus('<next>')}`; the last text field
+  gets `returnKeyType="done"` and submits.
 
 ## Testing
 

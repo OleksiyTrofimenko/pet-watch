@@ -42,6 +42,9 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
           autoComplete="new-password"
           secureToggle
           testID="reset.password"
+          returnKeyType="next"
+          submitBehavior="submit"
+          onSubmitEditing={() => form.setFocus('confirmPassword')}
         />
         <FormInput
           control={form.control}
@@ -50,6 +53,8 @@ export function ResetPasswordForm({ onSubmit }: ResetPasswordFormProps) {
           autoComplete="new-password"
           secureToggle
           testID="reset.confirm"
+          returnKeyType="done"
+          onSubmitEditing={() => void submit()}
         />
       </VStack>
       <Button

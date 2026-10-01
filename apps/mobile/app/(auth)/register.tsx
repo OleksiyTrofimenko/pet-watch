@@ -8,7 +8,7 @@ export default function RegisterScreen() {
   const register = useRegister();
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       <RegisterForm
         onSubmit={register.mutateAsync}
         onLogin={(email) => router.replace({ pathname: '/login', params: email ? { email } : {} })}

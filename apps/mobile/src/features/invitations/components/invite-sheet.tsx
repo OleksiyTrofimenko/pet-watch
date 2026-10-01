@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CircleCheck, Info, Send } from 'lucide-react-native';
 import { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView } from 'react-native';
+import { Keyboard } from 'react-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useForm } from 'react-hook-form';
 import {
   Actionsheet,
@@ -118,6 +119,8 @@ export function InviteSheet({ isOpen, petName, onInvite, onClose }: InviteSheetP
               autoComplete="email"
               autoFocus
               testID="invite.email"
+              returnKeyType="done"
+              onSubmitEditing={() => void submit()}
             />
             {result?.outcome === 'ALREADY_WATCHING' ? (
               <HStack
@@ -151,7 +154,7 @@ export function InviteSheet({ isOpen, petName, onInvite, onClose }: InviteSheetP
   return (
     <Actionsheet isOpen={isOpen} onClose={close}>
       {/* The autofocused field opens the keyboard over the sheet (iOS overlays it; Android's
-          edge-to-edge window doesn't resize for a modal): lift the sheet, Gluestack's documented way. */}
+          edge-to-edge window doesn't resize for a modal): lift the sheet with keyboard-controller. */}
       <KeyboardAvoidingView
         behavior="padding"
         style={{ flex: 1, justifyContent: 'flex-end', position: 'relative' }}

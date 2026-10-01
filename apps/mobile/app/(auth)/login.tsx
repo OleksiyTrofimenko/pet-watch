@@ -9,7 +9,7 @@ export default function LoginScreen() {
   const login = useLogin();
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       <LoginForm
         defaultEmail={email}
         onSubmit={login.mutateAsync}

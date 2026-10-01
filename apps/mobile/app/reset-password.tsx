@@ -32,7 +32,7 @@ export default function ResetPasswordScreen() {
   };
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       {expired ? (
         <LinkExpired
           onRequestNewLink={() => router.replace('/forgot-password')}

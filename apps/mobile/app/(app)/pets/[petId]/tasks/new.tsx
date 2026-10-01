@@ -12,7 +12,7 @@ export default function NewTaskScreen() {
   const create = useCreateTask(petId);
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       <ScreenHeader
         title="New task"
         leading={{ label: 'Cancel', onPress: () => router.back(), testID: 'task-form.cancel' }}

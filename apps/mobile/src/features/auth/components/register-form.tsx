@@ -49,6 +49,9 @@ export function RegisterForm({ onSubmit, onLogin }: RegisterFormProps) {
             autoCapitalize="none"
             autoComplete="email"
             testID="register.email"
+            returnKeyType="next"
+            submitBehavior="submit"
+            onSubmitEditing={() => form.setFocus('password')}
           />
           {emailTaken ? (
             <HStack className="ml-4">
@@ -70,6 +73,8 @@ export function RegisterForm({ onSubmit, onLogin }: RegisterFormProps) {
           autoComplete="new-password"
           secureToggle
           testID="register.password"
+          returnKeyType="done"
+          onSubmitEditing={() => void submit()}
         />
       </VStack>
       <Button

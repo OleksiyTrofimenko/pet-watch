@@ -53,6 +53,9 @@ export function PetForm({ pet, photo, onSubmit, saveDisabledReason, onDelete }: 
         placeholder="e.g. Rex"
         isRequired
         testID="pet-form.name"
+        returnKeyType="next"
+        submitBehavior="submit"
+        onSubmitEditing={() => form.setFocus('breed')}
       />
       <SelectField
         control={form.control}
@@ -68,6 +71,9 @@ export function PetForm({ pet, photo, onSubmit, saveDisabledReason, onDelete }: 
         label="Breed (optional)"
         placeholder="e.g. Labrador"
         testID="pet-form.breed"
+        returnKeyType="next"
+        submitBehavior="submit"
+        onSubmitEditing={() => form.setFocus('ageYears')}
       />
       <FormInput
         control={form.control}
@@ -78,6 +84,9 @@ export function PetForm({ pet, photo, onSubmit, saveDisabledReason, onDelete }: 
         format={(value) => (typeof value === 'number' ? String(value) : '')}
         parse={(text) => (text.trim() === '' ? null : Number(text))}
         testID="pet-form.age"
+        returnKeyType="next"
+        submitBehavior="submit"
+        onSubmitEditing={() => form.setFocus('notes')}
       />
       <FormInput
         control={form.control}

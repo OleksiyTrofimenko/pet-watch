@@ -14,7 +14,7 @@ export default function ForgotPasswordScreen() {
     router.replace({ pathname: '/login', params: { email: sentTo ?? email } });
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       {sentTo ? (
         <CheckEmail
           email={sentTo}

@@ -46,6 +46,8 @@ export function ForgotPasswordForm({
         autoCapitalize="none"
         autoComplete="email"
         testID="forgot.email"
+        returnKeyType="done"
+        onSubmitEditing={() => void submit()}
       />
       <Button
         label="Send reset link"

@@ -10,7 +10,7 @@ export default function EditTaskScreen() {
   const replace = useReplaceTask(petId, taskId);
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       <ScreenHeader
         title="Edit task"
         leading={{ label: 'Cancel', onPress: () => router.back(), testID: 'task-form.cancel' }}

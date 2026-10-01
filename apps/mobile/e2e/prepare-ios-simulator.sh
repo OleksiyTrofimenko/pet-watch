@@ -7,6 +7,16 @@
 # No-op without a booted simulator.
 xcrun simctl list devices booted 2>/dev/null | grep -q Booted || exit 0
 DEVICE="${1:-booted}"
+# Use the on-screen keyboard, as on a phone: with the Mac's keyboard "connected" iOS hides it while
+# still sending keyboard events, and keyboard-aware layouts then disagree with what's drawn.
+# Host-wide Simulator setting; it applies from the simulator's next boot.
+defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool NO
+if [ "$DEVICE" != booted ]; then # older runtimes read the per-device entry
+  PLIST="$HOME/Library/Preferences/com.apple.iphonesimulator.plist"
+  /usr/libexec/PlistBuddy -c "Add :DevicePreferences:$DEVICE dict" "$PLIST" 2>/dev/null
+  /usr/libexec/PlistBuddy -c "Delete :DevicePreferences:$DEVICE:ConnectHardwareKeyboard" "$PLIST" 2>/dev/null
+  /usr/libexec/PlistBuddy -c "Add :DevicePreferences:$DEVICE:ConnectHardwareKeyboard bool false" "$PLIST"
+fi
 prefs() { xcrun simctl spawn "$DEVICE" defaults write com.apple.Preferences "$@"; }
 prefs KeyboardAutocorrection -bool NO
 prefs KeyboardPrediction -bool NO

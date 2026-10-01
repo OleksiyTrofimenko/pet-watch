@@ -64,6 +64,9 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
         placeholder="e.g. Breakfast"
         isRequired
         testID="task-form.title"
+        returnKeyType="next"
+        submitBehavior="submit"
+        onSubmitEditing={() => form.setFocus('notes')}
       />
       <TimeField
         control={form.control}

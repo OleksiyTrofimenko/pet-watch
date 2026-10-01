@@ -51,6 +51,9 @@ export function LoginForm({
           autoCapitalize="none"
           autoComplete="email"
           testID="login.email"
+          returnKeyType="next"
+          submitBehavior="submit"
+          onSubmitEditing={() => form.setFocus('password')}
         />
         <FormInput
           control={form.control}
@@ -60,6 +63,8 @@ export function LoginForm({
           autoComplete="current-password"
           secureToggle
           testID="login.password"
+          returnKeyType="done"
+          onSubmitEditing={() => void submit()}
         />
         <HStack className="-mt-2 justify-end">
           <Button

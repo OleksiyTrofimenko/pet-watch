@@ -25,7 +25,7 @@ export default function NewPetScreen() {
   };
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       <ScreenHeader
         title="Add pet"
         leading={{ label: 'Cancel', onPress: () => router.back(), testID: 'pet-form.cancel' }}

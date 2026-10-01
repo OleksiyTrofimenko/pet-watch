@@ -35,7 +35,7 @@ export default function EditPetScreen() {
     });
 
   return (
-    <Screen scroll>
+    <Screen keyboardAware>
       <QueryView query={pet} loading={<PetListSkeleton />}>
         {(data) => (
           <>
