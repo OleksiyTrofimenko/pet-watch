@@ -23,6 +23,8 @@ env:
     env:
       EMAIL: ${output.email}
       PASSWORD: ${PASSWORD}
+- tapOn:
+    id: 'tab.pets'
 - assertVisible: 'No pets yet'
 
 # Add

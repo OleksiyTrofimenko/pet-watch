@@ -31,10 +31,10 @@ export const careTaskSchema = z
     title: z.string().trim().min(1, 'Title is required').max(80),
     notes: optionalText(500),
     timeOfDay: z
-      .number()
+      .number({ error: 'Enter a time like 08:00' })
       .int()
-      .min(0)
-      .max(24 * 60 - 1),
+      .min(0, 'Enter a time like 08:00')
+      .max(24 * 60 - 1, 'Enter a time like 08:00'),
     recurrence: recurrenceSchema,
     daysOfWeek: z.array(dayOfWeekSchema).max(7).default([]),
   })

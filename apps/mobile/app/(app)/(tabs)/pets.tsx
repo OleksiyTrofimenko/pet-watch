@@ -1,9 +1,7 @@
 import { useRouter } from 'expo-router';
 import { PawPrint, Plus } from 'lucide-react-native';
-import { HStack } from '@/components/ui/hstack';
 import { Heading } from '@/components/ui/heading';
-import { Button, EmptyState, Fab, QueryView, Screen } from '@/src/design-system';
-import { useLogout } from '@/src/features/auth/queries';
+import { EmptyState, Fab, QueryView, Screen } from '@/src/design-system';
 import { PetListSkeleton } from '@/src/features/pets/components/pet-list-skeleton';
 import { PetSections } from '@/src/features/pets/components/pet-sections';
 import { usePets } from '@/src/features/pets/queries';
@@ -11,7 +9,6 @@ import { usePets } from '@/src/features/pets/queries';
 export default function PetsScreen() {
   const router = useRouter();
   const pets = usePets();
-  const logout = useLogout();
   const addPet = () => router.push('/pets/new');
   // One primary action: the Fab hides while the empty state's own button is on screen.
   const hasPets = (pets.data?.length ?? 0) > 0;
@@ -23,20 +20,9 @@ export default function PetsScreen() {
         hasPets ? <Fab label="Add pet" icon={Plus} onPress={addPet} testID="pets.add" /> : null
       }
     >
-      <HStack className="items-center justify-between">
-        <Heading className="text-[32px] font-semibold leading-[38px]" testID="pets.title">
-          Pets
-        </Heading>
-        <Button
-          label="Log out"
-          variant="link"
-          action="secondary"
-          size="sm"
-          isLoading={logout.isPending}
-          onPress={() => logout.mutate()}
-          testID="pets.logout"
-        />
-      </HStack>
+      <Heading className="text-[32px] font-semibold leading-[38px]" testID="pets.title">
+        Pets
+      </Heading>
       <QueryView
         query={pets}
         loading={<PetListSkeleton />}

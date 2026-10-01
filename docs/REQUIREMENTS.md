@@ -26,11 +26,11 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 | ID     | Requirement                                                                             | Edge cases / acceptance                                               | Status |
 | ------ | --------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------ |
-| CARE-1 | Create daily or weekly routine entries (feeding, walk, medication, play…)               | Weekly needs ≥ 1 day; time 00:00–23:59                                | ⬜     |
-| CARE-2 | Edit / delete entries                                                                   | Owner only                                                            | ⬜     |
-| CARE-3 | Owner **and** watcher can view a pet's schedule                                         | Watcher read-only (no edit affordances)                               | ⬜     |
-| CARE-4 | "Today" view (all tasks due today) and "Weekly" view (grouped day by day, current week) | Week = Mon–Sun containing today; sorted by time; empty days shown     | ⬜     |
-| CARE-5 | Filter either view by pet                                                               | Filter persists when switching views (Jotai atom); "All pets" default | ⬜     |
+| CARE-1 | Create daily or weekly routine entries (feeding, walk, medication, play…)               | Weekly needs ≥ 1 day; time 00:00–23:59                                | ✅     |
+| CARE-2 | Edit / delete entries                                                                   | Owner only                                                            | ✅     |
+| CARE-3 | Owner **and** watcher can view a pet's schedule                                         | Watcher read-only (no edit affordances)                               | ✅     |
+| CARE-4 | "Today" view (all tasks due today) and "Weekly" view (grouped day by day, current week) | Week = Mon–Sun containing today; sorted by time; empty days shown     | ✅     |
+| CARE-5 | Filter either view by pet                                                               | Filter persists when switching views (Jotai atom); "All pets" default | ✅     |
 
 ### Watchers & invitations
 

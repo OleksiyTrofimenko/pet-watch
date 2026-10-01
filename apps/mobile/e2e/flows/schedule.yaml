@@ -1,0 +1,153 @@
+# CARE-1..5: add a daily and a weekly rule, see them in Today and This week, filter by pet,
+# edit and delete a rule. Assertions avoid depending on which weekday the run happens.
+appId: com.petwatch.app
+name: Schedule – rules, today, week, filter
+env:
+  PASSWORD: walkies-123
+---
+- runFlow: ../subflows/new-email.yaml
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- runScript:
+    file: ../scripts/create-pet.js
+    env:
+      ACCESS_TOKEN: ${output.accessToken}
+      NAME: Rex
+      SPECIES: DOG
+- runScript:
+    file: ../scripts/create-pet.js
+    env:
+      ACCESS_TOKEN: ${output.accessToken}
+      NAME: Miso
+      SPECIES: CAT
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- assertVisible:
+    id: 'schedule.title'
+- assertVisible: 'Nothing scheduled today'
+
+# Daily 08:00 feeding (type and time are the form's defaults)
+- tapOn:
+    id: 'tab.pets'
+- tapOn:
+    id: 'pets.card-Rex'
+- tapOn:
+    id: 'pet.add-task'
+- tapOn:
+    id: 'task-form.title'
+- inputText: Breakfast
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'task-form.save'
+- waitForAnimationToEnd
+- tapOn:
+    id: 'task-form.save'
+- assertVisible:
+    id: 'rule.Breakfast'
+- assertVisible: 'Breakfast · 08:00 · Daily'
+
+# Weekly Mon/Wed/Fri 18:00 walk
+- tapOn:
+    id: 'pet.add-task'
+- tapOn:
+    id: 'task-form.type-WALK'
+- tapOn:
+    id: 'task-form.title'
+- inputText: Walk
+- tapOn:
+    id: 'task-form.time'
+- eraseText
+- inputText: '18:00'
+- hideKeyboard
+- tapOn:
+    id: 'task-form.repeat-WEEKLY'
+- tapOn:
+    id: 'task-form.day-Mon'
+- tapOn:
+    id: 'task-form.day-Wed'
+- tapOn:
+    id: 'task-form.day-Fri'
+- assertVisible: 'Repeats Mon, Wed, Fri'
+- scrollUntilVisible:
+    element:
+      id: 'task-form.save'
+- waitForAnimationToEnd
+- tapOn:
+    id: 'task-form.save'
+- assertVisible: 'Walk · 18:00 · Mon, Wed, Fri'
+
+# Today: the daily rule is always there
+- tapOn:
+    id: 'pet.back'
+- tapOn:
+    id: 'tab.index'
+- assertVisible:
+    id: 'task.Breakfast'
+
+# This week: Mon–Sun; Mon/Wed/Fri carry both rules
+- tapOn:
+    id: 'schedule.view-week'
+- assertVisible: '.* – .*'
+- assertVisible: '2 tasks'
+- assertVisible: '1 task'
+
+# Filter by pet, kept when switching views
+- tapOn:
+    id: 'schedule.filter-Miso'
+- assertVisible: '0 tasks for Miso'
+- tapOn:
+    id: 'schedule.filter-Rex'
+- assertVisible: '2 tasks for Rex'
+- tapOn:
+    id: 'schedule.view-today'
+- assertVisible: '[12] tasks? for Rex'
+
+# Edit from the schedule (owner rows open the rule)
+- tapOn:
+    id: 'task.Breakfast'
+- tapOn:
+    id: 'task-form.title'
+- eraseText
+- inputText: Big breakfast
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: 'task-form.save'
+- waitForAnimationToEnd
+- tapOn:
+    id: 'task-form.save'
+- assertVisible:
+    id: 'task.Big breakfast'
+
+# Delete from the pet's routine
+- tapOn:
+    id: 'tab.pets'
+- tapOn:
+    id: 'pets.card-Rex'
+- retry:
+    maxRetries: 3
+    commands:
+      - tapOn:
+          id: 'rule.Big breakfast.delete'
+          retryTapIfNoChange: false
+      - extendedWaitUntil:
+          visible: 'Delete Big breakfast from Rex.s routine\?'
+          timeout: 3000
+- tapOn:
+    id: 'task-delete-confirm'
+- assertNotVisible:
+    id: 'rule.Big breakfast'
+- assertVisible: 'Walk · 18:00 · Mon, Wed, Fri'

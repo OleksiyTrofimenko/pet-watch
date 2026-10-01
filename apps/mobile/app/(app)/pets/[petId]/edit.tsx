@@ -30,7 +30,7 @@ export default function EditPetScreen() {
       onSuccess: () => {
         setConfirmingDelete(false);
         notify(`${name} was deleted`);
-        router.dismissTo('/');
+        router.dismissTo('/pets');
       },
     });
 

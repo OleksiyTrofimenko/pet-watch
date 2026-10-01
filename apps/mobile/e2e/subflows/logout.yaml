@@ -1,0 +1,9 @@
+# Logs out from the Account tab.
+appId: com.petwatch.app
+---
+- tapOn:
+    id: 'tab.account'
+- tapOn:
+    id: 'account.logout'
+- assertVisible:
+    id: 'login.submit'
