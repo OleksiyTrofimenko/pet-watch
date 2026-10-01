@@ -18,3 +18,15 @@ export const AUTH_ERROR_CODES = {
   INVALID_RESET_TOKEN: 'INVALID_RESET_TOKEN',
 } as const;
 export type AuthErrorCode = (typeof AUTH_ERROR_CODES)[keyof typeof AUTH_ERROR_CODES];
+
+/** Stable pet error codes (access rules and photo upload). */
+export const PET_ERROR_CODES = {
+  /** The pet doesn't exist or the caller can't see it: indistinguishable on purpose. */
+  PET_NOT_FOUND: 'PET_NOT_FOUND',
+  OWNER_ONLY: 'OWNER_ONLY',
+  /** The confirmed key wasn't issued for this pet. */
+  INVALID_PHOTO_KEY: 'INVALID_PHOTO_KEY',
+  /** Confirm was called before the upload to S3 finished. */
+  PHOTO_NOT_UPLOADED: 'PHOTO_NOT_UPLOADED',
+} as const;
+export type PetErrorCode = (typeof PET_ERROR_CODES)[keyof typeof PET_ERROR_CODES];

@@ -9,6 +9,7 @@ import { HealthModule } from './health/health.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { UsersModule } from './users/users.module';
+import { PetsModule } from './pets/pets.module';
 
 @Module({
   imports: [
@@ -17,8 +18,8 @@ import { UsersModule } from './users/users.module';
     HealthModule,
     AuthModule,
     UsersModule,
-    // Feature modules are added here as they are built:
-    // PetsModule, CareTasksModule, InvitationsModule, StorageModule (S3 presign).
+    PetsModule,
+    // Feature modules are added here as they are built: CareTasksModule, InvitationsModule.
   ],
   providers: [
     // Global DTO validation: every @Body/@Query typed with a createZodDto class is validated.
