@@ -13,6 +13,7 @@ import {
 } from '@/src/design-system';
 import { CareRoutine } from '@/src/features/care-tasks/components/care-routine';
 import { useDeleteTask, usePetTasks } from '@/src/features/care-tasks/queries';
+import { PetWatchers } from '@/src/features/invitations/pet-watchers';
 import { PetDetails } from '@/src/features/pets/components/pet-details';
 import { PetListSkeleton } from '@/src/features/pets/components/pet-list-skeleton';
 import { usePet } from '@/src/features/pets/queries';
@@ -78,6 +79,7 @@ export default function PetScreen() {
                 />
               )}
             </QueryView>
+            {isOwner ? <PetWatchers petId={petId} petName={data.name} /> : null}
             <ConfirmDialog
               isOpen={deleting !== null}
               title={deleting ? `Delete ${deleting.title} from ${data.name}'s routine?` : ''}

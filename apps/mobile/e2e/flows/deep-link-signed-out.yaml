@@ -1,4 +1,4 @@
-# A protected deep link opened while signed out survives the login (cold start).
+# A protected deep link opened while signed out survives the login (cold start: app not running).
 appId: com.petwatch.app
 name: Deep link – invite opened while signed out
 env:
@@ -13,7 +13,7 @@ env:
 - launchApp:
     clearState: true
 - stopApp
-- openLink: petwatch://invites/e2e-token
+- openLink: petwatch://invites/e2e-token-that-does-not-exist-000000000000
 - extendedWaitUntil:
     visible:
       id: 'login.submit'
@@ -23,6 +23,9 @@ env:
     env:
       EMAIL: ${output.email}
       PASSWORD: ${PASSWORD}
-- assertVisible:
-    id: 'invite.title'
-- assertVisible: 'token: e2e-token'
+# Back on the invite screen after login. The token is made up, so it's the "unavailable" state;
+# flows/invite.yaml accepts a real one.
+- extendedWaitUntil:
+    visible:
+      id: 'invite.unavailable'
+    timeout: 20000

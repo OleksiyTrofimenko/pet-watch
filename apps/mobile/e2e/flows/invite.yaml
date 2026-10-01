@@ -1,0 +1,135 @@
+# INV-1..5: Ana invites Sam → Sam opens the emailed link while signed out → logs in → accepts →
+# Rex is under "Pets I'm watching" without edit controls → Ana removes Sam.
+appId: com.petwatch.app
+name: Invite – invite, accept from a signed-out link, revoke
+env:
+  PASSWORD: walkies-123
+---
+- evalScript: ${output.ana = 'e2e-ana-' + Date.now() + '@petwatch.test'}
+- evalScript: ${output.sam = 'e2e-sam-' + Date.now() + '@petwatch.test'}
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+- runScript:
+    file: ../scripts/create-pet.js
+    env:
+      ACCESS_TOKEN: ${output.accessToken}
+      NAME: Rex
+      SPECIES: DOG
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.sam}
+      PASSWORD: ${PASSWORD}
+
+# Ana invites Sam
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+- tapOn:
+    id: 'tab.pets'
+- tapOn:
+    id: 'pets.card-Rex'
+- scrollUntilVisible:
+    element:
+      id: 'pet.invite'
+- waitForAnimationToEnd
+- tapOn:
+    id: 'pet.invite'
+- tapOn:
+    id: 'invite.email'
+- inputText: ${output.sam}
+- tapOn:
+    id: 'invite.send'
+- assertVisible: 'Invite sent'
+- tapOn:
+    id: 'invite.done'
+- assertVisible: 'Pending'
+- tapOn:
+    id: 'pet.back'
+- runFlow: ../subflows/logout.yaml
+
+# Sam opens the link while signed out, logs in, lands back on the invite
+- retry:
+    maxRetries: 3
+    commands:
+      - runScript:
+          file: ../scripts/mailpit.js
+          env:
+            EMAIL: ${output.sam}
+- openLink: ${output.link}
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 20000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.sam}
+      PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'invite.accept'
+    timeout: 20000
+- assertVisible: '.*invited you to help look after Rex'
+- tapOn:
+    id: 'invite.accept'
+- assertVisible: 'Rex is now in your pets'
+- tapOn:
+    id: 'invite.view-schedule'
+- assertVisible:
+    id: 'schedule.title'
+- assertVisible: '.* for Rex'
+
+# Watching: same pet, no owner controls
+- tapOn:
+    id: 'tab.pets'
+- assertVisible: "Pets I'm watching"
+- tapOn:
+    id: 'pets.card-Rex'
+- assertVisible: 'Owned by .*'
+- assertNotVisible:
+    id: 'pet.edit'
+- assertNotVisible:
+    id: 'pet.invite'
+- tapOn:
+    id: 'pet.back'
+- runFlow: ../subflows/logout.yaml
+
+# Ana removes Sam
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+- tapOn:
+    id: 'tab.pets'
+- tapOn:
+    id: 'pets.card-Rex'
+- scrollUntilVisible:
+    element:
+      text: 'Remove .*'
+- waitForAnimationToEnd
+- retry:
+    maxRetries: 3
+    commands:
+      - tapOn:
+          text: 'Remove .*'
+          retryTapIfNoChange: false
+      - extendedWaitUntil:
+          visible: 'Remove .* access to Rex\?'
+          timeout: 3000
+- tapOn:
+    id: 'watcher-confirm-confirm'
+- assertVisible: '.* can no longer see Rex'
+- assertVisible: 'Nobody else can see this pet yet.*'

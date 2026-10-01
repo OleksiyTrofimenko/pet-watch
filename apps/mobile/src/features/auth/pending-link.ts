@@ -21,3 +21,8 @@ export function takePendingInvite(): string | null {
   pendingInviteToken = null;
   return token;
 }
+
+/** "Switch account" on an invite for another user: reopen this invite after the next sign-in. */
+export function rememberPendingInvite(token: string): void {
+  pendingInviteToken = token;
+}

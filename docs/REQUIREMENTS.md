@@ -36,11 +36,11 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 | ID    | Requirement                                                     | Edge cases / acceptance                                                                                                                                                                       | Status |
 | ----- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| INV-1 | Owner invites a **registered** user by email                    | Unknown email → 404 `USER_NOT_FOUND` (required by brief; enumeration trade-off noted); self-invite → 400; already watching → 200 `ALREADY_WATCHING`; pending → token rotated, `INVITE_RESENT` | ⬜     |
-| INV-2 | Invitee gets an email with a deep link; must click it to accept | `petwatch://invites/<token>`; opens accept screen showing pet, inviter, expiry                                                                                                                | ⬜     |
-| INV-3 | Accepting adds the pet to the invitee's watching list           | Transaction: create watcher + mark ACCEPTED; token for another account → 403 `INVITE_FOR_OTHER_USER`; expired/revoked/used → 410; pet deleted → 404; logged out → login then return to link   | ⬜     |
-| INV-4 | Owner sees who watches each pet                                 | Also lists pending invites (status badge)                                                                                                                                                     | ⬜     |
-| INV-5 | Owner revokes a watcher                                         | Deletes watcher row + marks invitation REVOKED; watcher's queries then 404                                                                                                                    | ⬜     |
+| INV-1 | Owner invites a **registered** user by email                    | Unknown email → 404 `USER_NOT_FOUND` (required by brief; enumeration trade-off noted); self-invite → 400; already watching → 200 `ALREADY_WATCHING`; pending → token rotated, `INVITE_RESENT` | ✅     |
+| INV-2 | Invitee gets an email with a deep link; must click it to accept | `petwatch://invites/<token>`; opens accept screen showing pet, inviter, expiry                                                                                                                | ✅     |
+| INV-3 | Accepting adds the pet to the invitee's watching list           | Transaction: create watcher + mark ACCEPTED; token for another account → 403 `INVITE_FOR_OTHER_USER`; expired/revoked/used → 410; pet deleted → 404; logged out → login then return to link   | ✅     |
+| INV-4 | Owner sees who watches each pet                                 | Also lists pending invites (status badge)                                                                                                                                                     | ✅     |
+| INV-5 | Owner revokes a watcher                                         | Deletes watcher row + marks invitation REVOKED; watcher's queries then 404                                                                                                                    | ✅     |
 
 ## Technical requirements
 
@@ -70,7 +70,7 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 | N-1 | Tests for a non-trivial unit                                         | `expandOccurrences` (shared), invite service outcomes, auth refresh rotation                         | ⬜                                              |
 | N-2 | Loading states + skeletons                                           | Pet list, schedule, pet detail; EmptyState slice: tone circle, CTA icon, 16px gap above CTA (design) | ⬜                                              |
 | N-3 | Offline-aware                                                        | NetInfo banner; queries paused; mutations disabled with message                                      | 🟨 onlineManager wired; `Button` disabledReason |
-| N-4 | Clear invite feedback ("added to their list" vs "invite email sent") | API returns explicit `outcome`; UI copy per outcome                                                  | 🟨 contract                                     |
+| N-4 | Clear invite feedback ("added to their list" vs "invite email sent") | API returns explicit `outcome`; UI copy per outcome                                                  | ✅ sent / re-sent / already watching            |
 
 ## Ambiguities → assumptions (put these in the README)
 
