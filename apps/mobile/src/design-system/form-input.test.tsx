@@ -45,3 +45,29 @@ describe('FormInput + shared schema', () => {
     );
   });
 });
+
+function PasswordHarness() {
+  const { control } = useForm<{ password: string }>({ defaultValues: { password: '' } });
+  return (
+    <FormInput
+      control={control}
+      name="password"
+      label="Password"
+      placeholder="Password"
+      secureToggle
+    />
+  );
+}
+
+describe('FormInput secureToggle', () => {
+  it('hides the text until the eye button is pressed, and says what it will do', async () => {
+    await render(<PasswordHarness />);
+    const input = screen.getByPlaceholderText('Password');
+    expect(input.props.secureTextEntry).toBe(true);
+
+    await fireEvent.press(screen.getByLabelText('Show password'));
+
+    expect(screen.getByPlaceholderText('Password').props.secureTextEntry).toBe(false);
+    expect(screen.getByLabelText('Hide password')).toBeTruthy();
+  });
+});

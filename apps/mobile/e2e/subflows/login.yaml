@@ -1,0 +1,12 @@
+# Logs in with EMAIL/PASSWORD from the login screen.
+appId: com.petwatch.app
+---
+- tapOn:
+    id: 'login.email'
+- inputText: ${EMAIL}
+- tapOn:
+    id: 'login.password'
+- inputText: ${PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'login.submit'

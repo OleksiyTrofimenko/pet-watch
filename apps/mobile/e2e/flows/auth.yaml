@@ -1,0 +1,87 @@
+# AUTH-1..4: register → logout → login → forgot password → email link → reset → login.
+appId: com.petwatch.app
+name: Auth – register, login, reset password
+env:
+  PASSWORD: walkies-123
+  NEW_PASSWORD: walkies-456
+---
+- runFlow: ../subflows/new-email.yaml
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+
+# Register signs the user in.
+- runFlow:
+    file: ../subflows/register.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- assertVisible:
+    id: 'home.title'
+- tapOn:
+    id: 'home.logout'
+
+# Wrong password: form-level alert, not a field error.
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: wrong-password
+- assertVisible:
+    id: 'login.alert'
+- tapOn:
+    id: 'login.password'
+- eraseText
+- inputText: ${PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'login.submit'
+- assertVisible:
+    id: 'home.title'
+- tapOn:
+    id: 'home.logout'
+
+# Forgot password → reset link from Mailpit → new password signs the user in.
+- tapOn:
+    id: 'login.forgot-link'
+- tapOn:
+    id: 'forgot.email'
+- inputText: ${output.email}
+- hideKeyboard
+- tapOn:
+    id: 'forgot.submit'
+- assertVisible:
+    id: 'forgot.sent'
+- retry:
+    maxRetries: 3
+    commands:
+      - runScript:
+          file: ../scripts/mailpit.js
+          env:
+            EMAIL: ${output.email}
+- openLink: ${output.link}
+- tapOn:
+    id: 'reset.password'
+- inputText: ${NEW_PASSWORD}
+- tapOn:
+    id: 'reset.confirm'
+- inputText: ${NEW_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'reset.submit'
+- assertVisible:
+    id: 'home.title'
+
+# The old password no longer works; the new one does.
+- tapOn:
+    id: 'home.logout'
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${NEW_PASSWORD}
+- assertVisible:
+    id: 'home.title'

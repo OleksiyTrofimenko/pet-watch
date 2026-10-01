@@ -11,7 +11,7 @@ export default function AcceptInviteScreen() {
   const { token } = useLocalSearchParams<{ token: string }>();
   return (
     <Screen>
-      <Heading>Invitation</Heading>
+      <Heading testID="invite.title">Invitation</Heading>
       <Text className="text-typography-500">token: {token}</Text>
     </Screen>
   );

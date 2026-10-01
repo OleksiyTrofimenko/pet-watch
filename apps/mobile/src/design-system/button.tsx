@@ -27,6 +27,8 @@ type BaseProps = {
   /** Shows a spinner in place of the icon and blocks presses; keeps the action colours. */
   isLoading?: boolean;
   fullWidth?: boolean;
+  /** E2E selector, `<screen>.<element>` (see apps/mobile/CLAUDE.md). */
+  testID?: string;
 };
 
 /**
@@ -46,6 +48,7 @@ export function Button(props: ButtonProps) {
     icon,
     isLoading = false,
     fullWidth = false,
+    testID,
     isDisabled = false,
     disabledReason,
   } = props;
@@ -64,6 +67,7 @@ export function Button(props: ButtonProps) {
       variant={variant}
       isDisabled={isDisabled || isLoading}
       onPress={onPress}
+      testID={testID}
       accessibilityRole="button"
       accessibilityLabel={label}
       accessibilityHint={disabledReason}

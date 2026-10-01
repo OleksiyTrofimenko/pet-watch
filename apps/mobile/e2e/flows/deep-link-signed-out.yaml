@@ -1,0 +1,28 @@
+# A protected deep link opened while signed out survives the login (cold start).
+appId: com.petwatch.app
+name: Deep link – invite opened while signed out
+env:
+  PASSWORD: walkies-123
+---
+- runFlow: ../subflows/new-email.yaml
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- launchApp:
+    clearState: true
+- stopApp
+- openLink: petwatch://invites/e2e-token
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.email}
+      PASSWORD: ${PASSWORD}
+- assertVisible:
+    id: 'invite.title'
+- assertVisible: 'token: e2e-token'

@@ -50,8 +50,8 @@ export class AuthController {
   }
 
   @Post('reset-password')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  resetPassword(@Body() dto: ResetPasswordDto): Promise<void> {
+  @HttpCode(HttpStatus.OK)
+  resetPassword(@Body() dto: ResetPasswordDto): Promise<AuthResponse> {
     return this.auth.resetPassword(dto);
   }
 }

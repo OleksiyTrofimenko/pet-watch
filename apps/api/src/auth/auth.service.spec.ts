@@ -222,15 +222,21 @@ describe('AuthService', () => {
       expect(prisma.user.update).not.toHaveBeenCalled();
     });
 
-    it('updates the password and revokes every refresh token', async () => {
+    it('updates the password, revokes every refresh token and starts a new session', async () => {
       prisma.passwordResetToken.findUnique.mockResolvedValue({
         id: 'pr-1',
         userId: USER.id,
         expiresAt: inOneHour(),
         usedAt: null,
       });
+      prisma.user.update.mockResolvedValue(USER);
 
-      await auth.resetPassword(input);
+      const session = await auth.resetPassword(input);
+
+      expect(session.user).toEqual(USER);
+      expect(prisma.refreshToken.create).toHaveBeenCalledWith({
+        data: containing({ userId: USER.id }),
+      });
 
       expect(prisma.passwordResetToken.updateMany).toHaveBeenCalledWith({
         where: { id: 'pr-1', usedAt: null },
@@ -239,6 +245,7 @@ describe('AuthService', () => {
       expect(prisma.user.update).toHaveBeenCalledWith({
         where: { id: USER.id },
         data: { passwordHash: argon2idHash },
+        select: { id: true, email: true },
       });
       expect(prisma.refreshToken.updateMany).toHaveBeenCalledWith({
         where: { userId: USER.id, revokedAt: null },

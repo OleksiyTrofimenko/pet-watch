@@ -133,14 +133,16 @@ describe('Auth (e2e)', () => {
   });
 
   describe('password reset (AUTH-3)', () => {
-    it('emails a link whose token resets the password and signs out every session', async () => {
+    it('emails a link whose token resets the password, signs out every session and signs in anew', async () => {
       const session = await register();
 
       const token = await requestResetToken();
-      await api(app)
+      const res = await api(app)
         .post('/auth/reset-password')
         .send({ token, password: NEW_PASSWORD })
-        .expect(204);
+        .expect(200);
+      const fresh = res.body as AuthResponse;
+      await me(fresh.accessToken).expect(200, session.user);
 
       await refresh(session.refreshToken).expect(401);
       await login(EMAIL, PASSWORD).expect(401);
@@ -153,7 +155,7 @@ describe('Auth (e2e)', () => {
       await api(app)
         .post('/auth/reset-password')
         .send({ token, password: NEW_PASSWORD })
-        .expect(204);
+        .expect(200);
 
       const res = await api(app)
         .post('/auth/reset-password')
@@ -175,7 +177,7 @@ describe('Auth (e2e)', () => {
       await api(app)
         .post('/auth/reset-password')
         .send({ token: newer, password: NEW_PASSWORD })
-        .expect(204);
+        .expect(200);
     });
 
     it('answers 204 for an unknown email and sends nothing', async () => {

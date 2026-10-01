@@ -129,7 +129,8 @@ export class AuthService {
     });
   }
 
-  async resetPassword({ token: rawToken, password }: ResetPasswordInput): Promise<void> {
+  /** Returns a fresh session: the emailed token proves control of the account (auto-login). */
+  async resetPassword({ token: rawToken, password }: ResetPasswordInput): Promise<AuthResponse> {
     const now = new Date();
     const token = await this.prisma.passwordResetToken.findUnique({
       where: { tokenHash: hashToken(rawToken) },
@@ -138,16 +139,21 @@ export class AuthService {
     if (!token || token.usedAt || token.expiresAt <= now) throw invalidResetToken();
 
     const passwordHash = await hashPassword(password);
-    await this.prisma.$transaction(async (tx) => {
+    const user = await this.prisma.$transaction(async (tx) => {
       const claimed = await tx.passwordResetToken.updateMany({
         where: { id: token.id, usedAt: null },
         data: { usedAt: now },
       });
       if (claimed.count !== 1) throw invalidResetToken();
-      await tx.user.update({ where: { id: token.userId }, data: { passwordHash } });
       // Whoever knew the old password is signed out everywhere.
       await revokeAllRefreshTokens(tx, token.userId, now);
+      return tx.user.update({
+        where: { id: token.userId },
+        data: { passwordHash },
+        select: publicUserSelect,
+      });
     });
+    return this.issueSession(toPublicUser(user));
   }
 
   private async issueSession(user: PublicUser): Promise<AuthResponse> {

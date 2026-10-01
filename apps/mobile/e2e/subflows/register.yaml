@@ -1,7 +1,5 @@
-# Registers EMAIL/PASSWORD through the sign-up screen.
-# Usage: - runFlow: { file: ../subflows/register.yaml, env: { EMAIL: ..., PASSWORD: ... } }
-# The testIDs below are the contract for the AUTH-1 screen (see apps/mobile/CLAUDE.md → E2E).
-# Flows that only need a logged-in user should create it with scripts/api.js instead (faster).
+# Registers EMAIL/PASSWORD through the sign-up screen, starting from the login screen.
+# Flows that only need an existing user should create it with scripts/api.js instead (faster).
 appId: com.petwatch.app
 ---
 - tapOn:

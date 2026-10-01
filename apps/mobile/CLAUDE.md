@@ -86,8 +86,11 @@ export function useUpdatePet(id: string) {
 ## Forms
 
 - `useForm<Input>({ resolver: zodResolver(sharedSchema) })` + `<FormInput control name label />`.
-- Server `fieldErrors` from `ApiErrorBody` are mapped onto fields with `setError`, so API validation
-  and client validation look identical.
+- Submit through `useApiSubmit(form, fields, onSubmit, codeFields?)` (`src/lib/form-errors.ts`): server
+  `fieldErrors` (and codes like `EMAIL_TAKEN → email`) land on fields via `setError`, so API and client
+  validation look identical; anything else becomes `formError` for a `<FormAlert>` above the fields.
+- Form components own `useForm` and take `onSubmit: (values) => Promise` (the screen passes
+  `mutation.mutateAsync`); loading comes from `formState.isSubmitting`.
 - Buttons are the design-system `<Button>`: loading from `mutation.isPending`; `isDisabled` requires a
   `disabledReason` (the type enforces it), e.g. offline → "Connect to the internet to send invites."
 

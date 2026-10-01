@@ -1,0 +1,4 @@
+# Puts a unique address in output.email, so flows never collide and need no DB reset.
+appId: com.petwatch.app
+---
+- evalScript: ${output.email = 'e2e-' + Date.now() + '@petwatch.test'}

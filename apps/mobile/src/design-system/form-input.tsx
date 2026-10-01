@@ -1,4 +1,5 @@
-import type { ComponentProps } from 'react';
+import { useState, type ComponentProps } from 'react';
+import { Eye, EyeOff } from 'lucide-react-native';
 import { Controller, type Control, type FieldValues, type Path } from 'react-hook-form';
 import {
   FormControl,
@@ -9,7 +10,7 @@ import {
   FormControlLabel,
   FormControlLabelText,
 } from '@/components/ui/form-control';
-import { Input, InputField } from '@/components/ui/input';
+import { Input, InputField, InputIcon, InputSlot } from '@/components/ui/input';
 
 type NativeInputProps = Omit<
   ComponentProps<typeof InputField>,
@@ -22,6 +23,8 @@ type FormInputProps<T extends FieldValues> = NativeInputProps & {
   label: string;
   helperText?: string;
   isRequired?: boolean;
+  /** Password field with a 44×44 eye button that shows/hides the text. */
+  secureToggle?: boolean;
   /** Map between the form value and the text shown, e.g. numbers: String(v) / Number(text). */
   format?: (value: unknown) => string;
   parse?: (text: string) => unknown;
@@ -40,10 +43,12 @@ export function FormInput<T extends FieldValues>({
   label,
   helperText,
   isRequired,
+  secureToggle = false,
   format = defaultFormat,
   parse,
   ...inputProps
 }: FormInputProps<T>) {
+  const [revealed, setRevealed] = useState(false);
   return (
     <Controller
       control={control}
@@ -56,10 +61,27 @@ export function FormInput<T extends FieldValues>({
           <Input>
             <InputField
               {...inputProps}
+              // RHF focuses the first invalid field on submit through this ref.
+              ref={field.ref}
+              secureTextEntry={secureToggle ? !revealed : inputProps.secureTextEntry}
               value={format(field.value)}
               onChangeText={(text) => field.onChange(parse ? parse(text) : text)}
               onBlur={field.onBlur}
             />
+            {secureToggle ? (
+              <InputSlot
+                onPress={() => setRevealed((value) => !value)}
+                className="h-11 w-11 items-center justify-center"
+                // InputSlot hides itself from assistive tech by default; this one is a real button.
+                accessibilityElementsHidden={false}
+                importantForAccessibility="yes"
+                accessibilityRole="button"
+                accessibilityLabel={revealed ? 'Hide password' : 'Show password'}
+                testID={inputProps.testID ? `${inputProps.testID}-toggle` : undefined}
+              >
+                <InputIcon as={revealed ? EyeOff : Eye} className="text-typography-700" />
+              </InputSlot>
+            ) : null}
           </Input>
           {fieldState.error?.message ? (
             <FormControlError>
