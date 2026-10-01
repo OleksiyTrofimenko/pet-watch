@@ -129,7 +129,7 @@ model CareTask {
   notes      String?
   timeOfDay  Int          @map("time_of_day") // minutes since midnight, 0..1439
   recurrence Recurrence
-  daysOfWeek Int[]        @map("days_of_week") // 0=Sun..6=Sat; empty for DAILY
+  daysOfWeek Int[]        @default([]) @map("days_of_week") // 0=Sun..6=Sat; empty for DAILY
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
 

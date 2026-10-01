@@ -30,3 +30,9 @@ export const PET_ERROR_CODES = {
   PHOTO_NOT_UPLOADED: 'PHOTO_NOT_UPLOADED',
 } as const;
 export type PetErrorCode = (typeof PET_ERROR_CODES)[keyof typeof PET_ERROR_CODES];
+
+/** Stable care task error codes. */
+export const CARE_TASK_ERROR_CODES = {
+  /** No such task on this pet (also when the id belongs to another pet). */
+  TASK_NOT_FOUND: 'TASK_NOT_FOUND',
+} as const;
