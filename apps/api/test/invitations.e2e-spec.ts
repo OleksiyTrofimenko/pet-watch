@@ -96,6 +96,26 @@ describe('Invitations and watchers (e2e)', () => {
     expect(await countMessagesTo(SAM)).toBe(1);
   });
 
+  it('emails a tappable link, with the user-typed pet name escaped in the HTML part', async () => {
+    const pet = (
+      await api(app)
+        .post('/pets')
+        .set(bearer(ana))
+        .send({ name: '<b>Bo</b> & "Co"', species: 'CAT' })
+        .expect(201)
+    ).body as PetDto;
+    await api(app)
+      .post(`/pets/${pet.id}/invitations`)
+      .set(bearer(ana))
+      .send({ email: SAM })
+      .expect(200);
+
+    const { text, html } = await waitForMessageTo(SAM);
+    expect(html).toContain(`href="${extractLink(text, 'petwatch://invites/')}"`);
+    expect(html).toContain('&lt;b&gt;Bo&lt;/b&gt; &amp; &quot;Co&quot;');
+    expect(html).not.toContain('<b>Bo</b>');
+  });
+
   it('rejects inviting unknown, self, and by non-owners', async () => {
     const unknown = await invite('nobody@petwatch.test').expect(404);
     expect(unknown.body).toMatchObject({ code: INVITATION_ERROR_CODES.USER_NOT_FOUND });

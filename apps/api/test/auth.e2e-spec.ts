@@ -149,6 +149,13 @@ describe('Auth (e2e)', () => {
       await login(EMAIL, NEW_PASSWORD).expect(200);
     });
 
+    it('makes the link tappable: the HTML part links to the same reset URL', async () => {
+      await register();
+      await api(app).post('/auth/forgot-password').send({ email: EMAIL }).expect(204);
+      const { text, html } = await waitForMessageTo(EMAIL);
+      expect(html).toContain(`href="${extractLink(text, 'petwatch://reset-password')}"`);
+    });
+
     it('accepts a reset link only once', async () => {
       await register();
       const token = await requestResetToken();

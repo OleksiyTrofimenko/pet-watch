@@ -5,9 +5,9 @@ import { z } from 'zod';
 const baseUrl = () => `${process.env.MAILPIT_URL ?? 'http://localhost:8025'}/api/v1`;
 
 const searchSchema = z.object({ messages: z.array(z.object({ ID: z.string() })) });
-const messageSchema = z.object({ Subject: z.string(), Text: z.string() });
+const messageSchema = z.object({ Subject: z.string(), Text: z.string(), HTML: z.string() });
 
-export type MailMessage = { subject: string; text: string };
+export type MailMessage = { subject: string; text: string; html: string };
 
 export async function deleteAllMessages(): Promise<void> {
   const res = await fetch(`${baseUrl()}/messages`, { method: 'DELETE' });
@@ -36,7 +36,7 @@ export async function waitForMessageTo(email: string, timeoutMs = 5_000): Promis
     const { messages } = await getJson(`/search?query=${toQuery(email)}`, searchSchema);
     if (messages[0]) {
       const message = await getJson(`/message/${messages[0].ID}`, messageSchema);
-      return { subject: message.Subject, text: message.Text };
+      return { subject: message.Subject, text: message.Text, html: message.HTML };
     }
     await sleep(100);
   }
