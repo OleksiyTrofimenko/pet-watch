@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { LogBox } from 'react-native';
 import { useLinkingURL } from 'expo-linking';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { Box } from '@/components/ui/box';
 import { OfflineBanner } from '@/src/design-system';
 import { rememberPendingLink } from '@/src/features/auth/pending-link';
@@ -27,6 +28,9 @@ LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered',
 ]);
 
+// Keep the native splash up until the saved session is read, then go straight to login or the app.
+void SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   return (
     <AppProviders>
@@ -49,7 +53,11 @@ function RootNavigator() {
     if (url && session.status !== 'signed-in') rememberPendingLink(url);
   }, [url, session.status]);
 
-  if (session.status === 'loading') return null; // reading SecureStore takes a few ms
+  useEffect(() => {
+    if (session.status !== 'loading') void SplashScreen.hideAsync();
+  }, [session.status]);
+
+  if (session.status === 'loading') return null; // the splash is still showing (reading SecureStore)
   const signedIn = session.status === 'signed-in';
 
   return (
