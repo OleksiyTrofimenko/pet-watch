@@ -35,7 +35,8 @@ pnpm bootstrap
 
 `pnpm bootstrap` creates the `.env` files from the `.example` files, starts Postgres, S3 (SeaweedFS) and
 Mailpit in Docker, creates the S3 bucket, builds the shared contract, applies the migrations and loads the
-demo data. It ends with "✔ Ready". It's safe to run again; existing `.env` files are kept.
+demo data. It ends with "✔ Ready". It's safe to run again: existing `.env` files and the data are kept,
+and the Docker containers are recreated. If a port it needs is taken, it stops and names the port.
 
 ### 3. Start the API (terminal 1)
 
@@ -116,6 +117,8 @@ Metro 8081, S3 9000, Mailpit 1025 (SMTP) and 8025 (web).
 - **Simulator acts up after a long session** (taps not registering, keyboard missing): reboot it
   (`xcrun simctl shutdown all`) and open the app again.
 - **`pnpm bootstrap` says Docker isn't running**: start Docker Desktop and run it again.
+- **`pnpm bootstrap` says a port is in use**: something else holds it (another project's containers,
+  a local Postgres or Mailpit). Find it with the `lsof` / `docker ps` command it prints, stop it, run again.
 
 ## Running tests
 
