@@ -15,7 +15,7 @@ App-specific patterns live next to the code and load automatically when you work
 apps/api         NestJS 11 + Prisma 7 + PostgreSQL (REST, JWT)
 apps/mobile      Expo SDK 57 + Expo Router + Gluestack UI v3 (NativeWind v4)
 packages/shared  Zod schemas + inferred types = the API contract (used by both apps)
-docs/            REQUIREMENTS (what) · DECISIONS (why) · LEARNING (reading list) · DESIGN_PROMPT
+docs/            REQUIREMENTS (what) · DECISIONS (why) · DESIGN_PROMPT
 ```
 
 ## Commands

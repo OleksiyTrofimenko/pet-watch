@@ -149,7 +149,7 @@ access matrix (every pet route × owner / watcher / stranger / anonymous) that f
 apps/api         NestJS 11 · Prisma 7 · PostgreSQL · JWT
 apps/mobile      Expo SDK 57 · Expo Router · Gluestack UI v3 · TanStack Query · Jotai · RHF + Zod
 packages/shared  Zod schemas + inferred types: the API contract used by both apps
-docs/            REQUIREMENTS (traceability) · DECISIONS (why) · LEARNING (reading list) · design export
+docs/            REQUIREMENTS (traceability) · DECISIONS (why) · design export
 CLAUDE.md, apps/*/CLAUDE.md, .claude/   AI configuration used while building this
 ```
 
