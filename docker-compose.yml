@@ -7,7 +7,9 @@ services:
       POSTGRES_USER: petwatch
       POSTGRES_PASSWORD: petwatch
       POSTGRES_DB: petwatch
-    ports: ['5432:5432']
+    # Host port 5433, not 5432: a Postgres already installed on the machine (Postgres.app,
+    # Homebrew) usually owns 5432 and would silently answer instead.
+    ports: ['5433:5432']
     volumes: [pgdata:/var/lib/postgresql/data]
     healthcheck:
       test: ['CMD-SHELL', 'pg_isready -U petwatch']
@@ -28,7 +30,7 @@ services:
 
   # One-shot: creates the private bucket once the S3 endpoint answers, then exits.
   s3-init:
-    image: amazon/aws-cli:latest
+    image: amazon/aws-cli:2.37.6
     depends_on: [s3]
     environment:
       AWS_ACCESS_KEY_ID: petwatch
@@ -43,7 +45,7 @@ services:
 
   # Catches all outgoing SMTP. Inspect invite/reset mails at http://localhost:8025
   mailpit:
-    image: axllent/mailpit:latest
+    image: axllent/mailpit:v1.31.3
     ports: ['1025:1025', '8025:8025']
 
 volumes:

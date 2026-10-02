@@ -6,11 +6,13 @@
     "node": ">=22"
   },
   "scripts": {
-    "db:up": "docker compose up -d",
+    "bootstrap": "node scripts/bootstrap.mjs",
+    "db:up": "docker compose up -d --wait postgres s3 mailpit && docker compose run --rm s3-init",
     "db:down": "docker compose down",
     "db:seed": "pnpm --filter @petwatch/api db:seed",
     "dev:api": "pnpm --filter @petwatch/api start:dev",
     "dev:mobile": "pnpm --filter @petwatch/mobile start",
+    "android:ports": "adb reverse tcp:8081 tcp:8081 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9000 tcp:9000",
     "build:shared": "pnpm --filter @petwatch/shared build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
