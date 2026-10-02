@@ -207,6 +207,8 @@ The full path to a store release (hosting, database, secrets, links, store requi
 
 - **Links use the custom scheme.** Many mail clients don't make `petwatch://` links clickable. Production would
   send https links handled by Universal Links / App Links, with a web fallback page.
+- **No live updates between devices** (D61): another user's change shows when a screen comes back into view,
+  on pull to refresh or when the app returns to the foreground. Next step: push notifications or a websocket.
 - **Rate limits are in memory and on auth only** (D41): fine for one API instance; several instances need Redis.
   Invites aren't rate-limited, so an owner could probe which emails have accounts (assumption 2).
 - **Age goes stale**: store `birthDate` instead.

@@ -5,10 +5,12 @@ import { EmptyState, Fab, QueryView, Screen } from '@/src/design-system';
 import { PetListSkeleton } from '@/src/features/pets/components/pet-list-skeleton';
 import { PetSections } from '@/src/features/pets/components/pet-sections';
 import { usePets } from '@/src/features/pets/queries';
+import { useRefreshScreen } from '@/src/lib/use-refresh-screen';
 
 export default function PetsScreen() {
   const router = useRouter();
   const pets = usePets();
+  const refresh = useRefreshScreen();
   const addPet = () => router.push('/pets/new');
   // One primary action: the Fab hides while the empty state's own button is on screen.
   const hasPets = (pets.data?.length ?? 0) > 0;
@@ -16,6 +18,7 @@ export default function PetsScreen() {
   return (
     <Screen
       scroll
+      onRefresh={refresh}
       floating={
         hasPets ? <Fab label="Add pet" icon={Plus} onPress={addPet} testID="pets.add" /> : null
       }

@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { CreateInvitationInput } from '@petwatch/shared';
 import { careTaskKeys } from '@/src/features/care-tasks/queries';
 import { petKeys } from '@/src/features/pets/queries';
+import { useRefetchOnFocus } from '@/src/lib/use-refetch-on-focus';
 import { invitationsApi } from './api';
 
 const invitationKeys = {
@@ -10,11 +11,13 @@ const invitationKeys = {
 };
 
 export function useWatchers(petId: string, enabled: boolean) {
-  return useQuery({
+  const query = useQuery({
     queryKey: invitationKeys.watchers(petId),
     queryFn: () => invitationsApi.watchers(petId),
     enabled,
   });
+  useRefetchOnFocus(query.refetch, enabled);
+  return query;
 }
 
 /** Watchers changed: the list (pending rows) and the pet card's watcher count. */

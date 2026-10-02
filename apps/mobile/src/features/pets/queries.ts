@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import type { CreatePetInput, PetDto, UpdatePetInput } from '@petwatch/shared';
+import { useRefetchOnFocus } from '@/src/lib/use-refetch-on-focus';
 import { petsApi } from './api';
 
 export const petKeys = {
@@ -14,12 +15,14 @@ function storePet(queryClient: QueryClient, pet: PetDto): void {
 }
 
 export function usePets() {
-  return useQuery({ queryKey: petKeys.all, queryFn: petsApi.list });
+  const query = useQuery({ queryKey: petKeys.all, queryFn: petsApi.list });
+  useRefetchOnFocus(query.refetch);
+  return query;
 }
 
 export function usePet(id: string) {
   const queryClient = useQueryClient();
-  return useQuery({
+  const query = useQuery({
     queryKey: petKeys.detail(id),
     queryFn: () => petsApi.get(id),
     // Opening a pet from the list renders instantly from the list data, then refreshes.
@@ -27,6 +30,8 @@ export function usePet(id: string) {
     // …as old as the list it came from, so the usual staleness rules decide the refetch.
     initialDataUpdatedAt: () => queryClient.getQueryState(petKeys.all)?.dataUpdatedAt,
   });
+  useRefetchOnFocus(query.refetch);
+  return query;
 }
 
 export function useCreatePet() {

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient, type QueryClient } from '@tanstack/react-query';
 import type { CareTaskPayload } from '@petwatch/shared';
+import { useRefetchOnFocus } from '@/src/lib/use-refetch-on-focus';
 import { careTasksApi } from './api';
 
 export const careTaskKeys = {
@@ -15,14 +16,18 @@ function invalidateTasks(queryClient: QueryClient): void {
 }
 
 export function useSchedule() {
-  return useQuery({ queryKey: careTaskKeys.schedule(), queryFn: careTasksApi.schedule });
+  const query = useQuery({ queryKey: careTaskKeys.schedule(), queryFn: careTasksApi.schedule });
+  useRefetchOnFocus(query.refetch);
+  return query;
 }
 
 export function usePetTasks(petId: string) {
-  return useQuery({
+  const query = useQuery({
     queryKey: careTaskKeys.pet(petId),
     queryFn: () => careTasksApi.listForPet(petId),
   });
+  useRefetchOnFocus(query.refetch);
+  return query;
 }
 
 export function useCreateTask(petId: string) {

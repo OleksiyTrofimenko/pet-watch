@@ -13,6 +13,7 @@ import { WeekView } from '@/src/features/schedule/components/week-view';
 import { effectiveFilter, filterTasks, staleLabel } from '@/src/features/schedule/schedule-view';
 import { useNow } from '@/src/features/schedule/use-now';
 import { useIsOnline } from '@/src/lib/use-is-online';
+import { useRefreshScreen } from '@/src/lib/use-refresh-screen';
 
 const VIEW_OPTIONS = [
   { value: 'today', label: 'Today' },
@@ -28,6 +29,7 @@ export default function ScheduleScreen() {
   const pets = usePets();
   const now = useNow();
   const online = useIsOnline();
+  const refresh = useRefreshScreen();
 
   const petList = (pets.data ?? []).map((pet) => ({ id: pet.id, name: pet.name }));
   const active = effectiveFilter(
@@ -42,7 +44,7 @@ export default function ScheduleScreen() {
     });
 
   return (
-    <Screen scroll>
+    <Screen scroll onRefresh={refresh}>
       <Heading className="text-[32px] font-semibold leading-[38px]" testID="schedule.title">
         Schedule
       </Heading>
