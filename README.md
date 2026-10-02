@@ -13,32 +13,36 @@ its status and where it lives, is in [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.
 
 ## Quick start
 
-Prerequisites: Node 22+, pnpm 10 (`corepack enable`), Docker, and Xcode 27 (iOS) and/or Android Studio.
+**Prerequisites**
+
+- Node 22+ (`.nvmrc`) with pnpm via corepack: `corepack enable`
+- Docker Desktop, running
+- iOS: **Xcode 27** (Xcode 26.3 can't build `expo-modules-jsi` 57.1.1) with an iOS simulator
+- Android: Android Studio with an emulator
+- Mobile e2e only: [Maestro](https://maestro.mobile.dev) (`curl -fsSL "https://get.maestro.mobile.dev" | bash`)
+
+**Setup** (one time; safe to re-run)
 
 ```bash
-cp .env.example apps/api/.env      # API config (defaults match docker-compose); before install:
-cp apps/mobile/.env.example apps/mobile/.env   # generating the Prisma client reads DATABASE_URL
-pnpm install                       # installs everything, generates the Prisma client
-pnpm db:up                         # Postgres :5432, SeaweedFS S3 :9000, Mailpit :8025
-pnpm build:shared                  # compile the shared contract package
-pnpm --filter @petwatch/api prisma:deploy   # apply committed migrations
-pnpm dev:api                       # http://localhost:3000/health → {"status":"ok","db":"up"}
-
-# in another terminal
-pnpm db:seed                       # optional demo data (see below), needs the API running
-pnpm --filter @petwatch/mobile ios # or: android. First run builds the dev client (minutes), then Metro
+pnpm install       # everything, incl. the Prisma client
+pnpm bootstrap     # .env files from the examples, Docker services, contract, migrations, demo data
 ```
 
-This is a **development build**, not Expo Go (the `petwatch://` scheme and the native modules need it).
-
-**Android emulator:** forward the host ports once per emulator boot, so the default `localhost` URLs work:
+**Run** (two terminals)
 
 ```bash
-adb reverse tcp:8081 tcp:8081 && adb reverse tcp:3000 tcp:3000 && adb reverse tcp:9000 tcp:9000
+pnpm dev:api                         # http://localhost:3000/health → {"status":"ok","db":"up"}
+pnpm --filter @petwatch/mobile ios   # or android; the first run builds the dev client (a few minutes)
 ```
 
-(Alternative: `EXPO_PUBLIC_API_URL=http://10.0.2.2:3000` in `apps/mobile/.env` and
-`S3_PUBLIC_ENDPOINT=http://10.0.2.2:9000` in `apps/api/.env`.)
+On Android, also run `pnpm android:ports` once per emulator boot: it forwards Metro (8081), the API
+(3000) and S3 (9000) so the default `localhost` URLs work. Sign in as `ana@example.com` / `petwatch-demo`.
+
+This is a **development build**, not Expo Go: the `petwatch://` scheme and the native modules need it.
+Native projects aren't committed; Expo generates them from `app.json` and the config plugins.
+
+Services (from `docker-compose.yml`): Postgres on **5433** (not 5432, so a local Postgres doesn't get
+in the way), S3 (SeaweedFS) on 9000, Mailpit on 1025 / http://localhost:8025. `pnpm db:down` stops them.
 
 ### Demo data
 
@@ -62,10 +66,11 @@ adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<toke
 
 ### Troubleshooting
 
-- **API health says the database is down** ("trust authentication"): a local Postgres (e.g. Postgres.app)
-  is listening on 5432 in front of Docker's. Stop it.
-- **Android dev build stays blank on launch**: cold-boot the emulator (`emulator -avd <name> -no-snapshot-load`)
-  and redo `adb reverse`.
+- **App can't reach the API on Android**: run `pnpm android:ports` (needed after every emulator boot).
+- **Android dev build stays blank on launch**: cold-boot the emulator (`emulator -avd <name> -no-snapshot-load`),
+  then `pnpm android:ports`.
+- **Simulator acts up after a long session** (taps not registering, keyboard missing): reboot it
+  (`xcrun simctl shutdown all`), then relaunch.
 
 ## Running tests
 
@@ -73,12 +78,9 @@ adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<toke
 pnpm typecheck && pnpm lint && pnpm test   # static checks + unit tests (no services needed)
 
 # API e2e: real Postgres, Mailpit and S3 (docker compose), separate petwatch_test database
-cp apps/api/.env.test.example apps/api/.env.test   # once
-pnpm db:up
-pnpm test:e2e            # creates petwatch_test if missing, migrate deploy, then test/*.e2e-spec.ts
+pnpm test:e2e            # after `pnpm bootstrap`; creates petwatch_test, migrates, runs test/*.e2e-spec.ts
 
-# Mobile e2e: Maestro (curl -fsSL "https://get.maestro.mobile.dev" | bash) and `pnpm db:seed`;
-# API + Metro + the dev build running on the device
+# Mobile e2e: Maestro, with the API, Metro and the dev build running on the device
 pnpm e2e:mobile          # Android emulator: all 7 flows in apps/mobile/e2e/flows
 pnpm e2e:mobile:ios      # iOS simulator: prepares it (no autocorrect / password AutoFill), 6 flows
 ```
@@ -161,10 +163,6 @@ Full reasoning with the rejected alternatives: [`docs/DECISIONS.md`](docs/DECISI
   pet, declining invites.
 - **Uploads**: a presigned POST with a size limit (today the app resizes before upload, the URL doesn't cap it).
 - **Mobile e2e on CI**: run Maestro on an emulator in CI; locally the offline flow is Android-only.
-- **Open iOS issue**: on the iOS 27 simulator, with the login password field focused, "Create an account"
-  doesn't respond (Android is fine). Not yet diagnosed.
-- **Visual QA** across devices, dark mode and the largest text size is still to do; the README screenshots
-  predate the native tab bar.
 
 ## Working with AI
 
