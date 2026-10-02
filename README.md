@@ -180,6 +180,9 @@ Full reasoning with the rejected alternatives: [`docs/DECISIONS.md`](docs/DECISI
 
 ## What is stubbed and how to make it real
 
+The full path to a store release (hosting, database, secrets, links, store requirements) is in
+[`docs/PRODUCTION.md`](docs/PRODUCTION.md).
+
 | Concern        | Local                          | Production                                                                                                                        |
 | -------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- |
 | Email          | Mailpit (real SMTP, web inbox) | Point `SMTP_*` at SES/Postmark/SendGrid SMTP, or swap the mail transport for the provider SDK                                     |
