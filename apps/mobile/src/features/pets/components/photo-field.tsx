@@ -1,13 +1,12 @@
 import { useState } from 'react';
 import { Camera, ImageIcon, Trash2 } from 'lucide-react-native';
 import type { Species } from '@petwatch/shared';
-import { Box } from '@/components/ui/box';
-import { Icon } from '@/components/ui/icon';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import { OptionSheet, type SheetOption } from '@/src/design-system';
-import { PetPhoto } from './pet-photo';
+import { PhotoPlaceholder } from './photo-placeholder';
+import { PhotoPreview } from './photo-preview';
 
 type PhotoFieldProps = {
   name: string;
@@ -64,31 +63,9 @@ export function PhotoField(props: PhotoFieldProps) {
         testID="pet-form.photo"
       >
         {uri ? (
-          <Box className="relative">
-            <PetPhoto uri={uri} species={species} name={name || 'your pet'} size="large" />
-            {uploading ? (
-              <Box className="absolute inset-0 items-center justify-center gap-2.5 rounded-lg bg-typography-900/60 p-4">
-                <Text className="text-sm font-bold text-typography-0">
-                  Uploading… {Math.round(progress * 100)}%
-                </Text>
-                <Box className="h-1.5 w-full overflow-hidden rounded-full bg-typography-0/30">
-                  <Box
-                    className="h-full rounded-full bg-typography-0"
-                    style={{ width: `${Math.round(progress * 100)}%` }}
-                  />
-                </Box>
-              </Box>
-            ) : (
-              <Box className="absolute -bottom-1.5 -right-1.5 h-10 w-10 items-center justify-center rounded-full border border-outline-100 bg-background-0">
-                <Icon as={Camera} className="h-5 w-5 text-typography-900" />
-              </Box>
-            )}
-          </Box>
+          <PhotoPreview uri={uri} species={species} name={name || 'your pet'} progress={progress} />
         ) : (
-          <Box className="h-32 w-32 items-center justify-center gap-2 rounded-lg border-[1.5px] border-dashed border-secondary-500 bg-background-0">
-            <Icon as={Camera} className="h-7 w-7 text-typography-700" />
-            <Text className="text-[15px] font-semibold text-typography-900">Add photo</Text>
-          </Box>
+          <PhotoPlaceholder />
         )}
       </Pressable>
       <Text className={`text-sm ${hasError ? 'text-error-700' : 'text-typography-700'}`}>

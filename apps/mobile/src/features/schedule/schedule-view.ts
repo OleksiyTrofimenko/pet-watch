@@ -1,5 +1,6 @@
 import type { ScheduleTaskDto } from '@petwatch/shared';
 import { localDateKey } from '@petwatch/shared';
+import { formatTime } from '@/src/lib/time-of-day';
 import type { PetFilter } from './atoms';
 
 /** The filter in effect: a pet that's gone (deleted, access revoked) falls back to all pets. */
@@ -22,4 +23,11 @@ export function isPast(occurrence: { date: string; timeOfDay: number }, now: Dat
   const today = localDateKey(now);
   if (occurrence.date !== today) return occurrence.date < today;
   return occurrence.timeOfDay < now.getHours() * 60 + now.getMinutes();
+}
+
+/** Offline with cached data: "Updated 13:10", so the user knows how fresh the schedule is. */
+export function staleLabel(online: boolean, dataUpdatedAt: number): string | undefined {
+  if (online || dataUpdatedAt === 0) return undefined;
+  const updated = new Date(dataUpdatedAt);
+  return `Updated ${formatTime(updated.getHours() * 60 + updated.getMinutes())}`;
 }

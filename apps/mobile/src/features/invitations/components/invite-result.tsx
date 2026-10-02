@@ -8,28 +8,17 @@ import {
   UserRoundX,
   type LucideIcon,
 } from 'lucide-react-native';
-import { Box } from '@/components/ui/box';
-import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
+import { IconCircle, type IconCircleTone } from '@/src/design-system';
 import type { InviteResultState } from '../invite-state';
-
-type Tone = 'success' | 'warning' | 'info' | 'neutral' | 'error';
-
-const TONE: Record<Tone, { circle: string; icon: string }> = {
-  success: { circle: 'bg-success-100', icon: 'text-success-700' },
-  warning: { circle: 'bg-warning-100', icon: 'text-warning-700' },
-  info: { circle: 'bg-info-100', icon: 'text-info-700' },
-  neutral: { circle: 'bg-secondary-100', icon: 'text-secondary-700' },
-  error: { circle: 'bg-error-100', icon: 'text-error-700' },
-};
 
 /** Copy per state, from AcceptScreen.dc.html. Exhaustive: a new state fails the build here. */
 const COPY: Record<
   InviteResultState,
   {
     icon: LucideIcon;
-    tone: Tone;
+    tone: IconCircleTone;
     title: (pet: string) => string;
     body: (pet: string, me: string) => string;
   }
@@ -88,12 +77,9 @@ type InviteResultProps = {
 
 export function InviteResult({ state, petName, signedInAs }: InviteResultProps) {
   const copy = COPY[state];
-  const tone = TONE[copy.tone];
   return (
     <VStack className="items-center gap-4 pt-8" testID={`invite.${state}`}>
-      <Box className={`h-20 w-20 items-center justify-center rounded-full ${tone.circle}`}>
-        <Icon as={copy.icon} className={`h-9 w-9 ${tone.icon}`} />
-      </Box>
+      <IconCircle icon={copy.icon} tone={copy.tone} size="xl" />
       <Text className="text-center font-heading text-[28px] font-semibold leading-[34px] text-typography-900">
         {copy.title(petName)}
       </Text>

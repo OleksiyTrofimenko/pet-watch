@@ -2,8 +2,7 @@ import { useRouter } from 'expo-router';
 import type { CreatePetInput } from '@petwatch/shared';
 import { Screen, ScreenHeader, useNotify } from '@/src/design-system';
 import { PetForm } from '@/src/features/pets/components/pet-form';
-import { PhotoPermissionDialog } from '@/src/features/pets/components/photo-permission-dialog';
-import { PhotoField } from '@/src/features/pets/components/photo-field';
+import { PetPhotoPicker } from '@/src/features/pets/pet-photo-picker';
 import { useCreatePet } from '@/src/features/pets/queries';
 import { usePetPhoto } from '@/src/features/pets/use-pet-photo';
 
@@ -33,22 +32,8 @@ export default function NewPetScreen() {
       <PetForm
         onSubmit={submit}
         photo={(name, species) => (
-          <PhotoField
-            name={name}
-            species={species ?? 'OTHER'}
-            uri={photo.localUri}
-            progress={photo.upload.status === 'uploading' ? photo.upload.progress : null}
-            hasError={photo.upload.status === 'error'}
-            onTakePhoto={() => void photo.choose('camera')}
-            onChooseFromLibrary={() => void photo.choose('library')}
-            onRemove={() => void photo.remove()}
-          />
+          <PetPhotoPicker photo={photo} name={name} species={species ?? 'OTHER'} />
         )}
-      />
-      <PhotoPermissionDialog
-        source={photo.deniedSource}
-        onOpenSettings={photo.openSettings}
-        onCancel={photo.dismissDenied}
       />
     </Screen>
   );

@@ -23,3 +23,21 @@ export function stateForError(error: unknown): InviteResultState {
       return 'error';
   }
 }
+
+export type InviteScreenState = InviteResultState | 'loading' | 'invite';
+
+/**
+ * What the accept screen shows, in priority order: a finished accept, then an accept failure,
+ * then the preview (loading / failed / the invite itself).
+ */
+export function screenState(input: {
+  accepted: boolean;
+  acceptError: unknown;
+  preview: { isPending: boolean; error: unknown };
+}): InviteScreenState {
+  if (input.accepted) return 'accepted';
+  if (input.acceptError) return stateForError(input.acceptError);
+  if (input.preview.isPending) return 'loading';
+  if (input.preview.error) return stateForError(input.preview.error);
+  return 'invite';
+}

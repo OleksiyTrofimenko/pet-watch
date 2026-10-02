@@ -15,6 +15,7 @@ export { OptionSheet, type SheetOption } from './option-sheet';
 export { ConfirmDialog } from './confirm-dialog';
 export { Fab } from './fab';
 export { useNotify } from './use-notify';
+export { IconCircle, type IconCircleTone } from './icon-circle';
 export { EmptyState, type EmptyStateProps } from './empty-state';
 export { QueryView } from './query-view';
 export { RowSkeleton } from './row-skeleton';

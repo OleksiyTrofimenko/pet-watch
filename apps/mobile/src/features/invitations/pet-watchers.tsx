@@ -9,6 +9,21 @@ import { useCancelInvitation, useInvite, useRevokeWatcher, useWatchers } from '.
 type Confirming =
   { kind: 'remove'; watcher: WatcherDto } | { kind: 'cancel'; invite: PendingInvitationDto } | null;
 
+/** Title, body and button of the confirmation for removing a watcher or cancelling an invite. */
+function confirmCopy(confirming: NonNullable<Confirming>, petName: string) {
+  return confirming.kind === 'remove'
+    ? {
+        title: `Remove ${confirming.watcher.email}'s access to ${petName}?`,
+        body: `They won't see ${petName}'s routine or schedule anymore. You can invite them again later.`,
+        confirmLabel: 'Remove',
+      }
+    : {
+        title: `Cancel the invite to ${confirming.invite.email}?`,
+        body: 'The link in their email will stop working. You can invite them again later.',
+        confirmLabel: 'Cancel invite',
+      };
+}
+
 /** The owner's Watchers block on a pet: list, invite sheet, remove/cancel with confirmation. */
 export function PetWatchers({ petId, petName }: { petId: string; petName: string }) {
   const notify = useNotify();
@@ -19,6 +34,8 @@ export function PetWatchers({ petId, petName }: { petId: string; petName: string
   const cancel = useCancelInvitation(petId);
   const [inviting, setInviting] = useState(false);
   const [confirming, setConfirming] = useState<Confirming>(null);
+
+  const copy = confirming ? confirmCopy(confirming, petName) : null;
 
   const confirm = () => {
     if (confirming?.kind === 'remove') {
@@ -56,17 +73,9 @@ export function PetWatchers({ petId, petName }: { petId: string; petName: string
       <ConfirmDialog
         requiresNetwork="update access"
         isOpen={confirming !== null}
-        title={
-          confirming?.kind === 'remove'
-            ? `Remove ${confirming.watcher.email}'s access to ${petName}?`
-            : `Cancel the invite to ${confirming?.invite.email ?? ''}?`
-        }
-        body={
-          confirming?.kind === 'remove'
-            ? `They won't see ${petName}'s routine or schedule anymore. You can invite them again later.`
-            : 'The link in their email will stop working. You can invite them again later.'
-        }
-        confirmLabel={confirming?.kind === 'remove' ? 'Remove' : 'Cancel invite'}
+        title={copy?.title ?? ''}
+        body={copy?.body ?? ''}
+        confirmLabel={copy?.confirmLabel ?? ''}
         isLoading={revoke.isPending || cancel.isPending}
         onConfirm={confirm}
         onCancel={() => setConfirming(null)}

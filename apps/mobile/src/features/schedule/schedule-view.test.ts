@@ -1,4 +1,5 @@
-import { countLabel, effectiveFilter, isPast } from './schedule-view';
+import { formatTime } from '@/src/lib/time-of-day';
+import { countLabel, effectiveFilter, isPast, staleLabel } from './schedule-view';
 
 describe('schedule view helpers', () => {
   it('names the filter in the count', () => {
@@ -19,5 +20,12 @@ describe('schedule view helpers', () => {
     expect(isPast({ date: '2026-09-30', timeOfDay: 790 }, now)).toBe(false); // 13:10 itself
     expect(isPast({ date: '2026-09-29', timeOfDay: 1300 }, now)).toBe(true);
     expect(isPast({ date: '2026-10-01', timeOfDay: 0 }, now)).toBe(false);
+  });
+
+  it('says when the data was fetched only while offline with cached data', () => {
+    const fetchedAt = new Date(2026, 8, 30, 13, 10).getTime();
+    expect(staleLabel(true, fetchedAt)).toBeUndefined();
+    expect(staleLabel(false, 0)).toBeUndefined();
+    expect(staleLabel(false, fetchedAt)).toBe(`Updated ${formatTime(790)}`);
   });
 });

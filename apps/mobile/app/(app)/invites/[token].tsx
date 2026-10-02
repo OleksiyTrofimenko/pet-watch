@@ -5,15 +5,15 @@ import { PawPrint } from 'lucide-react-native';
 import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { VStack } from '@/components/ui/vstack';
-import { Button, Screen } from '@/src/design-system';
+import { Screen } from '@/src/design-system';
 import { rememberPendingInvite } from '@/src/features/auth/pending-link';
 import { useLogout } from '@/src/features/auth/queries';
 import { useSession } from '@/src/features/auth/session-provider';
+import { InviteActions } from '@/src/features/invitations/components/invite-actions';
 import { InviteCard } from '@/src/features/invitations/components/invite-card';
 import { InviteResult } from '@/src/features/invitations/components/invite-result';
 import { InviteSkeleton } from '@/src/features/invitations/components/invite-skeleton';
-import { stateForError, type InviteResultState } from '@/src/features/invitations/invite-state';
+import { screenState } from '@/src/features/invitations/invite-state';
 import { useAcceptInvitation, useInvitationPreview } from '@/src/features/invitations/queries';
 import { petFilterAtom, viewModeAtom } from '@/src/features/schedule/atoms';
 
@@ -33,23 +33,23 @@ export default function AcceptInviteScreen() {
   const [accepted, setAccepted] = useState<{ petId: string } | null>(null);
   const me = session.status === 'signed-in' ? session.user.email : '';
 
-  const state: InviteResultState | 'loading' | 'invite' = accepted
-    ? 'accepted'
-    : accept.error
-      ? stateForError(accept.error)
-      : preview.isPending
-        ? 'loading'
-        : preview.error
-          ? stateForError(preview.error)
-          : 'invite';
+  const state = screenState({
+    accepted: accepted !== null,
+    acceptError: accept.error,
+    preview,
+  });
   const petName = preview.data?.petName ?? 'this pet';
-  const scheduleLabel = preview.data ? `View ${preview.data.petName}'s schedule` : 'View schedule';
   const petId = accepted?.petId ?? preview.data?.petId;
 
   const viewSchedule = () => {
     if (petId) setFilter({ petId });
     setViewMode('today');
     router.replace('/');
+  };
+  const switchAccount = () => {
+    // Log out, then reopen this invite after the next sign-in.
+    rememberPendingInvite(token);
+    logout.mutate();
   };
 
   return (
@@ -60,78 +60,23 @@ export default function AcceptInviteScreen() {
       </HStack>
       {state === 'loading' ? (
         <InviteSkeleton />
-      ) : state === 'invite' && preview.data ? (
-        <InviteCard invite={preview.data} signedInAs={me} />
-      ) : state !== 'invite' ? (
+      ) : state === 'invite' ? (
+        preview.data ? (
+          <InviteCard invite={preview.data} signedInAs={me} />
+        ) : null
+      ) : (
         <InviteResult state={state} petName={petName} signedInAs={me} />
-      ) : null}
-      <VStack className="mt-auto gap-2 pt-6">
-        {state === 'invite' ? (
-          <>
-            <Button
-              label="Accept"
-              size="lg"
-              fullWidth
-              isLoading={accept.isPending}
-              onPress={() => accept.mutate(undefined, { onSuccess: setAccepted })}
-              requiresNetwork="accept"
-              testID="invite.accept"
-            />
-            {/* The invite stays pending; the link keeps working until it expires. */}
-            <Button
-              label="Not now"
-              variant="outline"
-              action="secondary"
-              size="lg"
-              fullWidth
-              onPress={() => router.replace('/')}
-            />
-          </>
-        ) : null}
-        {state === 'accepted' || state === 'already' ? (
-          <Button
-            label={scheduleLabel}
-            size="lg"
-            fullWidth
-            onPress={viewSchedule}
-            testID="invite.view-schedule"
-          />
-        ) : null}
-        {state === 'expired' ||
-        state === 'cancelled' ||
-        state === 'unavailable' ||
-        state === 'error' ? (
-          <Button
-            label="Go to my pets"
-            size="lg"
-            fullWidth
-            onPress={() => router.replace('/pets')}
-          />
-        ) : null}
-        {state === 'wrong-account' ? (
-          <>
-            <Button
-              label="Switch account"
-              size="lg"
-              fullWidth
-              onPress={() => {
-                // Log out, then reopen this invite after the next sign-in.
-                rememberPendingInvite(token);
-                logout.mutate();
-              }}
-              testID="invite.switch-account"
-            />
-            <Button
-              label="Not now"
-              variant="outline"
-              action="secondary"
-              size="lg"
-              fullWidth
-              onPress={() => router.replace('/')}
-            />
-          </>
-        ) : null}
-      </VStack>
+      )}
+      <InviteActions
+        state={state}
+        scheduleLabel={preview.data ? `View ${preview.data.petName}'s schedule` : 'View schedule'}
+        isAccepting={accept.isPending}
+        onAccept={() => accept.mutate(undefined, { onSuccess: setAccepted })}
+        onNotNow={() => router.replace('/')}
+        onViewSchedule={viewSchedule}
+        onGoToPets={() => router.replace('/pets')}
+        onSwitchAccount={switchAccount}
+      />
     </Screen>
   );
 }

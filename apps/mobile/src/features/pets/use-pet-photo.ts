@@ -68,3 +68,5 @@ export function usePetPhoto(petId: string | null) {
     },
   };
 }
+
+export type PetPhotoState = ReturnType<typeof usePetPhoto>;

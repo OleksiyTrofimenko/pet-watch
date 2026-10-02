@@ -4,8 +4,7 @@ import type { CreatePetInput } from '@petwatch/shared';
 import { ConfirmDialog, QueryView, Screen, ScreenHeader, useNotify } from '@/src/design-system';
 import { PetForm } from '@/src/features/pets/components/pet-form';
 import { PetListSkeleton } from '@/src/features/pets/components/pet-list-skeleton';
-import { PhotoField } from '@/src/features/pets/components/photo-field';
-import { PhotoPermissionDialog } from '@/src/features/pets/components/photo-permission-dialog';
+import { PetPhotoPicker } from '@/src/features/pets/pet-photo-picker';
 import { useDeletePet, usePet, useUpdatePet } from '@/src/features/pets/queries';
 import { usePetPhoto } from '@/src/features/pets/use-pet-photo';
 
@@ -51,15 +50,11 @@ export default function EditPetScreen() {
               }
               onDelete={() => setConfirmingDelete(true)}
               photo={(name, species) => (
-                <PhotoField
+                <PetPhotoPicker
+                  photo={photo}
                   name={name}
                   species={species ?? data.species}
-                  uri={photo.localUri ?? data.photoUrl}
-                  progress={photo.upload.status === 'uploading' ? photo.upload.progress : null}
-                  hasError={photo.upload.status === 'error'}
-                  onTakePhoto={() => void photo.choose('camera')}
-                  onChooseFromLibrary={() => void photo.choose('library')}
-                  onRemove={() => void photo.remove()}
+                  savedUri={data.photoUrl}
                 />
               )}
             />
@@ -77,11 +72,6 @@ export default function EditPetScreen() {
           </>
         )}
       </QueryView>
-      <PhotoPermissionDialog
-        source={photo.deniedSource}
-        onOpenSettings={photo.openSettings}
-        onCancel={photo.dismissDenied}
-      />
     </Screen>
   );
 }

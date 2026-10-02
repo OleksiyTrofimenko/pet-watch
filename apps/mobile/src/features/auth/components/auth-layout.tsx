@@ -6,19 +6,13 @@ import { HStack } from '@/components/ui/hstack';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-
-type BadgeTone = 'primary' | 'error';
-
-const BADGE: Record<BadgeTone, { circle: string; icon: string }> = {
-  primary: { circle: 'bg-primary-100', icon: 'text-primary-700' },
-  error: { circle: 'bg-error-100', icon: 'text-error-700' },
-};
+import { IconCircle, type IconCircleTone } from '@/src/design-system';
 
 type AuthLayoutProps = {
   title: string;
   lead?: ReactNode;
   /** Large round icon above the title (forgot → sent, reset → link expired). */
-  badge?: { icon: LucideIcon; tone: BadgeTone };
+  badge?: { icon: LucideIcon; tone: IconCircleTone };
   showBrand?: boolean;
   children: ReactNode;
   /** Secondary action pinned to the bottom, e.g. "New to PetWatch? Create an account". */
@@ -48,13 +42,7 @@ export function AuthLayout({
           </Text>
         </HStack>
       ) : null}
-      {badge ? (
-        <Box
-          className={`h-16 w-16 items-center justify-center rounded-full ${BADGE[badge.tone].circle}`}
-        >
-          <Icon as={badge.icon} className={`h-7 w-7 ${BADGE[badge.tone].icon}`} />
-        </Box>
-      ) : null}
+      {badge ? <IconCircle icon={badge.icon} tone={badge.tone} /> : null}
       <VStack className="gap-2">
         <Heading className="text-[32px] font-semibold leading-[38px]">{title}</Heading>
         {lead ? <Text className="text-base leading-6 text-typography-700">{lead}</Text> : null}

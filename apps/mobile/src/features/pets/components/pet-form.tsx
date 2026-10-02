@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Trash2 } from 'lucide-react-native';
 import { useForm, useWatch } from 'react-hook-form';
-import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import {
   createPetSchema,
@@ -13,6 +11,7 @@ import {
 import { Button, FormAlert, FormInput, SelectField } from '@/src/design-system';
 import { useApiSubmit } from '@/src/lib/form-errors';
 import { SPECIES_OPTIONS } from '../species-visuals';
+import { DeletePetSection } from './delete-pet-section';
 
 const FIELDS = ['name', 'species', 'breed', 'ageYears', 'notes'] as const;
 
@@ -116,23 +115,7 @@ export function PetForm({ pet, photo, onSubmit, saveDisabledReason, onDelete }: 
           testID="pet-form.save"
         />
       )}
-      {pet && onDelete ? (
-        <VStack className="mt-2 gap-2 border-t border-outline-100 pt-5">
-          <Button
-            label="Delete pet"
-            icon={Trash2}
-            action="negative"
-            variant="outline"
-            fullWidth
-            onPress={onDelete}
-            requiresNetwork="delete"
-            testID="pet-form.delete"
-          />
-          <Text className="text-center text-sm text-typography-700">
-            Removes {pet.name}&apos;s care routine and everyone&apos;s access.
-          </Text>
-        </VStack>
-      ) : null}
+      {pet && onDelete ? <DeletePetSection petName={pet.name} onDelete={onDelete} /> : null}
     </VStack>
   );
 }

@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm, useWatch } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
 import {
@@ -8,17 +8,12 @@ import {
   type CareTaskInput,
   type CareTaskPayload,
 } from '@petwatch/shared';
-import { Button, FormAlert, FormInput, SegmentedControl, TimeField } from '@/src/design-system';
+import { Button, FormAlert, FormInput, TimeField } from '@/src/design-system';
 import { useApiSubmit } from '@/src/lib/form-errors';
-import { repeatLabel } from '../format';
-import { DayToggles } from './day-toggles';
+import { RepeatField } from './repeat-field';
 import { TypeChips } from './type-chips';
 
 const FIELDS = ['type', 'title', 'notes', 'timeOfDay', 'recurrence', 'daysOfWeek'] as const;
-const REPEAT_OPTIONS = [
-  { value: 'DAILY', label: 'Daily' },
-  { value: 'WEEKLY', label: 'Weekly' },
-] as const;
 
 type TaskFormProps = {
   /** Edit mode when set. */
@@ -40,11 +35,6 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
     },
   });
   const { submit, formError } = useApiSubmit(form, FIELDS, onSubmit);
-  const [recurrence, daysOfWeek] = useWatch({
-    control: form.control,
-    name: ['recurrence', 'daysOfWeek'],
-  });
-  const daysError = form.formState.errors.daysOfWeek?.message;
 
   return (
     <VStack className="gap-5 pb-4">
@@ -69,43 +59,7 @@ export function TaskForm({ task, onSubmit }: TaskFormProps) {
         onSubmitEditing={() => form.setFocus('notes')}
       />
       <TimeField control={form.control} name="timeOfDay" label="Time" testID="task-form.time" />
-      <VStack className="gap-3">
-        <Text className="font-semibold text-typography-900">Repeat</Text>
-        <Controller
-          control={form.control}
-          name="recurrence"
-          render={({ field }) => (
-            <SegmentedControl
-              options={REPEAT_OPTIONS}
-              value={field.value}
-              onChange={field.onChange}
-              label="Repeat"
-              testID="task-form.repeat"
-            />
-          )}
-        />
-        {recurrence === 'WEEKLY' ? (
-          <VStack className="gap-2">
-            <Controller
-              control={form.control}
-              name="daysOfWeek"
-              render={({ field }) => (
-                <DayToggles
-                  value={field.value ?? []}
-                  onChange={field.onChange}
-                  invalid={Boolean(daysError)}
-                />
-              )}
-            />
-            <Text className={`text-sm ${daysError ? 'text-error-700' : 'text-typography-700'}`}>
-              {daysError ??
-                (daysOfWeek?.length
-                  ? `Repeats ${repeatLabel({ recurrence, daysOfWeek })}`
-                  : 'Pick the days it repeats.')}
-            </Text>
-          </VStack>
-        ) : null}
-      </VStack>
+      <RepeatField control={form.control} />
       <FormInput
         control={form.control}
         name="notes"

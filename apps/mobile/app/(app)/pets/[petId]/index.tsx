@@ -1,42 +1,29 @@
-import { useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Pencil } from 'lucide-react-native';
-import type { CareTaskDto } from '@petwatch/shared';
 import { VStack } from '@/components/ui/vstack';
-import {
-  Button,
-  ConfirmDialog,
-  QueryView,
-  RowSkeleton,
-  Screen,
-  ScreenHeader,
-  useNotify,
-} from '@/src/design-system';
-import { CareRoutine } from '@/src/features/care-tasks/components/care-routine';
-import { useDeleteTask, usePetTasks } from '@/src/features/care-tasks/queries';
+import { Button, QueryView, Screen, ScreenHeader } from '@/src/design-system';
+import { PetCareRoutine } from '@/src/features/care-tasks/pet-care-routine';
 import { PetWatchers } from '@/src/features/invitations/pet-watchers';
 import { PetDetails } from '@/src/features/pets/components/pet-details';
 import { PetDetailSkeleton } from '@/src/features/pets/components/pet-detail-skeleton';
 import { petUnavailable } from '@/src/features/pets/pet-unavailable';
 import { usePet } from '@/src/features/pets/queries';
 
+/** A pet: details, care routine and (owner only) watchers. Watchers get a read-only view. */
 export default function PetScreen() {
   const router = useRouter();
-  const notify = useNotify();
   const { petId } = useLocalSearchParams<{ petId: string }>();
   const pet = usePet(petId);
-  const tasks = usePetTasks(petId);
-  const deleteTask = useDeleteTask(petId);
-  const [deleting, setDeleting] = useState<CareTaskDto | null>(null);
   const isOwner = pet.data?.role === 'OWNER';
 
-  const confirmDelete = (task: CareTaskDto) =>
-    deleteTask.mutate(task.id, {
-      onSuccess: () => {
-        setDeleting(null);
-        notify(`${task.title} was deleted`);
-      },
-    });
+  const ownerActions = {
+    onAdd: () => router.push({ pathname: '/pets/[petId]/tasks/new', params: { petId } }),
+    onEdit: (task: { id: string }) =>
+      router.push({
+        pathname: '/pets/[petId]/tasks/[taskId]/edit',
+        params: { petId, taskId: task.id },
+      }),
+  };
 
   return (
     <Screen scroll>
@@ -63,40 +50,12 @@ export default function PetScreen() {
         {(data) => (
           <VStack className="gap-6 pb-6">
             <PetDetails pet={data} />
-            <QueryView query={tasks} loading={<RowSkeleton label="Loading care routine" />}>
-              {(list) => (
-                <CareRoutine
-                  petName={data.name}
-                  tasks={list}
-                  owner={
-                    isOwner
-                      ? {
-                          onAdd: () =>
-                            router.push({ pathname: '/pets/[petId]/tasks/new', params: { petId } }),
-                          onEdit: (task) =>
-                            router.push({
-                              pathname: '/pets/[petId]/tasks/[taskId]/edit',
-                              params: { petId, taskId: task.id },
-                            }),
-                          onDelete: setDeleting,
-                        }
-                      : undefined
-                  }
-                />
-              )}
-            </QueryView>
-            {isOwner ? <PetWatchers petId={petId} petName={data.name} /> : null}
-            <ConfirmDialog
-              requiresNetwork="delete"
-              isOpen={deleting !== null}
-              title={deleting ? `Delete ${deleting.title} from ${data.name}'s routine?` : ''}
-              body="It disappears from everyone's schedule. This can't be undone."
-              confirmLabel="Delete task"
-              isLoading={deleteTask.isPending}
-              onConfirm={() => deleting && confirmDelete(deleting)}
-              onCancel={() => setDeleting(null)}
-              testID="task-delete"
+            <PetCareRoutine
+              petId={petId}
+              petName={data.name}
+              owner={isOwner ? ownerActions : undefined}
             />
+            {isOwner ? <PetWatchers petId={petId} petName={data.name} /> : null}
           </VStack>
         )}
       </QueryView>
