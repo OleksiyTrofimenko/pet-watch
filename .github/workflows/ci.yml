@@ -38,7 +38,7 @@ jobs:
       - name: Start Postgres, SeaweedFS and Mailpit
         run: docker compose up -d --wait postgres s3 mailpit
       - name: Create the S3 bucket
-        run: docker compose run --rm s3-init
+        run: docker compose run --rm --no-deps s3-init
       - name: API e2e
         run: |
           cp apps/api/.env.test.example apps/api/.env.test

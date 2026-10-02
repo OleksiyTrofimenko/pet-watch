@@ -7,7 +7,7 @@
   },
   "scripts": {
     "bootstrap": "node scripts/bootstrap.mjs",
-    "db:up": "docker compose up -d --wait postgres s3 mailpit && docker compose run --rm s3-init",
+    "db:up": "docker compose up -d --wait postgres s3 mailpit && docker compose run --rm --no-deps s3-init",
     "db:down": "docker compose down",
     "db:seed": "pnpm --filter @petwatch/api db:seed",
     "dev:api": "pnpm --filter @petwatch/api start:dev",
