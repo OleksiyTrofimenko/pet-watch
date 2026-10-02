@@ -29,8 +29,10 @@ export function TaskRow({ task, past, showPet, onPress }: TaskRowProps) {
         past ? 'border-background-100 bg-background-100' : 'border-outline-100 bg-background-0'
       }`}
     >
-      <VStack className="w-12 gap-0.5 pt-0.5">
+      {/* Wide enough for a 12-hour time ("12:30 PM") on one line, so rows stay aligned. */}
+      <VStack className="min-w-20 gap-0.5 pt-0.5">
         <Text
+          numberOfLines={1}
           className={`text-base font-bold ${past ? 'text-typography-600' : 'text-typography-900'}`}
         >
           {time}
