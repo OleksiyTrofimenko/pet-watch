@@ -8,69 +8,114 @@ Expo (React Native) + NestJS + PostgreSQL, in one pnpm monorepo. Runs on iOS and
 | ![Today](docs/screenshots/ios-1-today.png)     | ![Week](docs/screenshots/ios-2-week.png)     | ![Pets](docs/screenshots/ios-3-pets.png)     | ![Pet](docs/screenshots/ios-4-pet.png)     |
 | ![Today](docs/screenshots/android-1-today.png) | ![Week](docs/screenshots/android-2-week.png) | ![Pets](docs/screenshots/android-3-pets.png) | ![Pet](docs/screenshots/android-4-pet.png) |
 
-iOS 27 (top) and Android (bottom), demo data from `pnpm db:seed`. Every requirement from the brief, with
+iOS 27 (top) and Android (bottom), with the demo data. Every requirement from the brief, with
 its status and where it lives, is in [`docs/REQUIREMENTS.md`](docs/REQUIREMENTS.md).
 
-## Quick start
+## Getting started
 
-**Prerequisites**
+### 1. Install the prerequisites
 
-- Node 22+ (`.nvmrc`) with pnpm via corepack: `corepack enable`
-- Docker Desktop, running
-- iOS: **Xcode 27** (Xcode 26.3 can't build `expo-modules-jsi` 57.1.1) with an iOS simulator
-- Android: Android Studio with an emulator
-- Mobile e2e only: [Maestro](https://maestro.mobile.dev) (`curl -fsSL "https://get.maestro.mobile.dev" | bash`)
+| Tool                    | Version                                             | Check                        |
+| ----------------------- | --------------------------------------------------- | ---------------------------- |
+| Node.js                 | 22 or newer (`.nvmrc`)                              | `node -v`                    |
+| pnpm (through corepack) | 10 (pinned in package.json)                         | `corepack enable && pnpm -v` |
+| Docker Desktop          | running                                             | `docker info`                |
+| iOS: Xcode              | **27** (26.3 can't build `expo-modules-jsi` 57.1.1) | `xcodebuild -version`        |
+| Android: Android Studio | with an emulator (AVD)                              | `emulator -list-avds`        |
 
-**Setup** (one time; safe to re-run)
+You need Xcode _or_ Android Studio, not both. Maestro is only for the mobile e2e tests (below).
 
-```bash
-pnpm install       # everything, incl. the Prisma client
-pnpm bootstrap     # .env files from the examples, Docker services, contract, migrations, demo data
-```
-
-**Run** (two terminals)
+### 2. Install and set up (once)
 
 ```bash
-pnpm dev:api                         # http://localhost:3000/health → {"status":"ok","db":"up"}
-pnpm --filter @petwatch/mobile ios   # or android; the first run builds the dev client (a few minutes)
+git clone https://github.com/OleksiyTrofimenko/pet-watch.git && cd pet-watch
+pnpm install
+pnpm bootstrap
 ```
 
-On Android, also run `pnpm android:ports` once per emulator boot: it forwards Metro (8081), the API
-(3000) and S3 (9000) so the default `localhost` URLs work. Sign in as `ana@example.com` / `petwatch-demo`.
+`pnpm bootstrap` creates the `.env` files from the `.example` files, starts Postgres, S3 (SeaweedFS) and
+Mailpit in Docker, creates the S3 bucket, builds the shared contract, applies the migrations and loads the
+demo data. It ends with "✔ Ready". It's safe to run again; existing `.env` files are kept.
 
-This is a **development build**, not Expo Go: the `petwatch://` scheme and the native modules need it.
-Native projects aren't committed; Expo generates them from `app.json` and the config plugins.
+### 3. Start the API (terminal 1)
 
-Services (from `docker-compose.yml`): Postgres on **5433** (not 5432, so a local Postgres doesn't get
-in the way), S3 (SeaweedFS) on 9000, Mailpit on 1025 / http://localhost:8025. `pnpm db:down` stops them.
+```bash
+pnpm dev:api
+```
 
-### Demo data
+Ready when http://localhost:3000/health shows `{"status":"ok","db":"up"}`.
 
-`pnpm db:seed` is opt-in and safe to re-run. It goes through the API, so hashing, access rules and the
-invite flow are the real ones.
+### 4. Build and start the app (terminal 2)
 
-| Account (password `petwatch-demo`) | What you'll see                                             |
-| ---------------------------------- | ----------------------------------------------------------- |
-| `ana@example.com`                  | Owns Rex and Miso, both with care routines; Sam watches Rex |
-| `sam@example.com`                  | Watches Rex: read-only pet and schedule                     |
-| `lee@example.com`                  | Pending invite to Miso (open the link from Mailpit, :8025)  |
+**iOS:**
 
-### Emails and deep links
+```bash
+pnpm --filter @petwatch/mobile ios
+```
 
-Invite and password-reset emails land in Mailpit: http://localhost:8025. The links open the app:
+**Android:** start an emulator from Android Studio first, then:
+
+```bash
+pnpm android:ports        # once per emulator boot: forwards 8081, 3000, 9000 to your machine
+pnpm --filter @petwatch/mobile android
+```
+
+The first run builds and installs the development build (a few minutes), then starts Metro and opens the
+app. It's a **development build**, not Expo Go: the `petwatch://` links and the native modules need it.
+The `ios/` and `android/` folders aren't committed; Expo generates them from `app.json` and the config plugins.
+
+### 5. Sign in
+
+Use one of the demo accounts (password `petwatch-demo`):
+
+| Account           | What you'll see                                             |
+| ----------------- | ----------------------------------------------------------- |
+| `ana@example.com` | Owns Rex and Miso, both with care routines; Sam watches Rex |
+| `sam@example.com` | Watches Rex: read-only pet and schedule                     |
+| `lee@example.com` | Pending invite to Miso (open the link from Mailpit)         |
+
+Or create a new account in the app. Invite and password-reset emails land in Mailpit at
+http://localhost:8025; their links open the app:
 
 ```bash
 xcrun simctl openurl booted "petwatch://invites/<token>"
 adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<token>" com.petwatch.app
 ```
 
+### Next time
+
+The app stays installed, so you only start the services, the API and Metro:
+
+```bash
+pnpm db:up          # Docker services
+pnpm dev:api        # terminal 1
+pnpm dev:mobile     # terminal 2: Metro, then open PetWatch on the simulator/emulator
+```
+
+Rebuild with `pnpm --filter @petwatch/mobile ios|android` only after adding a native dependency.
+
+### Stop or reset
+
+```bash
+pnpm db:down                 # stop the Docker services (data is kept)
+docker compose down -v       # also delete the data; then `pnpm bootstrap` starts fresh
+pnpm db:seed                 # reload the demo accounts (API must be running)
+```
+
+### Ports
+
+Postgres **5433** (not 5432, so a Postgres already on your machine doesn't get in the way), API 3000,
+Metro 8081, S3 9000, Mailpit 1025 (SMTP) and 8025 (web).
+
 ### Troubleshooting
 
-- **App can't reach the API on Android**: run `pnpm android:ports` (needed after every emulator boot).
-- **Android dev build stays blank on launch**: cold-boot the emulator (`emulator -avd <name> -no-snapshot-load`),
+- **Android app can't reach the API**: run `pnpm android:ports` (needed after every emulator boot).
+- **Android app stays blank on launch**: cold-boot the emulator (`emulator -avd <name> -no-snapshot-load`),
   then `pnpm android:ports`.
+- **iOS build fails in `expo-modules-jsi`**: you're on Xcode 26.x; use Xcode 27.
 - **Simulator acts up after a long session** (taps not registering, keyboard missing): reboot it
-  (`xcrun simctl shutdown all`), then relaunch.
+  (`xcrun simctl shutdown all`) and open the app again.
+- **`pnpm bootstrap` says Docker isn't running**: start Docker Desktop and run it again.
 
 ## Running tests
 
@@ -78,9 +123,10 @@ adb shell am start -W -a android.intent.action.VIEW -d "petwatch://invites/<toke
 pnpm typecheck && pnpm lint && pnpm test   # static checks + unit tests (no services needed)
 
 # API e2e: real Postgres, Mailpit and S3 (docker compose), separate petwatch_test database
-pnpm test:e2e            # after `pnpm bootstrap`; creates petwatch_test, migrates, runs test/*.e2e-spec.ts
+pnpm test:e2e            # needs the Docker services; uses its own petwatch_test database
 
-# Mobile e2e: Maestro, with the API, Metro and the dev build running on the device
+# Mobile e2e: Maestro (curl -fsSL "https://get.maestro.mobile.dev" | bash),
+# with the API and Metro running and the app installed on the simulator/emulator
 pnpm e2e:mobile          # Android emulator: all 7 flows in apps/mobile/e2e/flows
 pnpm e2e:mobile:ios      # iOS simulator: prepares it (no autocorrect / password AutoFill), 6 flows
 ```
