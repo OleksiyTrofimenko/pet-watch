@@ -21,7 +21,8 @@ export function PetPhotoPicker({ photo, name, species, savedUri = null }: PetPho
         species={species}
         uri={photo.localUri ?? savedUri}
         progress={photo.upload.status === 'uploading' ? photo.upload.progress : null}
-        hasError={photo.upload.status === 'error'}
+        error={photo.upload.status === 'error' ? photo.upload.message : null}
+        onRetry={photo.canRetry ? () => void photo.retry() : undefined}
         onTakePhoto={() => void photo.choose('camera')}
         onChooseFromLibrary={() => void photo.choose('library')}
         onRemove={() => void photo.remove()}

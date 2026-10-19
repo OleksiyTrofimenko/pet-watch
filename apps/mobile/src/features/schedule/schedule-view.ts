@@ -8,6 +8,16 @@ export function effectiveFilter(filter: PetFilter, petIds: readonly string[]): P
   return filter !== 'all' && petIds.includes(filter.petId) ? filter : 'all';
 }
 
+/**
+ * The pets named in the schedule, once each, in order of first appearance. The filter chips fall
+ * back to this when the pet list failed to load, so they don't silently disappear.
+ */
+export function petsInSchedule(tasks: ScheduleTaskDto[]): { id: string; name: string }[] {
+  const pets = new Map<string, string>();
+  for (const task of tasks) if (!pets.has(task.pet.id)) pets.set(task.pet.id, task.pet.name);
+  return [...pets].map(([id, name]) => ({ id, name }));
+}
+
 export function filterTasks(tasks: ScheduleTaskDto[], filter: PetFilter): ScheduleTaskDto[] {
   return filter === 'all' ? tasks : tasks.filter((task) => task.petId === filter.petId);
 }

@@ -8,7 +8,9 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  UseGuards,
 } from '@nestjs/common';
+import { SkipThrottle, ThrottlerGuard } from '@nestjs/throttler';
 import type {
   AcceptInvitationResult,
   CreateInvitationResult,
@@ -24,8 +26,11 @@ import { ParseInviteTokenPipe } from './parse-token.pipe';
 export class InvitationsController {
   constructor(private readonly invitations: InvitationsService) {}
 
+  /** Every call sends an email: the `strict` limit (per IP, D41) stops inbox flooding and email probing. */
   @Post('pets/:petId/invitations')
   @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
+  @SkipThrottle({ default: true })
   invite(
     @CurrentUser() user: AuthUser,
     @Param('petId', ParseUUIDPipe) petId: string,

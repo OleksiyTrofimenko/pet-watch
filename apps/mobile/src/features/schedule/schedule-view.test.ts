@@ -1,5 +1,6 @@
 import { formatTime } from '@/src/lib/time-of-day';
-import { countLabel, effectiveFilter, isPast, staleLabel } from './schedule-view';
+import type { ScheduleTaskDto } from '@petwatch/shared';
+import { countLabel, effectiveFilter, isPast, petsInSchedule, staleLabel } from './schedule-view';
 
 describe('schedule view helpers', () => {
   it('names the filter in the count', () => {
@@ -27,5 +28,14 @@ describe('schedule view helpers', () => {
     expect(staleLabel(true, fetchedAt)).toBeUndefined();
     expect(staleLabel(false, 0)).toBeUndefined();
     expect(staleLabel(false, fetchedAt)).toBe(`Updated ${formatTime(790)}`);
+  });
+
+  it('lists the pets named in the schedule once each, for the filter fallback', () => {
+    const task = (id: string, name: string) => ({ pet: { id, name } }) as ScheduleTaskDto;
+    expect(petsInSchedule([task('rex', 'Rex'), task('miso', 'Miso'), task('rex', 'Rex')])).toEqual([
+      { id: 'rex', name: 'Rex' },
+      { id: 'miso', name: 'Miso' },
+    ]);
+    expect(petsInSchedule([])).toEqual([]);
   });
 });

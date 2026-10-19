@@ -1,4 +1,7 @@
-import { ApiError, NETWORK_ERROR } from './api-client';
+import { ApiError, networkError } from './api-client';
+
+/** Photos are ≤ ~1 MB after resizing; anything slower than this is a dead connection. */
+const UPLOAD_TIMEOUT_MS = 60_000;
 
 /**
  * PUT a local file to a presigned URL. XMLHttpRequest, not fetch: only XHR reports upload
@@ -15,6 +18,7 @@ export async function uploadFile(
     const xhr = new XMLHttpRequest();
     xhr.open('PUT', url);
     xhr.setRequestHeader('Content-Type', contentType);
+    xhr.timeout = UPLOAD_TIMEOUT_MS;
     xhr.upload.onprogress = (event) => {
       if (event.lengthComputable) onProgress(event.loaded / event.total);
     };
@@ -24,10 +28,8 @@ export async function uploadFile(
         : reject(
             new ApiError(xhr.status, 'UPLOAD_FAILED', "The photo couldn't be uploaded. Try again."),
           );
-    xhr.onerror = () =>
-      reject(
-        new ApiError(0, NETWORK_ERROR, "You're offline. Check your connection and try again."),
-      );
+    xhr.onerror = () => reject(networkError(false));
+    xhr.ontimeout = () => reject(networkError(true));
     xhr.send(file);
   });
 }

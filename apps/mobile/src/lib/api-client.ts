@@ -55,8 +55,20 @@ function refreshSession(): Promise<void> {
   return refreshing;
 }
 
+/** A request that hangs (dead Wi-Fi, stuck proxy) fails after this instead of spinning forever. */
+export const REQUEST_TIMEOUT_MS = 20_000;
+
+export function networkError(timedOut: boolean): ApiError {
+  return timedOut
+    ? new ApiError(0, NETWORK_ERROR, "The server didn't respond in time. Please try again.")
+    : new ApiError(0, NETWORK_ERROR, "You're offline. Check your connection and try again.");
+}
+
 async function send<T>(method: Method, path: string, body?: unknown, accessToken?: string) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   let res: Response;
+  let text: string;
   try {
     res = await fetch(`${API_URL}${path}`, {
       method,
@@ -66,12 +78,16 @@ async function send<T>(method: Method, path: string, body?: unknown, accessToken
         ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       },
       body: body === undefined ? undefined : JSON.stringify(body),
+      signal: controller.signal,
     });
+    text = await res.text();
   } catch {
-    throw new ApiError(0, NETWORK_ERROR, "You're offline. Check your connection and try again.");
+    throw networkError(controller.signal.aborted);
+  } finally {
+    clearTimeout(timer);
   }
 
-  const json = parseJson(await res.text());
+  const json = parseJson(text);
   if (!res.ok) throw toApiError(res.status, json);
   return json as T;
 }

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CareTaskDto } from '@petwatch/shared';
 import { ConfirmDialog, QueryView, RowSkeleton, useNotify } from '@/src/design-system';
+import { errorMessage } from '@/src/lib/form-errors';
 import { CareRoutine } from './components/care-routine';
 import { useDeleteTask, usePetTasks } from './queries';
 
@@ -47,8 +48,12 @@ export function PetCareRoutine({ petId, petName, owner }: PetCareRoutineProps) {
         body="It disappears from everyone's schedule. This can't be undone."
         confirmLabel="Delete task"
         isLoading={deleteTask.isPending}
+        error={deleteTask.error ? errorMessage(deleteTask.error) : null}
         onConfirm={() => deleting && confirmDelete(deleting)}
-        onCancel={() => setDeleting(null)}
+        onCancel={() => {
+          deleteTask.reset();
+          setDeleting(null);
+        }}
         testID="task-delete"
       />
     </>

@@ -14,6 +14,11 @@ export class MailService {
     this.transport = createTransport({
       host: config.get('SMTP_HOST', { infer: true }),
       port: config.get('SMTP_PORT', { infer: true }),
+      // Fail fast instead of nodemailer's minutes-long defaults: callers wait on the send
+      // (an invite answers 503 and is retried by the owner).
+      connectionTimeout: 10_000,
+      greetingTimeout: 10_000,
+      socketTimeout: 20_000,
     });
     this.from = config.get('MAIL_FROM', { infer: true });
   }

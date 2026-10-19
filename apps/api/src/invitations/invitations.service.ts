@@ -2,7 +2,9 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
+  ServiceUnavailableException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
@@ -29,6 +31,8 @@ const DAY_MS = 24 * 60 * 60 * 1000;
  */
 @Injectable()
 export class InvitationsService {
+  private readonly logger = new Logger(InvitationsService.name);
+
   constructor(
     private readonly prisma: PrismaService,
     private readonly access: PetAccessService,
@@ -66,37 +70,42 @@ export class InvitationsService {
       Date.now() + this.config.get('INVITE_TTL_DAYS', { infer: true }) * DAY_MS,
     );
     const pair = { petId_inviteeId: { petId, inviteeId: invitee.id } };
+    const link = `${this.config.get('APP_SCHEME', { infer: true })}://invites/${token}`;
+    const tokenHash = hashToken(token);
+
+    // Write first, then email (never inside a transaction: SMTP can be slow and would hold a DB
+    // connection and the row lock). If the email fails, put the row back as it was, so a re-invite
+    // never kills the old link without delivering a new one (D62).
     const previous = await this.prisma.invitation.findUnique({
       where: pair,
-      select: { status: true },
+      select: { status: true, inviterId: true, tokenHash: true, expiresAt: true, acceptedAt: true },
     });
     const invitation = await this.prisma.invitation.upsert({
       where: pair,
-      create: {
-        petId,
-        inviterId: userId,
-        inviteeId: invitee.id,
-        tokenHash: hashToken(token),
-        expiresAt,
-      },
+      create: { petId, inviterId: userId, inviteeId: invitee.id, tokenHash, expiresAt },
       // Re-invite: new token (the old link stops working), fresh expiry, back to PENDING.
-      update: {
-        inviterId: userId,
-        tokenHash: hashToken(token),
-        expiresAt,
-        status: 'PENDING',
-        acceptedAt: null,
-      },
+      update: { inviterId: userId, tokenHash, expiresAt, status: 'PENDING', acceptedAt: null },
       select: { pet: { select: { name: true } }, inviter: { select: { email: true } } },
     });
-
-    const link = `${this.config.get('APP_SCHEME', { infer: true })}://invites/${token}`;
-    await this.mail.sendInvitation(email, {
-      inviterEmail: invitation.inviter.email,
-      petName: invitation.pet.name,
-      link,
-      expiresAt,
-    });
+    try {
+      await this.mail.sendInvitation(email, {
+        inviterEmail: invitation.inviter.email,
+        petName: invitation.pet.name,
+        link,
+        expiresAt,
+      });
+    } catch (error) {
+      this.logger.error('Invite email failed', error instanceof Error ? error.stack : error);
+      // Only undo our own write: `tokenHash` still matching means no newer invite replaced it.
+      const ours = { petId, inviteeId: invitee.id, tokenHash };
+      await (previous
+        ? this.prisma.invitation.updateMany({ where: ours, data: previous })
+        : this.prisma.invitation.deleteMany({ where: ours }));
+      throw new ServiceUnavailableException({
+        code: INVITATION_ERROR_CODES.INVITE_EMAIL_FAILED,
+        message: "We couldn't send the invite email. Please try again in a moment.",
+      });
+    }
     return {
       outcome: previous?.status === 'PENDING' ? 'INVITE_RESENT' : 'INVITE_SENT',
       inviteeEmail: email,

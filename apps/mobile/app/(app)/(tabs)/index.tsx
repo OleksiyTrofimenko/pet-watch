@@ -10,7 +10,12 @@ import { PetFilterChips } from '@/src/features/schedule/components/pet-filter-ch
 import { ScheduleSkeleton } from '@/src/features/schedule/components/schedule-skeleton';
 import { TodayView } from '@/src/features/schedule/components/today-view';
 import { WeekView } from '@/src/features/schedule/components/week-view';
-import { effectiveFilter, filterTasks, staleLabel } from '@/src/features/schedule/schedule-view';
+import {
+  effectiveFilter,
+  filterTasks,
+  petsInSchedule,
+  staleLabel,
+} from '@/src/features/schedule/schedule-view';
 import { useNow } from '@/src/features/schedule/use-now';
 import { useIsOnline } from '@/src/lib/use-is-online';
 import { useRefreshScreen } from '@/src/lib/use-refresh-screen';
@@ -31,7 +36,10 @@ export default function ScheduleScreen() {
   const online = useIsOnline();
   const refresh = useRefreshScreen();
 
-  const petList = (pets.data ?? []).map((pet) => ({ id: pet.id, name: pet.name }));
+  // Pets without tasks only come from the pet list; if it failed, the schedule still names its pets.
+  const petList =
+    pets.data?.map((pet) => ({ id: pet.id, name: pet.name })) ??
+    petsInSchedule(schedule.data ?? []);
   const active = effectiveFilter(
     filter,
     petList.map((pet) => pet.id),

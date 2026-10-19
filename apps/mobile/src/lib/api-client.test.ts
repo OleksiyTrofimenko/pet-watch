@@ -1,5 +1,11 @@
 import type { AuthResponse } from '@petwatch/shared';
-import { ApiError, NETWORK_ERROR, apiClient, onSessionEnded } from './api-client';
+import {
+  ApiError,
+  NETWORK_ERROR,
+  REQUEST_TIMEOUT_MS,
+  apiClient,
+  onSessionEnded,
+} from './api-client';
 import { tokenStore } from './token-store';
 
 jest.mock('expo-secure-store', () => {
@@ -135,5 +141,29 @@ describe('apiClient', () => {
       status: 502,
       code: 'UNKNOWN_ERROR',
     });
+  });
+
+  it('fails a request that never answers instead of spinning forever', async () => {
+    jest.useFakeTimers();
+    try {
+      // Like a dead connection: nothing comes back until the request is aborted.
+      fetchMock.mockImplementation(
+        (_url, init) =>
+          new Promise((_resolve, reject) =>
+            init.signal?.addEventListener('abort', () => reject(new Error('Aborted'))),
+          ),
+      );
+
+      const pending = apiClient.get('/pets');
+      const assertion = expect(pending).rejects.toMatchObject({
+        status: 0,
+        code: NETWORK_ERROR,
+        message: "The server didn't respond in time. Please try again.",
+      });
+      await jest.advanceTimersByTimeAsync(REQUEST_TIMEOUT_MS);
+      await assertion;
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });

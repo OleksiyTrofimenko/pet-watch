@@ -1,11 +1,14 @@
 import type { INestApplication } from '@nestjs/common';
+import type { PetDto } from '@petwatch/shared';
 import type { App } from 'supertest/types';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { api, createTestApp } from './utils/app';
+import { bearer, registerUser } from './utils/auth';
 import { resetDb } from './utils/db';
 
 // Small limits instead of the production ones (D41) so the test stays fast; what is under test is
-// the wiring: limits come from config, `strict` is opt-in per route, and only /auth is throttled.
+// the wiring: limits come from config, `strict` is opt-in per route, and only /auth and sending
+// invites are throttled.
 const DEFAULT_LIMIT = 3;
 const STRICT_LIMIT = 2;
 
@@ -49,7 +52,27 @@ describe('Throttling (e2e)', () => {
     await register(DEFAULT_LIMIT).expect(429);
   });
 
-  it('does not throttle routes outside /auth', async () => {
+  it('limits sending invites with the strict throttler (each one sends an email)', async () => {
+    const ana = await registerUser(app, 'ana@petwatch.test');
+    const pet = (
+      await api(app)
+        .post('/pets')
+        .set(bearer(ana))
+        .send({ name: 'Rex', species: 'DOG' })
+        .expect(201)
+    ).body as PetDto;
+    const invite = () =>
+      api(app)
+        .post(`/pets/${pet.id}/invitations`)
+        .set(bearer(ana))
+        .send({ email: 'nobody@petwatch.test' });
+
+    for (let i = 0; i < STRICT_LIMIT; i++) await invite().expect(404); // USER_NOT_FOUND
+    const res = await invite().expect(429);
+    expect(res.body).toMatchObject({ code: 'TOO_MANY_REQUESTS' });
+  });
+
+  it('does not throttle other routes', async () => {
     for (let i = 0; i <= DEFAULT_LIMIT; i++) await api(app).get('/health').expect(200);
   });
 });

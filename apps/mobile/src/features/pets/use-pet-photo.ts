@@ -1,11 +1,19 @@
 import { useState } from 'react';
 import { Linking } from 'react-native';
+import { errorMessage } from '@/src/lib/form-errors';
 import { uploadFile } from '@/src/lib/upload-file';
 import { petsApi } from './api';
 import { pickPhoto, type PhotoSource } from './pick-photo';
 import { useConfirmPetPhoto, useRemovePetPhoto } from './queries';
 
-type Upload = { status: 'idle' } | { status: 'uploading'; progress: number } | { status: 'error' };
+type Upload =
+  | { status: 'idle' }
+  | { status: 'uploading'; progress: number }
+  /** `retryable`: the picked photo is still here and can be uploaded again without re-picking. */
+  | { status: 'error'; message: string; retryable: boolean };
+
+const UPLOAD_FAILED = 'Upload failed. Tap to try again.';
+const PICK_FAILED = "That photo couldn't be opened. Try another one.";
 
 /**
  * pick → resize → presign → PUT to S3 → confirm, so screens stay thin.
@@ -31,13 +39,20 @@ export function usePetPhoto(petId: string | null) {
       setUpload({ status: 'idle' });
       setLocalUri(null);
     } catch (error) {
-      setUpload({ status: 'error' });
+      setUpload({ status: 'error', message: UPLOAD_FAILED, retryable: true });
       throw error;
     }
   }
 
+  // choose/remove/retry are called from onPress (fire and forget): they never reject, every
+  // failure lands in `upload` and is shown on the photo.
   async function choose(source: PhotoSource): Promise<void> {
-    const result = await pickPhoto(source);
+    let result: Awaited<ReturnType<typeof pickPhoto>>;
+    try {
+      result = await pickPhoto(source);
+    } catch {
+      return setUpload({ status: 'error', message: PICK_FAILED, retryable: false });
+    }
     if (result.status === 'denied') return setDeniedSource(result.source);
     if (result.status === 'cancelled') return;
     setLocalUri(result.uri);
@@ -45,10 +60,19 @@ export function usePetPhoto(petId: string | null) {
     if (petId) await uploadTo(petId, result.uri).catch(() => undefined);
   }
 
+  async function retry(): Promise<void> {
+    if (petId && localUri) await uploadTo(petId).catch(() => undefined);
+  }
+
   async function remove(): Promise<void> {
-    setLocalUri(null);
-    setUpload({ status: 'idle' });
-    if (petId) await removeRemote.mutateAsync();
+    try {
+      if (petId) await removeRemote.mutateAsync();
+      setLocalUri(null);
+      setUpload({ status: 'idle' });
+    } catch (error) {
+      // The saved photo is still there: keep showing it, and say why it wasn't removed.
+      setUpload({ status: 'error', message: errorMessage(error), retryable: false });
+    }
   }
 
   return {
@@ -58,6 +82,9 @@ export function usePetPhoto(petId: string | null) {
     isUploading: upload.status === 'uploading',
     choose,
     remove,
+    /** Shown on the photo after a failed upload; offered only when `canRetry`. */
+    canRetry: upload.status === 'error' && upload.retryable && petId !== null && localUri !== null,
+    retry,
     uploadTo,
     /** Camera/library permission was refused: explain and offer Settings. */
     deniedSource,

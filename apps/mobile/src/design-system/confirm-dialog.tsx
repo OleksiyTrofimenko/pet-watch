@@ -8,7 +8,9 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
+import { VStack } from '@/components/ui/vstack';
 import { Button } from './button';
+import { FormAlert } from './form-alert';
 
 type ConfirmDialogProps = {
   isOpen: boolean;
@@ -21,6 +23,8 @@ type ConfirmDialogProps = {
   /** `negative` for destructive actions; `primary` for e.g. "Open Settings". */
   action?: 'negative' | 'primary';
   isLoading?: boolean;
+  /** Why the last confirm failed (e.g. 403, server down); the dialog stays open so it can be retried. */
+  error?: string | null;
   /** Passed to the confirm Button, e.g. "delete" (Open Settings needs no network). */
   requiresNetwork?: string;
   testID?: string;
@@ -36,6 +40,7 @@ export function ConfirmDialog({
   onCancel,
   action = 'negative',
   isLoading = false,
+  error,
   requiresNetwork,
   testID,
 }: ConfirmDialogProps) {
@@ -47,7 +52,12 @@ export function ConfirmDialog({
           <Heading size="md">{title}</Heading>
         </AlertDialogHeader>
         <AlertDialogBody className="mb-4 mt-2">
-          <Text className="text-typography-700">{body}</Text>
+          <VStack space="md">
+            <Text className="text-typography-700">{body}</Text>
+            {error ? (
+              <FormAlert message={error} testID={testID ? `${testID}-error` : undefined} />
+            ) : null}
+          </VStack>
         </AlertDialogBody>
         <AlertDialogFooter className="gap-3">
           <Button label="Cancel" variant="outline" action="secondary" onPress={onCancel} />

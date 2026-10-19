@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Camera, ImageIcon, Trash2 } from 'lucide-react-native';
+import { Camera, ImageIcon, RotateCw, Trash2 } from 'lucide-react-native';
 import type { Species } from '@petwatch/shared';
 import { Pressable } from '@/components/ui/pressable';
 import { Text } from '@/components/ui/text';
@@ -15,7 +15,10 @@ type PhotoFieldProps = {
   uri: string | null;
   /** 0–1 while uploading. */
   progress: number | null;
-  hasError: boolean;
+  /** Why the last upload/pick/remove failed; shown under the photo. */
+  error: string | null;
+  /** A failed upload of the picked photo can be sent again without picking it again. */
+  onRetry?: () => void;
   onTakePhoto: () => void;
   onChooseFromLibrary: () => void;
   onRemove: () => void;
@@ -23,10 +26,13 @@ type PhotoFieldProps = {
 
 /** Tap the photo → sheet: take / choose / remove (PetForm.dc.html). */
 export function PhotoField(props: PhotoFieldProps) {
-  const { name, species, uri, progress, hasError } = props;
+  const { name, species, uri, progress, error, onRetry } = props;
   const [sheetOpen, setSheetOpen] = useState(false);
   const uploading = progress !== null;
   const options: SheetOption[] = [
+    ...(onRetry
+      ? [{ label: 'Try upload again', icon: RotateCw, onPress: onRetry, testID: 'photo.retry' }]
+      : []),
     { label: 'Take photo', icon: Camera, onPress: props.onTakePhoto, testID: 'photo.camera' },
     {
       label: 'Choose from library',
@@ -41,14 +47,15 @@ export function PhotoField(props: PhotoFieldProps) {
             icon: Trash2,
             tone: 'negative' as const,
             onPress: props.onRemove,
+            testID: 'photo.remove',
           },
         ]
       : []),
   ];
   const hint = uploading
     ? 'Keep the app open while it uploads.'
-    : hasError
-      ? 'Upload failed. Tap to try again.'
+    : error
+      ? error
       : uri
         ? 'Tap to change photo'
         : 'Optional';
@@ -68,9 +75,7 @@ export function PhotoField(props: PhotoFieldProps) {
           <PhotoPlaceholder />
         )}
       </Pressable>
-      <Text className={`text-sm ${hasError ? 'text-error-700' : 'text-typography-700'}`}>
-        {hint}
-      </Text>
+      <Text className={`text-sm ${error ? 'text-error-700' : 'text-typography-700'}`}>{hint}</Text>
       <OptionSheet
         isOpen={sheetOpen}
         onClose={() => setSheetOpen(false)}

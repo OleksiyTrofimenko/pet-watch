@@ -5,6 +5,11 @@ import { ApiError } from './api-client';
 /** Error codes that belong to one field, e.g. { EMAIL_TAKEN: 'email' }. */
 export type CodeFields<T extends FieldValues> = Partial<Record<string, Path<T>>>;
 
+/** The message to show for a failed call outside a form (a dialog, a sheet). */
+export function errorMessage(error: unknown): string {
+  return error instanceof ApiError ? error.message : 'Something went wrong. Please try again.';
+}
+
 /**
  * Puts an ApiError where the user will see it: `fieldErrors` (and codes mapped in `codeFields`)
  * on their inputs via setError, so server and client validation look the same. Returns the
@@ -17,7 +22,7 @@ export function applyServerErrors<T extends FieldValues>(
   fields: readonly Path<T>[],
   codeFields: CodeFields<T> = {},
 ): string | null {
-  if (!(error instanceof ApiError)) return 'Something went wrong. Please try again.';
+  if (!(error instanceof ApiError)) return errorMessage(error);
 
   const codeField = codeFields[error.code];
   if (codeField) {

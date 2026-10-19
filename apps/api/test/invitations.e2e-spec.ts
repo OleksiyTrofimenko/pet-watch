@@ -9,6 +9,7 @@ import {
   type ScheduleTaskDto,
 } from '@petwatch/shared';
 import type { App } from 'supertest/types';
+import { MailService } from '../src/mail/mail.service';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { api, createTestApp } from './utils/app';
 import { bearer, registerUser } from './utils/auth';
@@ -147,6 +148,32 @@ describe('Invitations and watchers (e2e)', () => {
     await preview(second).expect(200);
     const watchers = await api(app).get(`/pets/${rex.id}/watchers`).set(bearer(ana)).expect(200);
     expect((watchers.body as PetWatchersDto).pending).toHaveLength(1);
+  });
+
+  it('a re-invite whose email fails changes nothing: the old link keeps working', async () => {
+    const first = await inviteSam();
+    const send = jest
+      .spyOn(app.get(MailService), 'sendInvitation')
+      .mockRejectedValueOnce(new Error('SMTP down'));
+
+    const res = await invite().expect(503);
+    expect(res.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_EMAIL_FAILED });
+    expect(send).toHaveBeenCalledTimes(1);
+    send.mockRestore();
+
+    await preview(first).expect(200);
+  });
+
+  it('a first invite whose email fails leaves no pending invitation behind', async () => {
+    const send = jest
+      .spyOn(app.get(MailService), 'sendInvitation')
+      .mockRejectedValueOnce(new Error('SMTP down'));
+
+    await invite().expect(503);
+    send.mockRestore();
+
+    const watchers = await api(app).get(`/pets/${rex.id}/watchers`).set(bearer(ana)).expect(200);
+    expect((watchers.body as PetWatchersDto).pending).toHaveLength(0);
   });
 
   it('answers each unusable link with its own code', async () => {

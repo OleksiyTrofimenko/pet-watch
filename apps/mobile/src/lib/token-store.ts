@@ -15,13 +15,28 @@ const storedSchema = z.object({
 // `undefined` = not loaded yet, `null` = loaded and signed out.
 let cache: AuthResponse | null | undefined;
 
+/**
+ * An unreadable entry (corrupt JSON, Keychain error after a restore) means "signed out", never a
+ * crash: otherwise the session never leaves `loading` and the splash screen stays up forever.
+ */
+async function readStored(): Promise<AuthResponse | null> {
+  try {
+    const raw = await SecureStore.getItemAsync(KEY);
+    if (!raw) return null;
+    const parsed = storedSchema.safeParse(JSON.parse(raw));
+    if (parsed.success) return parsed.data;
+  } catch {
+    // fall through: drop the broken entry below
+  }
+  await SecureStore.deleteItemAsync(KEY).catch(() => undefined);
+  return null;
+}
+
 /** The only place tokens live: the Keychain / Keystore via expo-secure-store (never AsyncStorage). */
 export const tokenStore = {
   async get(): Promise<AuthResponse | null> {
     if (cache !== undefined) return cache;
-    const raw = await SecureStore.getItemAsync(KEY);
-    const parsed = raw ? storedSchema.safeParse(JSON.parse(raw)) : undefined;
-    cache = parsed?.success ? parsed.data : null;
+    cache = await readStored();
     return cache;
   },
 

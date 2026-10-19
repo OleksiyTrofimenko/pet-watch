@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { PendingInvitationDto, WatcherDto } from '@petwatch/shared';
 import { ConfirmDialog, QueryView, RowSkeleton, useNotify } from '@/src/design-system';
 import { useNow } from '@/src/features/schedule/use-now';
+import { errorMessage } from '@/src/lib/form-errors';
 import { InviteSheet } from './components/invite-sheet';
 import { WatchersSection } from './components/watchers-section';
 import { useCancelInvitation, useInvite, useRevokeWatcher, useWatchers } from './queries';
@@ -36,6 +37,13 @@ export function PetWatchers({ petId, petName }: { petId: string; petName: string
   const [confirming, setConfirming] = useState<Confirming>(null);
 
   const copy = confirming ? confirmCopy(confirming, petName) : null;
+  const failure = revoke.error ?? cancel.error;
+
+  const closeConfirm = () => {
+    revoke.reset();
+    cancel.reset();
+    setConfirming(null);
+  };
 
   const confirm = () => {
     if (confirming?.kind === 'remove') {
@@ -77,8 +85,9 @@ export function PetWatchers({ petId, petName }: { petId: string; petName: string
         body={copy?.body ?? ''}
         confirmLabel={copy?.confirmLabel ?? ''}
         isLoading={revoke.isPending || cancel.isPending}
+        error={failure ? errorMessage(failure) : null}
         onConfirm={confirm}
-        onCancel={() => setConfirming(null)}
+        onCancel={closeConfirm}
         testID="watcher-confirm"
       />
     </>

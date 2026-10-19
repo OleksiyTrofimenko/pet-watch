@@ -7,6 +7,7 @@ import { PetListSkeleton } from '@/src/features/pets/components/pet-list-skeleto
 import { PetPhotoPicker } from '@/src/features/pets/pet-photo-picker';
 import { useDeletePet, usePet, useUpdatePet } from '@/src/features/pets/queries';
 import { usePetPhoto } from '@/src/features/pets/use-pet-photo';
+import { errorMessage } from '@/src/lib/form-errors';
 
 export default function EditPetScreen() {
   const router = useRouter();
@@ -65,8 +66,12 @@ export default function EditPetScreen() {
               body={`${data.name}'s care routine will be deleted and everyone watching loses access. This can't be undone.`}
               confirmLabel="Delete pet"
               isLoading={remove.isPending}
+              error={remove.error ? errorMessage(remove.error) : null}
               onConfirm={() => deletePet(data.name)}
-              onCancel={() => setConfirmingDelete(false)}
+              onCancel={() => {
+                remove.reset();
+                setConfirmingDelete(false);
+              }}
               testID="pet-delete"
             />
           </>

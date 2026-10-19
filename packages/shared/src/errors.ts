@@ -42,6 +42,8 @@ export const INVITATION_ERROR_CODES = {
   /** Only registered users can be invited (required by the brief; enumeration trade-off noted). */
   USER_NOT_FOUND: 'USER_NOT_FOUND',
   CANNOT_INVITE_SELF: 'CANNOT_INVITE_SELF',
+  /** The email couldn't be sent; nothing changed, so an earlier link keeps working. */
+  INVITE_EMAIL_FAILED: 'INVITE_EMAIL_FAILED',
   /** Unknown token, or the pet (and with it the invitation) was deleted. */
   INVITE_NOT_FOUND: 'INVITE_NOT_FOUND',
   INVITE_FOR_OTHER_USER: 'INVITE_FOR_OTHER_USER',

@@ -24,7 +24,8 @@ import { AuthService } from './auth.service';
         verifyOptions: { algorithms: ['HS256'] },
       }),
     }),
-    // In-memory counters per IP (D41); applied by ThrottlerGuard on AuthController only.
+    // In-memory counters per IP (D41); applied by ThrottlerGuard on AuthController and on sending
+    // invites (the module is global).
     // Two named throttlers: `default` for every auth route, `strict` opted into per route.
     ThrottlerModule.forRootAsync({
       inject: [ConfigService],

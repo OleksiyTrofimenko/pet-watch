@@ -25,9 +25,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
     // Restore from SecureStore; an expired token is handled by the first request's refresh.
-    void tokenStore.get().then((stored) => {
-      if (active) setSession(stored ? { status: 'signed-in', user: stored.user } : SIGNED_OUT);
-    });
+    void tokenStore
+      .get()
+      .catch(() => null)
+      .then((stored) => {
+        if (active) setSession(stored ? { status: 'signed-in', user: stored.user } : SIGNED_OUT);
+      });
     // A rejected refresh (revoked, reused, expired) signs the user out from anywhere.
     onSessionEnded(() => {
       queryClient.clear();
@@ -44,12 +47,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       session,
       signIn: async (auth) => {
         await tokenStore.save(auth);
+        // Signing in can replace another account (a reset link opened while signed in): drop the
+        // previous user's data. removeQueries, not clear(): the login mutation is still running.
+        queryClient.removeQueries();
         setSession({ status: 'signed-in', user: auth.user });
       },
       signOut: async () => {
         const stored = await tokenStore.get();
         await tokenStore.clear();
-        // User A's cached data must never show up for user B.
+        // User A's cached data must never show up for user B (signIn clears it too).
         queryClient.clear();
         setSession(SIGNED_OUT);
         // Best effort: the local sign-out already happened, so offline logout still works.
