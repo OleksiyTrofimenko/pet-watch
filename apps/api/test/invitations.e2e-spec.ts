@@ -57,6 +57,8 @@ describe('Invitations and watchers (e2e)', () => {
     api(app).get(`/invitations/${token}`).set(bearer(as));
   const accept = (token: string, as = sam) =>
     api(app).post(`/invitations/${token}/accept`).set(bearer(as));
+  const decline = (token: string, as = sam) =>
+    api(app).post(`/invitations/${token}/decline`).set(bearer(as));
 
   /** Invite Sam and read the token from the email, as the app would from the deep link. */
   async function inviteSam(): Promise<string> {
@@ -247,6 +249,56 @@ describe('Invitations and watchers (e2e)', () => {
 
     // Invited again later: a fresh invite, not a re-send.
     await invite().expect(200, { outcome: 'INVITE_SENT', inviteeEmail: SAM });
+  });
+
+  it("declining closes the link and drops the invite from the owner's pending list", async () => {
+    const token = await inviteSam();
+
+    await decline(token).expect(204);
+    await decline(token).expect(204); // a second tap is a success, not an error
+    for (const res of [await preview(token).expect(410), await accept(token).expect(410)]) {
+      expect(res.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_DECLINED });
+    }
+    await api(app).get(`/pets/${rex.id}`).set(bearer(sam)).expect(404);
+    const list = await api(app).get(`/pets/${rex.id}/watchers`).set(bearer(ana)).expect(200);
+    expect(list.body).toEqual({ watchers: [], pending: [] });
+
+    // The owner can still invite again: a fresh invite whose new link works.
+    await deleteAllMessages();
+    await invite().expect(200, { outcome: 'INVITE_SENT', inviteeEmail: SAM });
+    const { text } = await waitForMessageTo(SAM);
+    const fresh = extractLink(text, 'petwatch://invites/').replace('petwatch://invites/', '');
+    await accept(fresh).expect(200, { petId: rex.id });
+  });
+
+  it('only the invitee can decline, and only a pending invite', async () => {
+    const token = await inviteSam();
+
+    const other = await decline(token, eve).expect(403);
+    expect(other.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_FOR_OTHER_USER });
+    const malformed = await decline('not-a-token').expect(404);
+    expect(malformed.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_NOT_FOUND });
+    const unknown = await decline('a'.repeat(43)).expect(404);
+    expect(unknown.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_NOT_FOUND });
+
+    await prisma.invitation.updateMany({ data: { expiresAt: new Date(Date.now() - 1000) } });
+    const expired = await decline(token).expect(410);
+    expect(expired.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_EXPIRED });
+
+    await prisma.invitation.updateMany({
+      data: { status: 'REVOKED', expiresAt: new Date(Date.now() + 60_000) },
+    });
+    const revoked = await decline(token).expect(410);
+    expect(revoked.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_REVOKED });
+  });
+
+  it('an accepted invite cannot be declined: the watcher keeps access', async () => {
+    const token = await inviteSam();
+    await accept(token).expect(200);
+
+    const res = await decline(token).expect(410);
+    expect(res.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_ALREADY_ACCEPTED });
+    await api(app).get(`/pets/${rex.id}`).set(bearer(sam)).expect(200);
   });
 
   it('only the owner sees and manages watchers', async () => {

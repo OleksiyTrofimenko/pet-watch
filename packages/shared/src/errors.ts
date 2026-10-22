@@ -50,6 +50,8 @@ export const INVITATION_ERROR_CODES = {
   INVITE_EXPIRED: 'INVITE_EXPIRED',
   /** The owner cancelled the invite or removed the watcher. */
   INVITE_REVOKED: 'INVITE_REVOKED',
+  /** The invitee declined it; only a new invite from the owner can bring it back. */
+  INVITE_DECLINED: 'INVITE_DECLINED',
   INVITE_ALREADY_ACCEPTED: 'INVITE_ALREADY_ACCEPTED',
   WATCHER_NOT_FOUND: 'WATCHER_NOT_FOUND',
 } as const;

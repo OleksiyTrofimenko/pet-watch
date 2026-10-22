@@ -88,6 +88,7 @@ module.exports = defineConfig([
         API_URL: 'readonly',
         MAILPIT_URL: 'readonly',
         ACCESS_TOKEN: 'readonly',
+        PET_ID: 'readonly',
         NAME: 'readonly',
         SPECIES: 'readonly',
       },

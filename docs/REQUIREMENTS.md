@@ -34,13 +34,14 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 
 ### Watchers & invitations
 
-| ID    | Requirement                                                     | Edge cases / acceptance                                                                                                                                                                       | Status |
-| ----- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| INV-1 | Owner invites a **registered** user by email                    | Unknown email → 404 `USER_NOT_FOUND` (required by brief; enumeration trade-off noted); self-invite → 400; already watching → 200 `ALREADY_WATCHING`; pending → token rotated, `INVITE_RESENT` | ✅     |
-| INV-2 | Invitee gets an email with a deep link; must click it to accept | `petwatch://invites/<token>`; opens accept screen showing pet, inviter, expiry                                                                                                                | ✅     |
-| INV-3 | Accepting adds the pet to the invitee's watching list           | Transaction: create watcher + mark ACCEPTED; token for another account → 403 `INVITE_FOR_OTHER_USER`; expired/revoked/used → 410; pet deleted → 404; logged out → login then return to link   | ✅     |
-| INV-4 | Owner sees who watches each pet                                 | Also lists pending invites (status badge)                                                                                                                                                     | ✅     |
-| INV-5 | Owner revokes a watcher                                         | Deletes watcher row + marks invitation REVOKED; watcher's queries then 404                                                                                                                    | ✅     |
+| ID    | Requirement                                                     | Edge cases / acceptance                                                                                                                                                                                         | Status |
+| ----- | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| INV-1 | Owner invites a **registered** user by email                    | Unknown email → 404 `USER_NOT_FOUND` (required by brief; enumeration trade-off noted); self-invite → 400; already watching → 200 `ALREADY_WATCHING`; pending → token rotated, `INVITE_RESENT`                   | ✅     |
+| INV-2 | Invitee gets an email with a deep link; must click it to accept | `petwatch://invites/<token>`; opens accept screen showing pet, inviter, expiry                                                                                                                                  | ✅     |
+| INV-3 | Accepting adds the pet to the invitee's watching list           | Transaction: create watcher + mark ACCEPTED; token for another account → 403 `INVITE_FOR_OTHER_USER`; expired/revoked/used → 410; pet deleted → 404; logged out → login then return to link                     | ✅     |
+| INV-4 | Owner sees who watches each pet                                 | Also lists pending invites (status badge)                                                                                                                                                                       | ✅     |
+| INV-5 | Owner revokes a watcher                                         | Deletes watcher row + marks invitation REVOKED; watcher's queries then 404                                                                                                                                      | ✅     |
+| INV-6 | Invitee declines a pending invite                               | From the invite link: `POST /invitations/:token/decline` → 204, status DECLINED; twice → 204; other account → 403; accepted/revoked/expired → 410; link then answers 410 `INVITE_DECLINED`; owner can re-invite | ✅     |
 
 ## Technical requirements
 
@@ -84,5 +85,6 @@ Status: ⬜ todo · 🟨 in progress · ✅ done. Update this file as features l
 4. **Timezone** — schedule times are wall-clock local time; owner and watcher assumed to share a timezone.
 5. **Week** — Monday–Sunday week containing today.
 6. **Who edits schedules** — owners only; watchers read. (Brief: owner "creates/edits", owner _or_ watcher "views".)
-7. **Declining an invite** — not required; the invitee can simply ignore it; it expires after 7 days.
+7. **Declining an invite** — added as INV-6: the invitee declines from the link; the owner isn't emailed, the invite
+   just leaves their "Pending" list (a "Declined" badge would need a new list section; post-MVP).
 8. **Watcher leaving a pet** — not required; out of scope (listed in "with more time").

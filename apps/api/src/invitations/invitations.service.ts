@@ -26,7 +26,8 @@ import { assertUsable, inviteNotFound } from './invitation-errors';
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 /**
- * Invite lifecycle: PENDING → ACCEPTED (watcher created) or REVOKED (owner cancelled/removed).
+ * Invite lifecycle: PENDING → ACCEPTED (watcher created), REVOKED (owner cancelled/removed) or
+ * DECLINED (invitee said no).
  * One row per (pet, invitee) (D9): re-inviting rotates the token and resets the expiry.
  */
 @Injectable()
@@ -155,6 +156,22 @@ export class InvitationsService {
       assertUsable(current, now);
     }
     return { petId: invitation.pet.id };
+  }
+
+  /**
+   * The invitee says no: same conditional claim as accept. Declining twice is a success; any other
+   * non-pending state answers with its 410 code. The owner's list drops it from "Pending".
+   */
+  async decline(userId: string, token: string): Promise<void> {
+    const invitation = await this.findForInvitee(userId, token);
+    const now = new Date();
+    const claim = await this.prisma.invitation.updateMany({
+      where: { id: invitation.id, inviteeId: userId, status: 'PENDING', expiresAt: { gt: now } },
+      data: { status: 'DECLINED' },
+    });
+    if (claim.count === 1) return;
+    const current = await this.findForInvitee(userId, token);
+    if (current.status !== 'DECLINED') assertUsable(current, now);
   }
 
   async watchers(userId: string, petId: string): Promise<PetWatchersDto> {

@@ -19,9 +19,11 @@ export function RegisterForm({ onSubmit, onLogin }: RegisterFormProps) {
     resolver: zodResolver(registerSchema),
     defaultValues: { email: '', password: '' },
   });
+
   const { submit, formError } = useApiSubmit(form, ['email', 'password'], onSubmit, {
     [AUTH_ERROR_CODES.EMAIL_TAKEN]: 'email',
   });
+
   const emailTaken = form.formState.errors.email?.type === AUTH_ERROR_CODES.EMAIL_TAKEN;
 
   return (

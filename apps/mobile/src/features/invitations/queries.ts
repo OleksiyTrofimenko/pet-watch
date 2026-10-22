@@ -62,6 +62,18 @@ export function useInvitationPreview(token: string) {
   });
 }
 
+/**
+ * Drops the cached preview: reopening the link must ask the API (→ "declined"), not show the
+ * old invite. The owner's list refetches on their side (D61).
+ */
+export function useDeclineInvitation(token: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () => invitationsApi.decline(token),
+    onSuccess: () => queryClient.removeQueries({ queryKey: invitationKeys.preview(token) }),
+  });
+}
+
 /** Accepting adds a pet to "Pets I'm watching" and its tasks to the schedule. */
 export function useAcceptInvitation(token: string) {
   const queryClient = useQueryClient();

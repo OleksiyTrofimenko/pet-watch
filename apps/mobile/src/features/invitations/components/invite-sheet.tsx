@@ -37,6 +37,7 @@ export function InviteSheet({ isOpen, petName, onInvite, onClose }: InviteSheetP
     resolver: zodResolver(createInvitationSchema),
     defaultValues: { email: '' },
   });
+
   const { submit, formError } = useApiSubmit(
     form,
     ['email'],
@@ -51,14 +52,17 @@ export function InviteSheet({ isOpen, petName, onInvite, onClose }: InviteSheetP
       [INVITATION_ERROR_CODES.CANNOT_INVITE_SELF]: 'email',
     },
   );
+
   const reset = () => {
     setResult(null);
     form.reset();
   };
+
   const close = () => {
     reset();
     onClose();
   };
+
   const sent = result && result.outcome !== 'ALREADY_WATCHING' ? result : null;
 
   return (

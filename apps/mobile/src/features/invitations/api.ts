@@ -19,4 +19,6 @@ export const invitationsApi = {
     apiClient.get<InvitationPreview>(`/invitations/${encodeURIComponent(token)}`),
   accept: (token: string) =>
     apiClient.post<AcceptInvitationResult>(`/invitations/${encodeURIComponent(token)}/accept`),
+  decline: (token: string) =>
+    apiClient.post<void>(`/invitations/${encodeURIComponent(token)}/decline`),
 };

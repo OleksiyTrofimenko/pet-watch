@@ -1,5 +1,6 @@
 import { GoneException, NotFoundException } from '@nestjs/common';
 import { INVITATION_ERROR_CODES } from '@petwatch/shared';
+import type { InvitationStatus } from '../generated/prisma/client';
 
 export function inviteNotFound(): NotFoundException {
   return new NotFoundException({
@@ -10,7 +11,7 @@ export function inviteNotFound(): NotFoundException {
 
 /** Why a found invitation can't be used: 410 with one stable code per reason. */
 export function assertUsable(
-  invitation: { status: 'PENDING' | 'ACCEPTED' | 'REVOKED'; expiresAt: Date },
+  invitation: { status: InvitationStatus; expiresAt: Date },
   now: Date,
 ): void {
   const gone = (code: string, message: string) => new GoneException({ code, message });
@@ -19,6 +20,9 @@ export function assertUsable(
   }
   if (invitation.status === 'REVOKED') {
     throw gone(INVITATION_ERROR_CODES.INVITE_REVOKED, 'This invite was cancelled');
+  }
+  if (invitation.status === 'DECLINED') {
+    throw gone(INVITATION_ERROR_CODES.INVITE_DECLINED, 'You declined this invite');
   }
   if (invitation.expiresAt <= now) {
     throw gone(INVITATION_ERROR_CODES.INVITE_EXPIRED, 'This invite has expired');

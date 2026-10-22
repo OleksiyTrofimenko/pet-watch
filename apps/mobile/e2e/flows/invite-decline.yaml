@@ -1,0 +1,103 @@
+# INV-6: Ana invites Sam (API) → Sam opens the emailed link → declines → Rex is not in Sam's pets
+# and the link stays closed → Ana no longer sees Sam as pending.
+appId: com.petwatch.app
+name: Invite – decline from the emailed link
+env:
+  PASSWORD: walkies-123
+---
+- evalScript: ${output.ana = 'e2e-ana-' + Date.now() + '@petwatch.test'}
+- evalScript: ${output.sam = 'e2e-sam-' + Date.now() + '@petwatch.test'}
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+# api.js overwrites output.accessToken for the next user: keep Ana's.
+- evalScript: ${output.anaToken = output.accessToken}
+- runScript:
+    file: ../scripts/create-pet.js
+    env:
+      ACCESS_TOKEN: ${output.anaToken}
+      NAME: Rex
+      SPECIES: DOG
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.sam}
+      PASSWORD: ${PASSWORD}
+- runScript:
+    file: ../scripts/invite.js
+    env:
+      ACCESS_TOKEN: ${output.anaToken}
+      PET_ID: ${output.petId}
+      EMAIL: ${output.sam}
+- retry:
+    maxRetries: 3
+    commands:
+      - runScript:
+          file: ../scripts/mailpit.js
+          env:
+            EMAIL: ${output.sam}
+
+# Sam signs in, opens the link and declines
+- runFlow: ../subflows/launch-signed-out.yaml
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.sam}
+      PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
+- openLink: ${output.link}
+- extendedWaitUntil:
+    visible:
+      id: 'invite.decline'
+    timeout: 20000
+- assertVisible:
+    id: 'invite.card'
+- tapOn:
+    id: 'invite.decline'
+- assertVisible:
+    id: 'invite.declined'
+- tapOn:
+    id: 'invite.go-to-pets'
+- assertNotVisible:
+    id: 'pets.card-Rex'
+
+# The link stays closed
+- openLink: ${output.link}
+- extendedWaitUntil:
+    visible:
+      id: 'invite.declined'
+    timeout: 20000
+- tapOn:
+    id: 'invite.go-to-pets'
+- runFlow: ../subflows/logout.yaml
+
+# Ana no longer sees Sam as pending
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
+- tapOn:
+    id: 'pets.card-Rex'
+- scrollUntilVisible:
+    element:
+      id: 'pet.invite'
+- assertNotVisible:
+    id: 'watcher.${output.sam}'

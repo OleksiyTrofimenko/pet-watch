@@ -48,9 +48,10 @@ function RootNavigator() {
   const url = useLinkingURL();
 
   // A protected link opened while signed out is redirected to login by the guard: remember it so
-  // (app) can open it after sign-in.
+  // (app) can open it after sign-in. Links seen while signed in are marked too, so a logout
+  // doesn't replay them for the next account.
   useEffect(() => {
-    if (url && session.status !== 'signed-in') rememberPendingLink(url);
+    if (url) rememberPendingLink(url, session.status === 'signed-in');
   }, [url, session.status]);
 
   useEffect(() => {

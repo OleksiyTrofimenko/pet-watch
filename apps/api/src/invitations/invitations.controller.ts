@@ -84,4 +84,13 @@ export class InvitationsController {
   ): Promise<AcceptInvitationResult> {
     return this.invitations.accept(user.id, token);
   }
+
+  @Post('invitations/:token/decline')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  decline(
+    @CurrentUser() user: AuthUser,
+    @Param('token', ParseInviteTokenPipe) token: string,
+  ): Promise<void> {
+    return this.invitations.decline(user.id, token);
+  }
 }

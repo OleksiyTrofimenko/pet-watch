@@ -29,6 +29,13 @@ const COPY: Record<
     title: (pet) => `${pet} is now in your pets`,
     body: (pet) => `You'll see ${pet}'s tasks in your schedule from today.`,
   },
+  declined: {
+    icon: Ban,
+    tone: 'neutral',
+    title: () => 'You declined this invite',
+    body: (pet) =>
+      `${pet} won't be added to your pets. If you change your mind, ask the owner to invite you again.`,
+  },
   expired: {
     icon: Clock,
     tone: 'warning',

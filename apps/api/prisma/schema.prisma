@@ -80,6 +80,7 @@ enum InvitationStatus {
   PENDING
   ACCEPTED
   REVOKED
+  DECLINED
 }
 
 // One row per (pet, invitee). Re-inviting rotates the token on the same row

@@ -14,7 +14,11 @@ import { InviteCard } from '@/src/features/invitations/components/invite-card';
 import { InviteResult } from '@/src/features/invitations/components/invite-result';
 import { InviteSkeleton } from '@/src/features/invitations/components/invite-skeleton';
 import { screenState } from '@/src/features/invitations/invite-state';
-import { useAcceptInvitation, useInvitationPreview } from '@/src/features/invitations/queries';
+import {
+  useAcceptInvitation,
+  useDeclineInvitation,
+  useInvitationPreview,
+} from '@/src/features/invitations/queries';
 import { petFilterAtom, viewModeAtom } from '@/src/features/schedule/atoms';
 
 /**
@@ -27,19 +31,20 @@ export default function AcceptInviteScreen() {
   const { session } = useSession();
   const preview = useInvitationPreview(token);
   const accept = useAcceptInvitation(token);
+  const decline = useDeclineInvitation(token);
   const logout = useLogout();
   const setFilter = useSetAtom(petFilterAtom);
   const setViewMode = useSetAtom(viewModeAtom);
-  const [accepted, setAccepted] = useState<{ petId: string } | null>(null);
+  const [outcome, setOutcome] = useState<'accepted' | 'declined' | null>(null);
   const me = session.status === 'signed-in' ? session.user.email : '';
 
   const state = screenState({
-    accepted: accepted !== null,
-    acceptError: accept.error,
+    outcome,
+    actionError: accept.error ?? decline.error,
     preview,
   });
   const petName = preview.data?.petName ?? 'this pet';
-  const petId = accepted?.petId ?? preview.data?.petId;
+  const petId = accept.data?.petId ?? preview.data?.petId;
 
   const viewSchedule = () => {
     if (petId) setFilter({ petId });
@@ -71,7 +76,9 @@ export default function AcceptInviteScreen() {
         state={state}
         scheduleLabel={preview.data ? `View ${preview.data.petName}'s schedule` : 'View schedule'}
         isAccepting={accept.isPending}
-        onAccept={() => accept.mutate(undefined, { onSuccess: setAccepted })}
+        isDeclining={decline.isPending}
+        onAccept={() => accept.mutate(undefined, { onSuccess: () => setOutcome('accepted') })}
+        onDecline={() => decline.mutate(undefined, { onSuccess: () => setOutcome('declined') })}
         onNotNow={() => router.replace('/')}
         onViewSchedule={viewSchedule}
         onGoToPets={() => router.replace('/pets')}

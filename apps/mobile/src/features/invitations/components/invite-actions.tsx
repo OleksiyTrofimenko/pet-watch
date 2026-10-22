@@ -7,7 +7,9 @@ type InviteActionsProps = {
   /** "View Rex's schedule" once the pet name is known. */
   scheduleLabel: string;
   isAccepting: boolean;
+  isDeclining: boolean;
   onAccept: () => void;
+  onDecline: () => void;
   onNotNow: () => void;
   onViewSchedule: () => void;
   onGoToPets: () => void;
@@ -41,6 +43,18 @@ export function InviteActions(props: InviteActionsProps) {
             requiresNetwork="accept"
             testID="invite.accept"
           />
+          {/* Closes the link for good; only a new invite from the owner brings it back. */}
+          <Button
+            label="Decline"
+            variant="outline"
+            action="negative"
+            size="lg"
+            fullWidth
+            isLoading={props.isDeclining}
+            onPress={props.onDecline}
+            requiresNetwork="decline"
+            testID="invite.decline"
+          />
           {/* The invite stays pending; the link keeps working until it expires. */}
           {notNow}
         </>
@@ -54,11 +68,18 @@ export function InviteActions(props: InviteActionsProps) {
           testID="invite.view-schedule"
         />
       ) : null}
-      {state === 'expired' ||
+      {state === 'declined' ||
+      state === 'expired' ||
       state === 'cancelled' ||
       state === 'unavailable' ||
       state === 'error' ? (
-        <Button label="Go to my pets" size="lg" fullWidth onPress={props.onGoToPets} />
+        <Button
+          label="Go to my pets"
+          size="lg"
+          fullWidth
+          onPress={props.onGoToPets}
+          testID="invite.go-to-pets"
+        />
       ) : null}
       {state === 'wrong-account' ? (
         <>

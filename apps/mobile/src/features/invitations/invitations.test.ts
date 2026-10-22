@@ -7,6 +7,7 @@ describe('stateForError', () => {
     ['INVITE_EXPIRED', 'expired'],
     ['INVITE_ALREADY_ACCEPTED', 'already'],
     ['INVITE_REVOKED', 'cancelled'],
+    ['INVITE_DECLINED', 'declined'],
     ['INVITE_NOT_FOUND', 'unavailable'],
     ['INVITE_FOR_OTHER_USER', 'wrong-account'],
     ['NETWORK_ERROR', 'error'],
@@ -20,7 +21,7 @@ describe('stateForError', () => {
 });
 
 describe('screenState', () => {
-  const idle = { accepted: false, acceptError: null, preview: { isPending: false, error: null } };
+  const idle = { outcome: null, actionError: null, preview: { isPending: false, error: null } };
   const expired = new ApiError(410, 'INVITE_EXPIRED', 'x');
 
   it('shows the invite once the preview loaded', () => {
@@ -35,12 +36,12 @@ describe('screenState', () => {
     expect(screenState({ ...idle, preview: { isPending: false, error: expired } })).toBe('expired');
   });
 
-  it('lets an accept failure win over the loaded preview', () => {
-    expect(screenState({ ...idle, acceptError: expired })).toBe('expired');
+  it('lets an accept/decline failure win over the loaded preview', () => {
+    expect(screenState({ ...idle, actionError: expired })).toBe('expired');
   });
 
-  it('shows accepted above everything else', () => {
-    expect(screenState({ ...idle, accepted: true, acceptError: expired })).toBe('accepted');
+  it.each(['accepted', 'declined'] as const)('shows %s above everything else', (outcome) => {
+    expect(screenState({ ...idle, outcome, actionError: expired })).toBe(outcome);
   });
 });
 
