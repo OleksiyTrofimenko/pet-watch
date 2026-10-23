@@ -13,6 +13,8 @@ export const invitationsApi = {
   watchers: (petId: string) => apiClient.get<PetWatchersDto>(`/pets/${petId}/watchers`),
   revokeWatcher: (petId: string, userId: string) =>
     apiClient.delete<void>(`/pets/${petId}/watchers/${userId}`),
+  /** The caller stops watching the pet (INV-7). */
+  leave: (petId: string) => apiClient.delete<void>(`/pets/${petId}/watching`),
   cancelInvitation: (petId: string, invitationId: string) =>
     apiClient.delete<void>(`/pets/${petId}/invitations/${invitationId}`),
   preview: (token: string) =>

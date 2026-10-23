@@ -3,6 +3,7 @@ import { Pencil } from 'lucide-react-native';
 import { VStack } from '@/components/ui/vstack';
 import { Button, QueryView, Screen, ScreenHeader } from '@/src/design-system';
 import { PetCareRoutine } from '@/src/features/care-tasks/pet-care-routine';
+import { LeavePet } from '@/src/features/invitations/leave-pet';
 import { PetWatchers } from '@/src/features/invitations/pet-watchers';
 import { PetDetails } from '@/src/features/pets/components/pet-details';
 import { PetDetailSkeleton } from '@/src/features/pets/components/pet-detail-skeleton';
@@ -10,7 +11,10 @@ import { petUnavailable } from '@/src/features/pets/pet-unavailable';
 import { usePet } from '@/src/features/pets/queries';
 import { useRefreshScreen } from '@/src/lib/use-refresh-screen';
 
-/** A pet: details, care routine and (owner only) watchers. Watchers get a read-only view. */
+/**
+ * A pet: details, care routine and (owner only) watchers. Watchers get a read-only view and a
+ * "Stop watching" action (INV-7).
+ */
 export default function PetScreen() {
   const router = useRouter();
   const { petId } = useLocalSearchParams<{ petId: string }>();
@@ -57,7 +61,11 @@ export default function PetScreen() {
               petName={data.name}
               owner={isOwner ? ownerActions : undefined}
             />
-            {isOwner ? <PetWatchers petId={petId} petName={data.name} /> : null}
+            {isOwner ? (
+              <PetWatchers petId={petId} petName={data.name} />
+            ) : (
+              <LeavePet petId={petId} petName={data.name} ownerEmail={data.owner.email} />
+            )}
           </VStack>
         )}
       </QueryView>

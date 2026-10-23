@@ -54,6 +54,8 @@ export const INVITATION_ERROR_CODES = {
   INVITE_DECLINED: 'INVITE_DECLINED',
   INVITE_ALREADY_ACCEPTED: 'INVITE_ALREADY_ACCEPTED',
   WATCHER_NOT_FOUND: 'WATCHER_NOT_FOUND',
+  /** The owner can't stop watching their own pet (INV-7); deleting the pet is the owner's way out. */
+  OWNER_CANNOT_LEAVE: 'OWNER_CANNOT_LEAVE',
 } as const;
 export type InvitationErrorCode =
   (typeof INVITATION_ERROR_CODES)[keyof typeof INVITATION_ERROR_CODES];

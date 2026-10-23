@@ -119,6 +119,13 @@ const MATRIX: Row[] = [
     path: (f) => `/pets/${f.petId}/watchers/${f.watcherId}`,
     expect: { owner: 204, ...WRITE },
   },
+  // INV-7: the one pet-scoped write a watcher may do, on their own relationship only.
+  {
+    method: 'delete',
+    route: '/pets/:petId/watching',
+    path: (f) => `/pets/${f.petId}/watching`,
+    expect: { owner: 403, watcher: 204, stranger: 404, anonymous: 401 },
+  },
 ];
 
 const CASES = MATRIX.flatMap((row) =>

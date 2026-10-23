@@ -67,6 +67,16 @@ export class InvitationsController {
     return this.invitations.revokeWatcher(user.id, petId, watcherId);
   }
 
+  /** The caller stops watching the pet (INV-7). Watchers only: the owner gets 403. */
+  @Delete('pets/:petId/watching')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  leave(
+    @CurrentUser() user: AuthUser,
+    @Param('petId', ParseUUIDPipe) petId: string,
+  ): Promise<void> {
+    return this.invitations.leave(user.id, petId);
+  }
+
   /** Opened from the email's deep link: requires sign-in as the invitee. */
   @Get('invitations/:token')
   preview(

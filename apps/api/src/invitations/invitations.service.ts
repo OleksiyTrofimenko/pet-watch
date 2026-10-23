@@ -18,7 +18,7 @@ import {
 import { generateToken, hashToken } from '../auth/tokens';
 import type { Env } from '../config/env';
 import { MailService } from '../mail/mail.service';
-import { PetAccessService } from '../pets/pet-access.service';
+import { PetAccessService, petNotFound } from '../pets/pet-access.service';
 import { PrismaService } from '../prisma/prisma.service';
 import { StorageService } from '../storage/storage.service';
 import { assertUsable, inviteNotFound } from './invitation-errors';
@@ -217,6 +217,26 @@ export class InvitationsService {
         where: { petId, inviteeId: watcherId },
         data: { status: 'REVOKED' },
       });
+    });
+  }
+
+  /**
+   * The watcher stops watching (INV-7): access ends at once, like a revoke. The accepted invitation
+   * goes too, so the old link answers "no longer available" instead of "you're already watching"
+   * (REVOKED would say "the owner cancelled"); a re-invite creates a fresh row. Leaving twice, or a
+   * pet you can't see, is the usual 404 (D15).
+   */
+  async leave(userId: string, petId: string): Promise<void> {
+    if ((await this.access.resolveRole(userId, petId)) === 'OWNER') {
+      throw new ForbiddenException({
+        code: INVITATION_ERROR_CODES.OWNER_CANNOT_LEAVE,
+        message: 'You own this pet. To stop seeing it, delete the pet instead.',
+      });
+    }
+    await this.prisma.$transaction(async (tx) => {
+      const removed = await tx.petWatcher.deleteMany({ where: { petId, userId } });
+      if (removed.count === 0) throw petNotFound();
+      await tx.invitation.deleteMany({ where: { petId, inviteeId: userId, status: 'ACCEPTED' } });
     });
   }
 

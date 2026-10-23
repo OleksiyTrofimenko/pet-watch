@@ -301,6 +301,43 @@ describe('Invitations and watchers (e2e)', () => {
     await api(app).get(`/pets/${rex.id}`).set(bearer(sam)).expect(200);
   });
 
+  it('a watcher stops watching: access ends at once and the owner can invite them again', async () => {
+    const token = await inviteSam();
+    await accept(token).expect(200);
+
+    await api(app).delete(`/pets/${rex.id}/watching`).set(bearer(sam)).expect(204);
+
+    await api(app).get(`/pets/${rex.id}`).set(bearer(sam)).expect(404);
+    await api(app).get(`/pets/${rex.id}/care-tasks`).set(bearer(sam)).expect(404);
+    await api(app).get('/care-tasks').set(bearer(sam)).expect(200, []);
+    
+    const { watchers } = (
+      await api(app).get(`/pets/${rex.id}/watchers`).set(bearer(ana)).expect(200)
+    ).body as PetWatchersDto;
+    expect(watchers).toEqual([]);
+    // The old link is gone: not "you're already watching", and it can't bring the pet back.
+    const link = await preview(token).expect(404);
+    expect(link.body).toMatchObject({ code: INVITATION_ERROR_CODES.INVITE_NOT_FOUND });
+    await accept(token).expect(404);
+
+    // Leaving twice: the pet is no longer visible to Sam (D15).
+    const twice = await api(app).delete(`/pets/${rex.id}/watching`).set(bearer(sam)).expect(404);
+    expect(twice.body).toMatchObject({ code: PET_ERROR_CODES.PET_NOT_FOUND });
+
+    // Invited again later: a fresh invite and a working link.
+    await deleteAllMessages();
+    await accept(await inviteSam()).expect(200);
+    await api(app).get(`/pets/${rex.id}`).set(bearer(sam)).expect(200);
+  });
+
+  it('only a watcher can stop watching: the owner gets 403, a stranger 404', async () => {
+    const owner = await api(app).delete(`/pets/${rex.id}/watching`).set(bearer(ana)).expect(403);
+    expect(owner.body).toMatchObject({ code: INVITATION_ERROR_CODES.OWNER_CANNOT_LEAVE });
+    const stranger = await api(app).delete(`/pets/${rex.id}/watching`).set(bearer(eve)).expect(404);
+    expect(stranger.body).toMatchObject({ code: PET_ERROR_CODES.PET_NOT_FOUND });
+    await api(app).get(`/pets/${rex.id}`).set(bearer(ana)).expect(200);
+  });
+
   it('only the owner sees and manages watchers', async () => {
     await api(app).get(`/pets/${rex.id}/watchers`).set(bearer(eve)).expect(404);
     await prisma.petWatcher.create({ data: { petId: rex.id, userId: eve.user.id } });

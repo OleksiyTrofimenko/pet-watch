@@ -1,0 +1,112 @@
+# INV-7: Sam already watches Rex (invite + accept through the API) → opens Rex → stops watching →
+# Rex leaves Sam's pets → Ana no longer sees Sam among Rex's watchers.
+appId: com.petwatch.app
+name: Watcher stops watching a pet
+env:
+  PASSWORD: walkies-123
+---
+- evalScript: ${output.ana = 'e2e-ana-' + Date.now() + '@petwatch.test'}
+- evalScript: ${output.sam = 'e2e-sam-' + Date.now() + '@petwatch.test'}
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+# api.js overwrites output.accessToken for the next user: keep Ana's.
+- evalScript: ${output.anaToken = output.accessToken}
+- runScript:
+    file: ../scripts/create-pet.js
+    env:
+      ACCESS_TOKEN: ${output.anaToken}
+      NAME: Rex
+      SPECIES: DOG
+- runScript:
+    file: ../scripts/api.js
+    env:
+      EMAIL: ${output.sam}
+      PASSWORD: ${PASSWORD}
+- evalScript: ${output.samToken = output.accessToken}
+- runScript:
+    file: ../scripts/invite.js
+    env:
+      ACCESS_TOKEN: ${output.anaToken}
+      PET_ID: ${output.petId}
+      EMAIL: ${output.sam}
+- retry:
+    maxRetries: 3
+    commands:
+      - runScript:
+          file: ../scripts/mailpit.js
+          env:
+            EMAIL: ${output.sam}
+- runScript:
+    file: ../scripts/accept.js
+    env:
+      ACCESS_TOKEN: ${output.samToken}
+      LINK: ${output.link}
+
+# Sam opens Rex and stops watching
+- runFlow: ../subflows/launch-signed-out.yaml
+- extendedWaitUntil:
+    visible:
+      id: 'login.submit'
+    timeout: 60000
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.sam}
+      PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
+- tapOn:
+    id: 'pets.card-Rex'
+- assertNotVisible:
+    id: 'pet.edit'
+- scrollUntilVisible:
+    element:
+      id: 'pet.leave'
+- waitForAnimationToEnd
+- retry:
+    maxRetries: 2
+    commands:
+      - tapOn:
+          id: 'pet.leave'
+          retryTapIfNoChange: false
+      - extendedWaitUntil:
+          visible:
+            id: 'leave-confirm-confirm'
+          timeout: 3000
+- tapOn:
+    id: 'leave-confirm-confirm'
+- assertVisible: 'You no longer watch Rex'
+- assertNotVisible:
+    id: 'pets.card-Rex'
+- runFlow: ../subflows/logout.yaml
+
+# Ana no longer sees Sam as a watcher
+- runFlow:
+    file: ../subflows/login.yaml
+    env:
+      EMAIL: ${output.ana}
+      PASSWORD: ${PASSWORD}
+- extendedWaitUntil:
+    visible:
+      id: 'schedule.title'
+    timeout: 15000
+- runFlow:
+    file: ../subflows/open-tab.yaml
+    env:
+      TAB: Pets
+- tapOn:
+    id: 'pets.card-Rex'
+- scrollUntilVisible:
+    element:
+      id: 'pet.invite'
+- assertNotVisible:
+    id: 'watcher.${output.sam}'

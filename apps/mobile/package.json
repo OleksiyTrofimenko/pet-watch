@@ -58,6 +58,7 @@
     "android": "expo run:android",
     "typecheck": "tsc --noEmit",
     "test": "jest --passWithNoTests",
+    "build": "pnpm --filter @petwatch/mobile ios",
     "lint": "eslint ."
   },
   "private": true,

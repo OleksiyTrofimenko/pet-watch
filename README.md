@@ -202,7 +202,8 @@ The full path to a store release (hosting, database, secrets, links, store requi
 6. **Only owners edit** pets and schedules; watchers read (the brief gives "view" to both, "edit" to owners).
 7. **Declining an invite** (INV-6): the invitee can decline from the link, or ignore it until it expires after 7 days.
    The owner isn't notified; the invite leaves their "Pending" list and they can invite again.
-8. **A watcher leaving a pet** isn't required; only the owner removes watchers.
+8. **A watcher leaving a pet** (INV-7): a watcher can stop watching from the pet's screen; access ends at once.
+   The owner isn't notified, sees one watcher fewer and can invite them again.
 
 ## Known limitations / with more time
 
@@ -214,8 +215,8 @@ The full path to a store release (hosting, database, secrets, links, store requi
   Invites aren't rate-limited, so an owner could probe which emails have accounts (assumption 2).
 - **Age goes stale**: store `birthDate` instead.
 - **Timezones**: store the owner's timezone with each task so watchers abroad see the right time.
-- **More product**: push reminders for due tasks, a completion log ("fed at 08:05 by Ana"), watchers leaving a
-  pet, an in-app list of incoming invites.
+- **More product**: push reminders for due tasks, a completion log ("fed at 08:05 by Ana"), an in-app list of
+  incoming invites, telling the owner when someone declines or stops watching.
 - **Uploads**: a presigned POST with a size limit (today the app resizes before upload, the URL doesn't cap it).
 - **Mobile e2e on CI**: run Maestro on an emulator in CI; locally the offline flow is Android-only.
 
